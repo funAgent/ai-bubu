@@ -1,0 +1,18 @@
+[meta]
+id = "continue"
+name = "Continue.dev"
+category = "extension"
+priority = 6
+
+[detect]
+adapter = "file_mtime"
+[detect.paths]
+macos = "${HOME}/.continue/"
+linux = "${HOME}/.continue/"
+windows = "${HOME}/.continue/"
+
+[activity]
+adapter = "file_mtime"
+
+[activity.file_mtime]
+watch_pattern = "sessions/**/*.json"

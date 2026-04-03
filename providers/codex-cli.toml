@@ -1,0 +1,26 @@
+[meta]
+id = "codex-cli"
+name = "Codex CLI"
+category = "cli"
+priority = 8
+
+[detect]
+adapter = "jsonl"
+[detect.paths]
+macos = "${HOME}/.codex/sessions/"
+linux = "${HOME}/.codex/sessions/"
+windows = "${HOME}/.codex/sessions/"
+
+[activity]
+adapter = "jsonl"
+
+[activity.jsonl]
+dir_pattern = "**"
+file_pattern = "rollout-*.jsonl"
+sort_by = "mtime"
+timestamp_field = "timestamp"
+type_field = "type"
+
+[process_fallback]
+enabled = true
+names = ["codex"]

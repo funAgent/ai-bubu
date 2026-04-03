@@ -1,0 +1,25 @@
+[meta]
+id = "goose"
+name = "Goose"
+category = "cli"
+priority = 6
+
+[detect]
+adapter = "jsonl"
+[detect.paths]
+macos = "${HOME}/.goose/sessions/"
+linux = "${HOME}/.goose/sessions/"
+windows = "${HOME}/.goose/sessions/"
+
+[activity]
+adapter = "jsonl"
+
+[activity.jsonl]
+dir_pattern = "*"
+file_pattern = "*.jsonl"
+sort_by = "mtime"
+timestamp_field = "timestamp"
+
+[process_fallback]
+enabled = true
+names = ["goose"]

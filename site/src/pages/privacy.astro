@@ -1,0 +1,260 @@
+---
+import Base from '../layouts/Base.astro'
+---
+<Base title="隐私协议 - AI 步步" description="AI 步步隐私协议">
+
+<style>
+  .privacy-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(249,249,249,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .privacy-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--text-2);
+    transition: color 0.2s;
+  }
+
+  .privacy-back:hover {
+    color: var(--text);
+  }
+
+  .lang-btn {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lang-btn:hover {
+    color: var(--text);
+    border-color: rgba(0,0,0,0.15);
+  }
+
+  .privacy {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .privacy h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .privacy .updated {
+    font-size: 13px;
+    color: var(--text-3);
+    margin-bottom: 40px;
+  }
+
+  .privacy h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 36px;
+    margin-bottom: 12px;
+  }
+
+  .privacy p {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 16px;
+  }
+
+  .privacy ul {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+
+  .privacy li {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 8px;
+  }
+
+  .privacy a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .privacy a:hover {
+    text-decoration-color: var(--accent);
+  }
+</style>
+
+<nav class="privacy-nav">
+  <a href="/" class="privacy-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    <span data-i18n="back">返回首页</span>
+  </a>
+  <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<div class="privacy">
+  <h1 data-i18n="title">隐私协议</h1>
+  <p class="updated" data-i18n="updated">最后更新：2026 年 4 月</p>
+
+  <h2 data-i18n="h1">1. 概述</h2>
+  <p data-i18n="p1">AI 步步（以下简称"本应用"）是一款桌面宠物应用，用于可视化你的 AI 编码工具使用情况。我们高度重视用户隐私，本协议说明我们如何收集、使用和保护你的信息。</p>
+
+  <h2 data-i18n="h2">2. 信息收集</h2>
+  <p data-i18n="p2a">本应用仅在本地运行，<strong>不会向任何远程服务器发送你的个人数据</strong>。具体而言：</p>
+  <ul>
+    <li data-i18n="p2b"><strong>活动数据</strong>：本应用通过检测本地进程来判断 AI 开发工具（如 Cursor、Claude Code 等）的使用状态。这些数据仅存储在你的设备上，不会上传。</li>
+    <li data-i18n="p2c"><strong>步数和历史记录</strong>：每日步数、活跃时长等统计数据仅保存在本地存储中。</li>
+    <li data-i18n="p2d"><strong>用户设置</strong>：昵称、主题偏好、选择的角色等配置信息保存在本地。</li>
+    <li data-i18n="p2e"><strong>局域网社交</strong>：启用局域网功能后，你的昵称、步数和角色信息会通过局域网广播与同网络的其他用户共享。这些数据不会离开你的局域网。</li>
+  </ul>
+
+  <h2 data-i18n="h3">3. 数据存储</h2>
+  <p data-i18n="p3a">所有数据存储在你的设备本地，包括：</p>
+  <ul>
+    <li data-i18n="p3b">应用配置（localStorage）</li>
+    <li data-i18n="p3c">步数历史（本地文件）</li>
+    <li data-i18n="p3d">导入的自定义角色（本地文件夹）</li>
+  </ul>
+  <p data-i18n="p3e">卸载本应用后，相关数据会随应用数据目录一并删除。</p>
+
+  <h2 data-i18n="h4">4. 第三方服务</h2>
+  <p data-i18n="p4">本应用不集成任何第三方分析、广告或跟踪服务。不使用 Cookie，不进行用户追踪。</p>
+
+  <h2 data-i18n="h5">5. 权限说明</h2>
+  <p data-i18n="p5a">本应用可能请求以下系统权限：</p>
+  <ul>
+    <li data-i18n="p5b"><strong>文件系统访问</strong>：用于导入和管理自定义角色文件。</li>
+    <li data-i18n="p5c"><strong>网络访问</strong>：仅用于局域网内的设备发现和社交功能。</li>
+    <li data-i18n="p5d"><strong>开机自启动</strong>：可选功能，允许应用随系统启动。</li>
+  </ul>
+
+  <h2 data-i18n="h6">6. 开源</h2>
+  <p data-i18n="p6">本应用完全开源，你可以在 <a href="https://github.com/nicepkg/ai-bubu" target="_blank" rel="noopener">GitHub</a> 查看完整源代码，审计数据处理逻辑。</p>
+
+  <h2 data-i18n="h7">7. 儿童隐私</h2>
+  <p data-i18n="p7">本应用不面向 13 岁以下儿童，也不会有意收集儿童的个人信息。</p>
+
+  <h2 data-i18n="h8">8. 协议变更</h2>
+  <p data-i18n="p8">如隐私协议有更新，我们会在本页面发布最新版本并更新日期。建议你定期查看。</p>
+
+  <h2 data-i18n="h9">9. 联系我们</h2>
+  <p data-i18n="p9">如果你对本隐私协议有任何疑问，可以通过 <a href="https://github.com/nicepkg/ai-bubu/issues" target="_blank" rel="noopener">GitHub Issues</a> 联系我们。</p>
+</div>
+
+<script>
+  const i18n: Record<string, Record<string, string>> = {
+    zh: {
+      back: '返回首页',
+      title: '隐私协议',
+      updated: '最后更新：2026 年 4 月',
+      h1: '1. 概述',
+      p1: 'AI 步步（以下简称"本应用"）是一款桌面宠物应用，用于可视化你的 AI 编码工具使用情况。我们高度重视用户隐私，本协议说明我们如何收集、使用和保护你的信息。',
+      h2: '2. 信息收集',
+      p2a: '本应用仅在本地运行，<strong>不会向任何远程服务器发送你的个人数据</strong>。具体而言：',
+      p2b: '<strong>活动数据</strong>：本应用通过检测本地进程来判断 AI 开发工具（如 Cursor、Claude Code 等）的使用状态。这些数据仅存储在你的设备上，不会上传。',
+      p2c: '<strong>步数和历史记录</strong>：每日步数、活跃时长等统计数据仅保存在本地存储中。',
+      p2d: '<strong>用户设置</strong>：昵称、主题偏好、选择的角色等配置信息保存在本地。',
+      p2e: '<strong>局域网社交</strong>：启用局域网功能后，你的昵称、步数和角色信息会通过局域网广播与同网络的其他用户共享。这些数据不会离开你的局域网。',
+      h3: '3. 数据存储',
+      p3a: '所有数据存储在你的设备本地，包括：',
+      p3b: '应用配置（localStorage）',
+      p3c: '步数历史（本地文件）',
+      p3d: '导入的自定义角色（本地文件夹）',
+      p3e: '卸载本应用后，相关数据会随应用数据目录一并删除。',
+      h4: '4. 第三方服务',
+      p4: '本应用不集成任何第三方分析、广告或跟踪服务。不使用 Cookie，不进行用户追踪。',
+      h5: '5. 权限说明',
+      p5a: '本应用可能请求以下系统权限：',
+      p5b: '<strong>文件系统访问</strong>：用于导入和管理自定义角色文件。',
+      p5c: '<strong>网络访问</strong>：仅用于局域网内的设备发现和社交功能。',
+      p5d: '<strong>开机自启动</strong>：可选功能，允许应用随系统启动。',
+      h6: '6. 开源',
+      p6: '本应用完全开源，你可以在 <a href="https://github.com/nicepkg/ai-bubu" target="_blank" rel="noopener">GitHub</a> 查看完整源代码，审计数据处理逻辑。',
+      h7: '7. 儿童隐私',
+      p7: '本应用不面向 13 岁以下儿童，也不会有意收集儿童的个人信息。',
+      h8: '8. 协议变更',
+      p8: '如隐私协议有更新，我们会在本页面发布最新版本并更新日期。建议你定期查看。',
+      h9: '9. 联系我们',
+      p9: '如果你对本隐私协议有任何疑问，可以通过 <a href="https://github.com/nicepkg/ai-bubu/issues" target="_blank" rel="noopener">GitHub Issues</a> 联系我们。',
+    },
+    en: {
+      back: 'Back to Home',
+      title: 'Privacy Policy',
+      updated: 'Last updated: April 2026',
+      h1: '1. Overview',
+      p1: 'AI bubu (hereinafter "the App") is a desktop pet application that visualizes your AI coding tool usage. We take user privacy seriously, and this policy explains how we collect, use, and protect your information.',
+      h2: '2. Information Collection',
+      p2a: 'The App runs entirely on your local machine. <strong>No personal data is sent to any remote server.</strong> Specifically:',
+      p2b: '<strong>Activity data</strong>: The App detects local processes to determine the usage status of AI development tools (e.g. Cursor, Claude Code). This data is stored only on your device and is never uploaded.',
+      p2c: '<strong>Steps and history</strong>: Daily step counts, active duration, and other statistics are saved in local storage only.',
+      p2d: '<strong>User settings</strong>: Nickname, theme preference, selected character, and other configurations are saved locally.',
+      p2e: '<strong>LAN social</strong>: When LAN features are enabled, your nickname, step count, and character info are broadcast within the local network to other users. This data never leaves your LAN.',
+      h3: '3. Data Storage',
+      p3a: 'All data is stored locally on your device, including:',
+      p3b: 'App configuration (localStorage)',
+      p3c: 'Step history (local files)',
+      p3d: 'Imported custom characters (local folders)',
+      p3e: 'After uninstalling the App, related data will be removed along with the app data directory.',
+      h4: '4. Third-Party Services',
+      p4: 'The App does not integrate any third-party analytics, advertising, or tracking services. No cookies are used, and no user tracking is performed.',
+      h5: '5. Permissions',
+      p5a: 'The App may request the following system permissions:',
+      p5b: '<strong>File system access</strong>: For importing and managing custom character files.',
+      p5c: '<strong>Network access</strong>: Used only for LAN device discovery and social features.',
+      p5d: '<strong>Auto-start</strong>: Optional feature that allows the App to launch at system startup.',
+      h6: '6. Open Source',
+      p6: 'The App is fully open source. You can review the complete source code and audit data handling logic on <a href="https://github.com/nicepkg/ai-bubu" target="_blank" rel="noopener">GitHub</a>.',
+      h7: '7. Children\'s Privacy',
+      p7: 'The App is not intended for children under the age of 13, and we do not knowingly collect personal information from children.',
+      h8: '8. Policy Changes',
+      p8: 'If this privacy policy is updated, we will publish the latest version on this page and update the date. We recommend checking periodically.',
+      h9: '9. Contact Us',
+      p9: 'If you have any questions about this privacy policy, please reach out via <a href="https://github.com/nicepkg/ai-bubu/issues" target="_blank" rel="noopener">GitHub Issues</a>.',
+    },
+  }
+
+  const pageTitles: Record<string, string> = {
+    zh: '隐私协议 - AI 步步',
+    en: 'Privacy Policy - AI bubu',
+  }
+
+  let lang = localStorage.getItem('aibubu-lang') || 'zh'
+  const toggle = document.getElementById('langToggle')!
+
+  function setLang(l: string) {
+    lang = l
+    localStorage.setItem('aibubu-lang', l)
+    document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en'
+    toggle.textContent = l === 'zh' ? 'EN' : '中'
+    document.title = pageTitles[l]
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n')!
+      if (i18n[l][key] != null) el.innerHTML = i18n[l][key]
+    })
+  }
+
+  toggle.addEventListener('click', () => setLang(lang === 'zh' ? 'en' : 'zh'))
+  setLang(lang)
+</script>
+
+</Base>

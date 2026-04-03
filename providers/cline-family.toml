@@ -1,0 +1,33 @@
+[meta]
+id = "cline-family"
+name = "Cline Family"
+category = "extension"
+priority = 7
+
+[[variants]]
+id = "cline"
+name = "Cline"
+extension_id = "saoudrizwan.claude-dev"
+
+[[variants]]
+id = "roo-code"
+name = "Roo Code"
+extension_id = "rooveterinaryinc.roo-cline"
+
+[[variants]]
+id = "kilo-code"
+name = "Kilo Code"
+extension_id = "kilocode.kilo-code"
+
+[detect]
+adapter = "vscode_ext"
+[detect.paths]
+macos = "${APP_SUPPORT}/${IDE}/User/globalStorage/${EXT_ID}/tasks/"
+linux = "${HOME}/.config/${IDE}/User/globalStorage/${EXT_ID}/tasks/"
+windows = "${APPDATA}/${IDE}/User/globalStorage/${EXT_ID}/tasks/"
+
+[activity]
+adapter = "vscode_ext"
+
+[activity.file_mtime]
+watch_pattern = "*/api_conversation_history.json"

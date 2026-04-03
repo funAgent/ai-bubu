@@ -1,0 +1,19 @@
+[meta]
+id = "gemini-cli"
+name = "Gemini CLI"
+category = "cli"
+priority = 6
+
+[detect]
+adapter = "process"
+
+[activity]
+adapter = "process"
+
+[activity.process]
+names = ["gemini"]
+cpu_active_threshold = 5.0
+
+[process_fallback]
+enabled = true
+names = ["gemini"]
