@@ -1,4 +1,4 @@
-use crate::monitor::adapter::{ActivityAdapter, ProbeResult, activity_from_elapsed};
+use crate::monitor::adapter::{activity_from_elapsed, ActivityAdapter, ProbeResult};
 use crate::monitor::config::ProviderConfig;
 use std::fs;
 use std::path::PathBuf;

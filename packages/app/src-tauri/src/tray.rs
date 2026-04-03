@@ -30,32 +30,42 @@ pub fn setup_tray(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     let zh = is_chinese();
 
     let show = MenuItem::with_id(
-        app, "show",
+        app,
+        "show",
         if zh { "显示桌宠" } else { "Show Pet" },
-        true, None::<&str>,
+        true,
+        None::<&str>,
     )?;
     let hide = MenuItem::with_id(
-        app, "hide",
+        app,
+        "hide",
         if zh { "隐藏桌宠" } else { "Hide Pet" },
-        true, None::<&str>,
+        true,
+        None::<&str>,
     )?;
     let sep1 = PredefinedMenuItem::separator(app)?;
     let leaderboard = MenuItem::with_id(
-        app, "leaderboard",
+        app,
+        "leaderboard",
         if zh { "排行榜" } else { "Leaderboard" },
-        true, None::<&str>,
+        true,
+        None::<&str>,
     )?;
     let sep2 = PredefinedMenuItem::separator(app)?;
     let quit = MenuItem::with_id(
-        app, "quit",
+        app,
+        "quit",
         if zh { "退出" } else { "Quit" },
-        true, None::<&str>,
+        true,
+        None::<&str>,
     )?;
 
     let menu = Menu::with_items(app, &[&show, &hide, &sep1, &leaderboard, &sep2, &quit])?;
 
     let png_data = include_bytes!("../icons/icon.png");
-    let decoded = image::load_from_memory(png_data).expect("failed to decode tray icon").to_rgba8();
+    let decoded = image::load_from_memory(png_data)
+        .expect("failed to decode tray icon")
+        .to_rgba8();
     let (w, h) = decoded.dimensions();
     let icon = Image::new_owned(decoded.into_raw(), w, h);
 
@@ -95,10 +105,19 @@ pub fn setup_tray(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[tauri::command]
-pub fn update_tray_icon(app: tauri::AppHandle, rgba: Vec<u8>, width: u32, height: u32) -> Result<(), String> {
+pub fn update_tray_icon(
+    app: tauri::AppHandle,
+    rgba: Vec<u8>,
+    width: u32,
+    height: u32,
+) -> Result<(), String> {
     let expected = (width as usize) * (height as usize) * 4;
     if rgba.len() != expected {
-        return Err(format!("rgba length {} != expected {}", rgba.len(), expected));
+        return Err(format!(
+            "rgba length {} != expected {}",
+            rgba.len(),
+            expected
+        ));
     }
     let icon = Image::new_owned(rgba, width, height);
     let tray_id = TrayIconId::new(TRAY_ID);
@@ -110,8 +129,12 @@ pub fn update_tray_icon(app: tauri::AppHandle, rgba: Vec<u8>, width: u32, height
 
 fn position_pet_below_tray(app: &tauri::AppHandle) {
     let tray_id = TrayIconId::new(TRAY_ID);
-    let Some(tray) = app.tray_by_id(&tray_id) else { return };
-    let Some(window) = app.get_webview_window("pet") else { return };
+    let Some(tray) = app.tray_by_id(&tray_id) else {
+        return;
+    };
+    let Some(window) = app.get_webview_window("pet") else {
+        return;
+    };
     let scale = window.scale_factor().unwrap_or(1.0);
 
     if let Ok(Some(rect)) = tray.rect() {

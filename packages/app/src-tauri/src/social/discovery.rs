@@ -23,8 +23,12 @@ impl SocialEngine {
     }
 
     pub fn start(&mut self, app_handle: AppHandle) -> Result<(), String> {
-        let socket = UdpSocket::bind(format!("0.0.0.0:{}", BROADCAST_PORT))
-            .map_err(|e| format!("Failed to bind UDP port {}: {}. Is another instance running?", BROADCAST_PORT, e))?;
+        let socket = UdpSocket::bind(format!("0.0.0.0:{}", BROADCAST_PORT)).map_err(|e| {
+            format!(
+                "Failed to bind UDP port {}: {}. Is another instance running?",
+                BROADCAST_PORT, e
+            )
+        })?;
 
         socket.set_broadcast(true).map_err(|e| e.to_string())?;
         socket
@@ -56,9 +60,7 @@ impl SocialEngine {
 
                 match socket.recv_from(&mut buf) {
                     Ok((size, _addr)) => {
-                        if let Ok(heartbeat) =
-                            serde_json::from_slice::<Heartbeat>(&buf[..size])
-                        {
+                        if let Ok(heartbeat) = serde_json::from_slice::<Heartbeat>(&buf[..size]) {
                             if heartbeat.peer_id == peer_id {
                                 continue;
                             }
@@ -72,7 +74,10 @@ impl SocialEngine {
                                 nickname: super::util::truncate_str(heartbeat.nickname, 30),
                                 daily_steps: heartbeat.daily_steps,
                                 activity_score: heartbeat.activity_score,
-                                movement_state: super::util::truncate_str(heartbeat.movement_state, 10),
+                                movement_state: super::util::truncate_str(
+                                    heartbeat.movement_state,
+                                    10,
+                                ),
                                 pet_skin: super::util::truncate_str(heartbeat.pet_skin, 50),
                                 is_online: true,
                             };
@@ -84,7 +89,9 @@ impl SocialEngine {
                                         (update.clone(), Instant::now()),
                                     );
                                 }
-                                Err(e) => eprintln!("social: peers mutex poisoned on insert: {}", e),
+                                Err(e) => {
+                                    eprintln!("social: peers mutex poisoned on insert: {}", e)
+                                }
                             }
 
                             let _ = app_handle.emit("social-peer-update", &update);

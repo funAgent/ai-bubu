@@ -108,7 +108,8 @@ fn expand_path(template: &str) -> String {
     #[cfg(target_os = "linux")]
     let app_support = format!("{}/.config", home);
     #[cfg(target_os = "windows")]
-    let app_support = std::env::var("APPDATA").unwrap_or_else(|_| format!("{}\\AppData\\Roaming", home));
+    let app_support =
+        std::env::var("APPDATA").unwrap_or_else(|_| format!("{}\\AppData\\Roaming", home));
 
     template
         .replace("${HOME}", &home)

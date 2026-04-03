@@ -63,10 +63,12 @@ fn validate_skin_dir(dir: &Path) -> Result<serde_json::Value, String> {
         }
 
         let file_path = dir.join(file);
-        let canonical = file_path.canonicalize().map_err(|_| {
-            format!("动画 {} 引用的文件不存在: {}", state, file)
-        })?;
-        let dir_canonical = dir.canonicalize().map_err(|e| format!("路径解析失败: {}", e))?;
+        let canonical = file_path
+            .canonicalize()
+            .map_err(|_| format!("动画 {} 引用的文件不存在: {}", state, file))?;
+        let dir_canonical = dir
+            .canonicalize()
+            .map_err(|e| format!("路径解析失败: {}", e))?;
         if !canonical.starts_with(&dir_canonical) {
             return Err(format!("动画 {} 的文件路径越界: {}", state, file));
         }
@@ -379,8 +381,14 @@ mod tests {
 
         copy_dir_contents(src.path(), dst.path()).unwrap();
 
-        assert_eq!(fs::read_to_string(dst.path().join("a.txt")).unwrap(), "hello");
-        assert_eq!(fs::read_to_string(dst.path().join("sub/b.txt")).unwrap(), "world");
+        assert_eq!(
+            fs::read_to_string(dst.path().join("a.txt")).unwrap(),
+            "hello"
+        );
+        assert_eq!(
+            fs::read_to_string(dst.path().join("sub/b.txt")).unwrap(),
+            "world"
+        );
     }
 
     #[test]

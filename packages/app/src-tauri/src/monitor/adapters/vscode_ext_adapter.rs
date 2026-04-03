@@ -1,4 +1,4 @@
-use crate::monitor::adapter::{ActivityAdapter, ProbeResult, activity_from_elapsed};
+use crate::monitor::adapter::{activity_from_elapsed, ActivityAdapter, ProbeResult};
 use crate::monitor::config::ProviderConfig;
 use std::fs;
 use std::path::PathBuf;
@@ -117,7 +117,10 @@ fn probe_variant(variant: &VariantInfo) -> Option<ProbeResult> {
     let now = SystemTime::now();
     let elapsed_s = now.duration_since(mtime).ok()?.as_secs();
 
-    let now_ms = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_millis() as u64;
+    let now_ms = now
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis() as u64;
     let last_ts = now_ms - elapsed_s * 1000;
 
     let activity = activity_from_elapsed(elapsed_s);

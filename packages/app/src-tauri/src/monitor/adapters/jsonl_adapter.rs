@@ -1,4 +1,4 @@
-use crate::monitor::adapter::{ActivityAdapter, ProbeResult, activity_from_elapsed};
+use crate::monitor::adapter::{activity_from_elapsed, ActivityAdapter, ProbeResult};
 use crate::monitor::config::ProviderConfig;
 use std::fs;
 use std::io::{Read as _, Seek, SeekFrom};
@@ -51,7 +51,10 @@ impl ActivityAdapter for JsonlAdapter {
         } else {
             let now = SystemTime::now();
             let elapsed = now.duration_since(mtime).ok()?.as_secs();
-            let now_ms_val = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_millis() as u64;
+            let now_ms_val = now
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_millis() as u64;
             (elapsed, now_ms_val - elapsed * 1000)
         };
 
@@ -69,7 +72,6 @@ impl ActivityAdapter for JsonlAdapter {
         })
     }
 }
-
 
 /// Read the tail of a JSONL file and extract the timestamp from the last
 /// entry that contains the field. Scans backwards through lines because

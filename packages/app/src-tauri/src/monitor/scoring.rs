@@ -84,9 +84,7 @@ impl MovementStateMachine {
             self.active_since = Some(now);
         }
 
-        let raw_duration_s = now
-            .duration_since(self.active_since.unwrap())
-            .as_secs();
+        let raw_duration_s = now.duration_since(self.active_since.unwrap()).as_secs();
 
         let speed_multiplier: f64 = if active_tool_count >= 3 {
             2.5
@@ -196,7 +194,11 @@ mod tests {
         let mut sm1 = MovementStateMachine::new();
         let mut sm2 = MovementStateMachine::new();
 
-        let one_tool = [make_result_with_id("cursor", ActivityLevel::ActiveHigh, false)];
+        let one_tool = [make_result_with_id(
+            "cursor",
+            ActivityLevel::ActiveHigh,
+            false,
+        )];
         let two_tools = [
             make_result_with_id("cursor", ActivityLevel::ActiveHigh, false),
             make_result_with_id("claude-code", ActivityLevel::ActiveMedium, false),

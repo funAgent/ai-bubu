@@ -4,11 +4,11 @@ pub mod config;
 pub mod scoring;
 
 use adapter::{ActivityAdapter, ActivityLevel, ProbeResult};
-use std::collections::HashSet;
 use adapters::build_adapters;
 use adapters::process_adapter::SharedProcessScanner;
 use config::load_providers;
 use scoring::MovementStateMachine;
+use std::collections::HashSet;
 
 use serde::Serialize;
 use std::path::PathBuf;

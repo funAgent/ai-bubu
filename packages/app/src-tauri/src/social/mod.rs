@@ -4,9 +4,9 @@ pub mod util;
 
 use discovery::SocialEngine;
 use protocol::{Heartbeat, PeerUpdate, PROTOCOL_VERSION};
-use util::truncate_str;
 use std::sync::Mutex;
 use tauri::AppHandle;
+use util::truncate_str;
 
 static SOCIAL_ENGINE: Mutex<Option<SocialEngine>> = Mutex::new(None);
 

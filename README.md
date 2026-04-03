@@ -4,7 +4,7 @@
 
 **AI 时代的编码计步器**
 
-监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。
+监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起跑。
 
 [官网](https://aibubu.funagent.app) · [下载](https://github.com/funAgent/ai-bubu/releases) · [English](./README_EN.md)
 

@@ -1,8 +1,8 @@
 use crate::monitor::adapter::{ActivityAdapter, ActivityLevel, ProbeResult};
 use crate::monitor::config::ProviderConfig;
-use sysinfo::System;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
+use sysinfo::System;
 
 pub struct SharedProcessScanner {
     system: System,
@@ -20,11 +20,7 @@ impl SharedProcessScanner {
             .refresh_processes(sysinfo::ProcessesToUpdate::All, true);
     }
 
-    pub fn find_matching_cpu(
-        &self,
-        names: &[String],
-        parent_exclude: &[String],
-    ) -> Option<f32> {
+    pub fn find_matching_cpu(&self, names: &[String], parent_exclude: &[String]) -> Option<f32> {
         let mut total_cpu: f32 = 0.0;
         let mut found = false;
 

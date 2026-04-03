@@ -1,4 +1,4 @@
-use crate::monitor::adapter::{ActivityAdapter, ActivityLevel, ProbeResult, activity_from_elapsed};
+use crate::monitor::adapter::{activity_from_elapsed, ActivityAdapter, ActivityLevel, ProbeResult};
 use crate::monitor::config::ProviderConfig;
 use rusqlite::{Connection, OpenFlags};
 use std::path::PathBuf;
@@ -40,9 +40,16 @@ impl ActivityAdapter for SqliteAdapter {
             return None;
         }
 
-        let query_result = try_sqlite_query(&self.db_path, &self.query, &self.timestamp_field, &self.status_field, &self.metrics_fields);
+        let query_result = try_sqlite_query(
+            &self.db_path,
+            &self.query,
+            &self.timestamp_field,
+            &self.status_field,
+            &self.metrics_fields,
+        );
 
-        let (ts, status, lines_added, files_changed) = query_result.unwrap_or((None, None, None, None));
+        let (ts, status, lines_added, files_changed) =
+            query_result.unwrap_or((None, None, None, None));
 
         let activity = determine_activity(ts, status.as_deref(), &self.status_map);
 
@@ -87,11 +94,8 @@ fn try_sqlite_query(
             conn.pragma_update(None, "query_only", "ON").ok();
 
             let mut stmt = conn.prepare(&q).ok()?;
-            let column_names: Vec<String> = stmt
-                .column_names()
-                .iter()
-                .map(|s| s.to_string())
-                .collect();
+            let column_names: Vec<String> =
+                stmt.column_names().iter().map(|s| s.to_string()).collect();
 
             stmt.query_row([], |row| {
                 let mut ts: Option<u64> = None;
