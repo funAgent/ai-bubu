@@ -26,7 +26,7 @@ export const useSkinStore = defineStore('skin', () => {
   const catalogLoaded = ref(false)
 
   const currentManifest = ref<SkinManifest>({
-    id: 'vita',
+    id: '000-vita',
     name: 'Vita',
     version: '1.0.0',
     author: '',

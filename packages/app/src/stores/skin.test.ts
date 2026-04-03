@@ -44,14 +44,14 @@ describe('useSkinStore', () => {
 
   it('initializes with vita defaults', () => {
     const store = useSkinStore()
-    expect(store.currentManifest.id).toBe('vita')
+    expect(store.currentManifest.id).toBe('000-vita')
     expect(store.catalogLoaded).toBe(false)
     expect(store.catalog).toEqual([])
   })
 
   it('skinBasePath reflects current skin id', () => {
     const store = useSkinStore()
-    expect(store.skinBasePath).toBe('/skins/vita/')
+    expect(store.skinBasePath).toBe('/skins/000-vita/')
   })
 
   describe('loadCatalog', () => {
