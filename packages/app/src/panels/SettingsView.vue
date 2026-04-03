@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
+import { invoke } from '@tauri-apps/api/core'
 import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart'
 import { useSettingsStore } from '@/stores/settings'
 import type { ThemeMode } from '@/stores/settings'
@@ -48,6 +49,17 @@ watch(
     settings.persistUserFields()
   },
 )
+
+async function toggleShowOverFullscreen() {
+  const newVal = !settings.showOverFullscreen
+  settings.showOverFullscreen = newVal
+  settings.persistUserFields()
+  try {
+    await invoke('set_show_over_fullscreen', { visible: newVal })
+  } catch (e) {
+    console.error('set_show_over_fullscreen failed', e)
+  }
+}
 </script>
 
 <template>
@@ -86,6 +98,21 @@ watch(
             {{ t(opt.key) }}
           </button>
         </div>
+      </div>
+      <div class="form-group row">
+        <div>
+          <label class="form-label">{{ t('settingsShowOverFullscreen') }}</label>
+          <p class="form-hint">{{ t('settingsShowOverFullscreenHint') }}</p>
+        </div>
+        <button
+          class="toggle"
+          :class="{ on: settings.showOverFullscreen }"
+          role="switch"
+          :aria-checked="settings.showOverFullscreen"
+          @click="toggleShowOverFullscreen"
+        >
+          <span class="toggle-thumb"></span>
+        </button>
       </div>
       <div class="form-group row">
         <div>

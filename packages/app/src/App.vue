@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 import PetCanvas from './pet/PetCanvas.vue'
@@ -27,11 +28,13 @@ useMonitor()
 useActivityScore()
 useStepCounter()
 useSocial()
-useSkinStore()
+const skinStore = useSkinStore()
+skinStore.loadCatalog()
 useTrayIcon()
 
 const currentWindow = getCurrentWindow()
 const isSocialWindow = currentWindow.label === 'social'
+const isPetWindow = currentWindow.label === 'pet'
 
 if (isSocialWindow) {
   onMounted(() => {
@@ -40,6 +43,23 @@ if (isSocialWindow) {
       await currentWindow.hide()
     })
   })
+}
+
+if (isPetWindow) {
+  onMounted(() => {
+    invoke('set_show_over_fullscreen', { visible: settingsStore.showOverFullscreen }).catch((e) =>
+      console.error('set_show_over_fullscreen failed', e),
+    )
+  })
+
+  watch(
+    () => settingsStore.showOverFullscreen,
+    (val) => {
+      invoke('set_show_over_fullscreen', { visible: val }).catch((e) =>
+        console.error('set_show_over_fullscreen failed', e),
+      )
+    },
+  )
 }
 
 const showTooltip = ref(false)
