@@ -3,7 +3,10 @@ node_modules/
 
 # Build output
 dist/
-src-tauri/target/
+packages/app/src-tauri/target/
+
+# Astro
+packages/site/.astro/
 
 # IDE
 .vscode/
@@ -19,3 +22,12 @@ src-tauri/target/
 
 # Logs
 *.log
+
+# Claude
+.claude/
+
+# Env
+.env
+.env.local
+
+*.local.*

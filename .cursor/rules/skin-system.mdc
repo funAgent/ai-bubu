@@ -1,0 +1,55 @@
+---
+description: 皮肤系统开发与资源管理规范
+globs: packages/app/public/skins/**,packages/app/src/**/skin*,packages/app/src/**/Skin*,scripts/validate-skins.js
+alwaysApply: false
+---
+
+# 皮肤系统规范
+
+## 目录结构
+
+```
+packages/app/public/skins/
+├── catalog.json          # 皮肤注册表
+├── vita/
+│   ├── skin.json         # 皮肤清单
+│   ├── pet.png           # 精灵图（头像）
+│   └── skin.png          # 动画精灵图
+├── doux/
+└── ...
+```
+
+## skin.json 必填字段
+
+- `name` — 皮肤名称
+- `author` — 作者
+- `animations` — 动画配置（至少包含 `idle`）
+
+## 动画状态
+
+有效状态: `idle`, `walk`, `run`, `sprint`
+
+每个动画需包含:
+- `file` — 引用的图片文件（必须实际存在）
+- `loop` — 是否循环
+- `sprite` — 精灵图参数: `frameWidth`, `frameHeight`, `frameCount`, `columns`, `fps`, `startFrame`
+
+## 支持的渲染格式
+
+- `sprite` — 精灵图（SpriteRenderer）
+- `lottie` — Lottie 动画（LottieRenderer）
+- 其他 — 静态图片（ImageRenderer）
+
+## 校验流程
+
+1. 修改皮肤资源后运行 `pnpm validate:skins`
+2. catalog.json 必须与目录列表一致
+3. pre-commit hook 会自动执行校验
+
+## 添加新皮肤
+
+1. 创建目录 `packages/app/public/skins/<skin-id>/`
+2. 添加 `skin.json` + `pet.png`
+3. 在 `catalog.json` 中注册 skin-id
+4. 运行 `pnpm validate:skins`
+5. commit: `feat(skin): add <skin-name> skin`

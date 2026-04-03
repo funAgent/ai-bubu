@@ -1,0 +1,2 @@
+node scripts/validate-skins.js
+npx lint-staged

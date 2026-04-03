@@ -1,0 +1,257 @@
+---
+import Base from '../layouts/Base.astro'
+---
+<Base title="安装指南 - AI 步步" description="macOS 首次打开 AI 步步的安装说明">
+
+<style>
+  .install-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(249,249,249,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .install-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--text-2);
+    transition: color 0.2s;
+  }
+
+  .install-back:hover {
+    color: var(--text);
+  }
+
+  .lang-btn {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lang-btn:hover {
+    color: var(--text);
+    border-color: rgba(0,0,0,0.15);
+  }
+
+  .install {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .install h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .install .subtitle {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  .install h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 36px;
+    margin-bottom: 12px;
+  }
+
+  .install h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 28px;
+    margin-bottom: 8px;
+  }
+
+  .install p {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 16px;
+  }
+
+  .install ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+
+  .install li {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 8px;
+  }
+
+  .install code {
+    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+    font-size: 13px;
+    background: rgba(0,0,0,0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  .install pre {
+    background: #1a1a1e;
+    color: #e0e0e0;
+    padding: 14px 18px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .install pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .install .tip {
+    background: rgba(99, 102, 241, 0.06);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--text-2);
+  }
+
+  .method-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    background: rgba(99, 102, 241, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+</style>
+
+<nav class="install-nav">
+  <a href="/" class="install-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    <span data-i18n="back">返回首页</span>
+  </a>
+  <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<div class="install">
+  <h1 data-i18n="title">macOS 安装指南</h1>
+  <p class="subtitle" data-i18n="subtitle">AI 步步是开源免费软件，尚未购买 Apple 开发者签名。首次打开时 macOS 会弹出安全提示，按以下任一方法操作即可正常使用。</p>
+
+  <h2 data-i18n="h1">方法一：右键打开</h2>
+  <div class="method-tag" data-i18n="tag1">推荐 · 最简单</div>
+  <ol>
+    <li data-i18n="m1s1">打开 <strong>Finder</strong>，进入「应用程序」文件夹</li>
+    <li data-i18n="m1s2">找到 <strong>AI 步步</strong>，<strong>右键点击</strong>（或按住 Control 键点击）</li>
+    <li data-i18n="m1s3">在菜单中选择「<strong>打开</strong>」</li>
+    <li data-i18n="m1s4">弹窗中点击「<strong>打开</strong>」即可</li>
+  </ol>
+  <p class="tip" data-i18n="m1tip">只需操作一次，之后可以正常双击打开。</p>
+
+  <h2 data-i18n="h2">方法二：终端命令</h2>
+  <div class="method-tag" data-i18n="tag2">一行命令</div>
+  <p data-i18n="m2desc">打开「终端」应用，粘贴以下命令并按回车：</p>
+  <pre><code>xattr -cr "/Applications/AIbubu.app"</code></pre>
+  <p data-i18n="m2after">执行后即可正常双击打开应用。</p>
+
+  <h2 data-i18n="h3">方法三：系统设置放行</h2>
+  <div class="method-tag" data-i18n="tag3">macOS Sequoia+</div>
+  <ol>
+    <li data-i18n="m3s1">双击打开应用，看到安全提示后关闭</li>
+    <li data-i18n="m3s2">打开「<strong>系统设置</strong>」→「<strong>隐私与安全性</strong>」</li>
+    <li data-i18n="m3s3">向下滚动到「安全性」部分，找到被阻止的应用</li>
+    <li data-i18n="m3s4">点击「<strong>仍要打开</strong>」，输入密码确认</li>
+  </ol>
+
+  <h2 data-i18n="h4">为什么会出现这个提示？</h2>
+  <p data-i18n="p4">macOS 的 Gatekeeper 安全机制会检查应用是否经过 Apple 公证。AI 步步是开源社区项目，暂未购买每年 $99 的 Apple 开发者账号进行公证签名，因此 macOS 会弹出安全提示。应用本身是安全的，你可以随时在 <a href="https://github.com/funAgent/ai-bubu" target="_blank" rel="noopener">GitHub</a> 查看完整源代码。</p>
+</div>
+
+<script>
+  import { initI18n } from '../scripts/i18n'
+
+  const messages: Record<string, Record<string, string>> = {
+    zh: {
+      back: '返回首页',
+      title: 'macOS 安装指南',
+      subtitle: 'AI 步步是开源免费软件，尚未购买 Apple 开发者签名。首次打开时 macOS 会弹出安全提示，按以下任一方法操作即可正常使用。',
+      h1: '方法一：右键打开',
+      tag1: '推荐 · 最简单',
+      m1s1: '打开 <strong>Finder</strong>，进入「应用程序」文件夹',
+      m1s2: '找到 <strong>AIbubu</strong>，<strong>右键点击</strong>（或按住 Control 键点击）',
+      m1s3: '在菜单中选择「<strong>打开</strong>」',
+      m1s4: '弹窗中点击「<strong>打开</strong>」即可',
+      m1tip: '只需操作一次，之后可以正常双击打开。',
+      h2: '方法二：终端命令',
+      tag2: '一行命令',
+      m2desc: '打开「终端」应用，粘贴以下命令并按回车：',
+      m2after: '执行后即可正常双击打开应用。',
+      h3: '方法三：系统设置放行',
+      tag3: 'macOS Sequoia+',
+      m3s1: '双击打开应用，看到安全提示后关闭',
+      m3s2: '打开「<strong>系统设置</strong>」→「<strong>隐私与安全性</strong>」',
+      m3s3: '向下滚动到「安全性」部分，找到被阻止的应用',
+      m3s4: '点击「<strong>仍要打开</strong>」，输入密码确认',
+      h4: '为什么会出现这个提示？',
+      p4: 'macOS 的 Gatekeeper 安全机制会检查应用是否经过 Apple 公证。AI 步步是开源社区项目，暂未购买每年 $99 的 Apple 开发者账号进行公证签名，因此 macOS 会弹出安全提示。应用本身是安全的，你可以随时在 <a href="https://github.com/funAgent/ai-bubu" target="_blank" rel="noopener">GitHub</a> 查看完整源代码。',
+    },
+    en: {
+      back: 'Back to Home',
+      title: 'macOS Install Guide',
+      subtitle: 'AIbubu is free and open-source software, not yet signed with an Apple Developer certificate. macOS will show a security warning on first launch — use any of the methods below to proceed.',
+      h1: 'Method 1: Right-click to Open',
+      tag1: 'Recommended · Easiest',
+      m1s1: 'Open <strong>Finder</strong> and go to the <strong>Applications</strong> folder',
+      m1s2: 'Find <strong>AIbubu</strong>, then <strong>right-click</strong> (or Control-click) on it',
+      m1s3: 'Select "<strong>Open</strong>" from the menu',
+      m1s4: 'Click "<strong>Open</strong>" in the dialog',
+      m1tip: 'You only need to do this once — after that, you can double-click to open normally.',
+      h2: 'Method 2: Terminal Command',
+      tag2: 'One Command',
+      m2desc: 'Open the <strong>Terminal</strong> app and paste the following command:',
+      m2after: 'After running, you can double-click the app to open it normally.',
+      h3: 'Method 3: System Settings',
+      tag3: 'macOS Sequoia+',
+      m3s1: 'Double-click the app and dismiss the security warning',
+      m3s2: 'Open <strong>System Settings</strong> → <strong>Privacy & Security</strong>',
+      m3s3: 'Scroll down to the "Security" section and find the blocked app',
+      m3s4: 'Click "<strong>Open Anyway</strong>" and enter your password to confirm',
+      h4: 'Why does this warning appear?',
+      p4: 'macOS Gatekeeper checks whether apps are notarized by Apple. AIbubu is a community open-source project and does not yet have a $99/year Apple Developer account for notarization. The app is safe — you can review the full source code on <a href="https://github.com/funAgent/ai-bubu" target="_blank" rel="noopener">GitHub</a> at any time.',
+    },
+  }
+
+  initI18n(messages, {
+    zh: '安装指南 - AI 步步',
+    en: 'Install Guide - AIbubu',
+  })
+</script>
+
+</Base>
