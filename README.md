@@ -6,7 +6,7 @@
 
 监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起跑。
 
-[官网](https://aibubu.funagent.app) · [下载](https://github.com/funAgent/ai-bubu/releases) · [English](./README_EN.md)
+[官网](https://aibubu.funagent.app) · [下载](https://github.com/funAgent/ai-bubu/releases) · [English](./README_EN.md) · [![GitHub stars](https://img.shields.io/github/stars/funAgent/ai-bubu?style=social)](https://github.com/funAgent/ai-bubu/stargazers)
 
 <video src="packages/site/public/demo/demo.mp4" width="100%" autoplay loop muted playsinline></video>
 

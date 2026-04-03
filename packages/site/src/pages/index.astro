@@ -37,6 +37,10 @@ const DOWNLOAD_MAC = `${GITHUB_REPO}/releases/latest/download/AI.步步_0.1.0_aa
         <span data-i18n="dl">下载 macOS 版</span>
       </a>
       <a href={GITHUB_REPO} class="btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      <a href={`${GITHUB_REPO}/stargazers`} class="btn-ghost btn-star" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+        <span>Star</span>
+      </a>
     </div>
 
     <p class="hero-meta" data-i18n="meta">Beta v0.1 · 支持 Cursor、Claude Code、Codex、Trae 等</p>
@@ -506,6 +510,15 @@ const DOWNLOAD_MAC = `${GITHUB_REPO}/releases/latest/download/AI.步步_0.1.0_aa
   .btn-ghost:hover {
     border-color: rgba(0, 0, 0, 0.2);
     color: var(--text);
+  }
+
+  .btn-star svg {
+    transition: all 0.2s ease-out;
+  }
+
+  .btn-star:hover svg {
+    fill: #fbbf24;
+    transform: scale(1.1);
   }
 
   .hero-meta {
