@@ -63,13 +63,19 @@ pub fn setup_tray(app: &App) -> Result<(), Box<dyn std::error::Error>> {
     let menu = Menu::with_items(app, &[&show, &hide, &sep1, &leaderboard, &sep2, &quit])?;
 
     let png_data = include_bytes!("../icons/icon.png");
-    let decoded = image::load_from_memory(png_data)
-        .expect("failed to decode tray icon")
-        .to_rgba8();
-    let (w, h) = decoded.dimensions();
-    let icon = Image::new_owned(decoded.into_raw(), w, h);
+    let icon = match image::load_from_memory(png_data) {
+        Ok(img) => {
+            let rgba = img.to_rgba8();
+            let (w, h) = rgba.dimensions();
+            Image::new_owned(rgba.into_raw(), w, h)
+        }
+        Err(e) => {
+            eprintln!("tray: failed to decode icon.png, using 1x1 fallback: {}", e);
+            Image::new_owned(vec![0, 0, 0, 0], 1, 1)
+        }
+    };
 
-    let tray = TrayIconBuilder::with_id(TRAY_ID)
+    let _tray = TrayIconBuilder::with_id(TRAY_ID)
         .icon(icon)
         .menu(&menu)
         .icon_as_template(false)

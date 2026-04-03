@@ -81,6 +81,9 @@ pnpm install
 # 开发模式
 pnpm tauri dev
 
+# 开发模式（带模拟同事数据）
+pnpm dev:mock
+
 # 构建生产版本
 pnpm tauri build
 ```

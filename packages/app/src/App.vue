@@ -14,8 +14,11 @@ import { useTrayIcon } from './composables/useTrayIcon'
 import { useSkinStore } from './stores/skin'
 import { useSettingsStore } from './stores/settings'
 
-if (import.meta.env.DEV) {
-  import('./dev/useMockPeers').then(({ startMockPeers }) => startMockPeers())
+let cleanupMockPeers: (() => void) | null = null
+if (import.meta.env.VITE_MOCK_PEERS === 'true') {
+  import('./dev/useMockPeers').then(({ startMockPeers }) => {
+    cleanupMockPeers = startMockPeers()
+  })
 }
 
 const settingsStore = useSettingsStore()
@@ -67,6 +70,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('storage', onStorageChange)
   if (hoverTimer) clearTimeout(hoverTimer)
+  if (cleanupMockPeers) cleanupMockPeers()
 })
 
 async function onPetClick() {

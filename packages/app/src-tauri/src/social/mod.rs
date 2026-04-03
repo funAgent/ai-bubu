@@ -10,8 +10,18 @@ use util::truncate_str;
 
 static SOCIAL_ENGINE: Mutex<Option<SocialEngine>> = Mutex::new(None);
 
+const MAX_PEER_ID_LEN: usize = 64;
+
 #[tauri::command]
 pub fn social_start(app: AppHandle, peer_id: String) -> Result<(), String> {
+    if peer_id.len() > MAX_PEER_ID_LEN {
+        return Err(format!(
+            "peer_id too long: {} (max {})",
+            peer_id.len(),
+            MAX_PEER_ID_LEN
+        ));
+    }
+
     let mut engine_lock = SOCIAL_ENGINE.lock().map_err(|e| e.to_string())?;
 
     if engine_lock.is_some() {
@@ -27,7 +37,7 @@ pub fn social_start(app: AppHandle, peer_id: String) -> Result<(), String> {
 #[tauri::command]
 pub fn social_stop() -> Result<(), String> {
     let mut engine_lock = SOCIAL_ENGINE.lock().map_err(|e| e.to_string())?;
-    if let Some(ref engine) = *engine_lock {
+    if let Some(ref mut engine) = *engine_lock {
         engine.stop();
     }
     *engine_lock = None;

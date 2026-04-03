@@ -56,7 +56,7 @@ jobs:
           projectPath: packages/app
           tagName: v__VERSION__
           releaseName: 'AIbubu v__VERSION__'
-          releaseBody: 'See [CHANGELOG.md](https://github.com/funAgent/ai-bubu/blob/main/CHANGELOG.md) for details.'
+          releaseBody: 'See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.'
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}

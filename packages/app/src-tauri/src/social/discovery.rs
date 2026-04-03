@@ -1,15 +1,25 @@
+// SECURITY: LAN-only social discovery via UDP broadcast.
+// No authentication — any host on the same subnet can send spoofed heartbeats.
+// Acceptable for the "fun office leaderboard" use case. If stronger guarantees
+// are needed (e.g. public networks), add HMAC signing or switch to TCP+TLS.
+
 use super::protocol::*;
 use std::collections::HashMap;
 use std::net::UdpSocket;
 use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 use tauri::{AppHandle, Emitter};
+
+const MAX_PEERS: usize = 50;
+const MAX_PACKETS_PER_SEC: usize = 100;
 
 pub struct SocialEngine {
     peer_id: String,
     socket: Option<UdpSocket>,
     peers: Arc<Mutex<HashMap<String, (PeerUpdate, Instant)>>>,
     running: Arc<Mutex<bool>>,
+    recv_thread: Option<JoinHandle<()>>,
 }
 
 impl SocialEngine {
@@ -19,6 +29,7 @@ impl SocialEngine {
             socket: None,
             peers: Arc::new(Mutex::new(HashMap::new())),
             running: Arc::new(Mutex::new(false)),
+            recv_thread: None,
         }
     }
 
@@ -46,8 +57,10 @@ impl SocialEngine {
         let running = self.running.clone();
         let peer_id = self.peer_id.clone();
 
-        std::thread::spawn(move || {
+        let handle = std::thread::spawn(move || {
             let mut buf = [0u8; 4096];
+            let mut pkt_count: usize = 0;
+            let mut pkt_window = Instant::now();
 
             loop {
                 let is_running = match running.lock() {
@@ -58,8 +71,17 @@ impl SocialEngine {
                     break;
                 }
 
+                if pkt_window.elapsed() >= Duration::from_secs(1) {
+                    pkt_count = 0;
+                    pkt_window = Instant::now();
+                }
+
                 match socket.recv_from(&mut buf) {
                     Ok((size, _addr)) => {
+                        pkt_count += 1;
+                        if pkt_count > MAX_PACKETS_PER_SEC {
+                            continue;
+                        }
                         if let Ok(heartbeat) = serde_json::from_slice::<Heartbeat>(&buf[..size]) {
                             if heartbeat.peer_id == peer_id {
                                 continue;
@@ -84,6 +106,10 @@ impl SocialEngine {
 
                             match peers.lock() {
                                 Ok(mut peers_lock) => {
+                                    let is_existing = peers_lock.contains_key(&heartbeat.peer_id);
+                                    if !is_existing && peers_lock.len() >= MAX_PEERS {
+                                        continue;
+                                    }
                                     peers_lock.insert(
                                         heartbeat.peer_id,
                                         (update.clone(), Instant::now()),
@@ -126,6 +152,7 @@ impl SocialEngine {
             }
         });
 
+        self.recv_thread = Some(handle);
         Ok(())
     }
 
@@ -138,10 +165,13 @@ impl SocialEngine {
         Ok(())
     }
 
-    pub fn stop(&self) {
+    pub fn stop(&mut self) {
         match self.running.lock() {
             Ok(mut running) => *running = false,
             Err(e) => eprintln!("social: running mutex poisoned on stop: {}", e),
+        }
+        if let Some(handle) = self.recv_thread.take() {
+            let _ = handle.join();
         }
     }
 

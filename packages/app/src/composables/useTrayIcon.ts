@@ -6,8 +6,6 @@ import type { SkinAnimationConfig } from '@/types'
 
 const TRAY_SIZE = 44
 
-let lastKey = ''
-
 export function useTrayIcon() {
   const skinStore = useSkinStore()
   const petStore = usePetStore()
@@ -15,6 +13,9 @@ export function useTrayIcon() {
   let animTimer: ReturnType<typeof setInterval> | null = null
   let cachedImage: HTMLImageElement | null = null
   let cachedSrc = ''
+  let loadGeneration = 0
+  let lastKey = ''
+  const rgbaBuffer: number[] = new Array(TRAY_SIZE * TRAY_SIZE * 4)
 
   function stopAnim() {
     if (animTimer !== null) {
@@ -51,9 +52,10 @@ export function useTrayIcon() {
     )
 
     const rgba = offCtx.getImageData(0, 0, TRAY_SIZE, TRAY_SIZE).data
+    for (let i = 0; i < rgba.length; i++) rgbaBuffer[i] = rgba[i]
 
     invoke('update_tray_icon', {
-      rgba: Array.from(rgba),
+      rgba: rgbaBuffer,
       width: TRAY_SIZE,
       height: TRAY_SIZE,
     }).catch(() => {})
@@ -89,11 +91,17 @@ export function useTrayIcon() {
       return
     }
 
+    const gen = ++loadGeneration
     const img = new Image()
     img.onload = () => {
+      if (gen !== loadGeneration) return
       cachedImage = img
       cachedSrc = src
       startAnimLoop(img, config)
+    }
+    img.onerror = () => {
+      if (gen !== loadGeneration) return
+      lastKey = ''
     }
     img.src = src
   }

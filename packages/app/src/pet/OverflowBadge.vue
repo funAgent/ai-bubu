@@ -19,7 +19,7 @@ const tooltipLines = computed(() =>
   props.peers.map((p) => {
     const name = p.nickname || t('lbSelf')
     const steps = p.dailySteps.toLocaleString()
-    return `${name}  ${steps}${t('steps')}`
+    return isZh.value ? `${name}  ${steps}步` : `${name} — ${steps} steps`
   }),
 )
 

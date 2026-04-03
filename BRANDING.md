@@ -36,5 +36,6 @@
 1. 在 `packages/app/public/skins/` 下创建目录（如 `my-skin/`）
 2. 添加 `skin.json`（必填字段：name, version, author, style, format, size, animations）
 3. 添加 `pet.png`（精灵图）
-4. 在 `packages/app/public/skins/catalog.json` 中添加皮肤 ID
-5. 运行 `pnpm validate:skins` 校验一致性
+4. 运行 `pnpm validate:skins` 校验一致性
+
+皮肤放入目录即自动发现，无需手动注册。

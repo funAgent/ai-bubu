@@ -65,12 +65,12 @@ export function useStepCounter() {
     await loadHistory()
   })
 
-  onUnmounted(async () => {
+  onUnmounted(() => {
     if (saveTimer) {
       clearTimeout(saveTimer)
       saveTimer = null
     }
-    await saveSteps()
+    void saveSteps()
   })
 
   return { saveSteps, loadTodaySteps }

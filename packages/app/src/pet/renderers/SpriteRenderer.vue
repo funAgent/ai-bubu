@@ -22,6 +22,7 @@ const image = ref<HTMLImageElement>()
 const currentFrame = ref(0)
 let rafId: number | null = null
 let lastFrameTime = 0
+let loadGeneration = 0
 
 function stop() {
   if (rafId !== null) {
@@ -81,17 +82,22 @@ function startAnim() {
   currentFrame.value = 0
   lastFrameTime = 0
   drawFrame()
-  rafId = requestAnimationFrame(tick)
+  if (document.visibilityState === 'visible') {
+    rafId = requestAnimationFrame(tick)
+  }
 }
 
 function loadImage(src: string) {
   stop()
+  const gen = ++loadGeneration
   const img = new Image()
   img.onload = () => {
+    if (gen !== loadGeneration) return
     image.value = img
     startAnim()
   }
   img.onerror = () => {
+    if (gen !== loadGeneration) return
     console.error('Failed to load sprite:', src)
   }
   img.src = src
@@ -108,12 +114,22 @@ watch([() => props.startFrame, () => props.frameCount, () => props.fps], () => {
   if (image.value) startAnim()
 })
 
+function onVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    if (image.value && rafId === null) startAnim()
+  } else {
+    stop()
+  }
+}
+
 onMounted(() => {
   loadImage(props.src)
+  document.addEventListener('visibilitychange', onVisibilityChange)
 })
 
 onUnmounted(() => {
   stop()
+  document.removeEventListener('visibilitychange', onVisibilityChange)
 })
 </script>
 
@@ -130,6 +146,7 @@ onUnmounted(() => {
 .sprite-renderer {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   image-rendering: pixelated;
 }
 </style>

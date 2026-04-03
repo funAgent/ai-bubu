@@ -24,9 +24,12 @@ function onMouseDown(e: MouseEvent) {
     isClick = false
     pressing.value = false
     petStore.isDragging = true
-    const appWindow = getCurrentWindow()
-    await appWindow.startDragging()
-    petStore.isDragging = false
+    try {
+      const appWindow = getCurrentWindow()
+      await appWindow.startDragging()
+    } finally {
+      petStore.isDragging = false
+    }
   }, 150)
 }
 
@@ -49,6 +52,10 @@ function onMouseLeave() {
   if (dragTimer) {
     clearTimeout(dragTimer)
     dragTimer = null
+  }
+  if (cleanupTimer) {
+    clearTimeout(cleanupTimer)
+    cleanupTimer = null
   }
   isClick = false
 }

@@ -23,7 +23,7 @@ SELECT
   json_extract(value, '$.totalLinesAdded') as lines_added,
   json_extract(value, '$.filesChangedCount') as files_changed
 FROM cursorDiskKV
-WHERE key LIKE 'composerData:%'
+WHERE key >= 'composerData:' AND key < 'composerDataa'
 ORDER BY json_extract(value, '$.lastUpdatedAt') DESC
 LIMIT 1
 """

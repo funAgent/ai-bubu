@@ -1,15 +1,22 @@
 use crate::monitor::adapter::{ActivityLevel, ProbeResult};
 use std::collections::HashSet;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 const RUN_THRESHOLD_S: u64 = 60;
 const SPRINT_THRESHOLD_S: u64 = 180;
+
+/// After real activity is detected, keep the pet active for this long even
+/// if signals temporarily drop (e.g. between agent tool calls).
+const ACTIVITY_COOLDOWN: Duration = Duration::from_secs(45);
 
 #[derive(Debug, Clone, Copy)]
 pub struct ScoredOutput {
     pub score: f32,
     pub movement: Movement,
     pub active_tool_count: usize,
+    /// True when the pet stays active due to cooldown bridging between
+    /// intermittent bursts of real activity (e.g. agent tool-call gaps).
+    pub in_cooldown: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize)]
@@ -57,38 +64,67 @@ fn count_unique_active_tools(results: &[ProbeResult]) -> usize {
     seen.len()
 }
 
+/// Returns true if any adapter reports at least `ActiveLow`, indicating
+/// that an AI tool process is present even if not intensely active.
+fn has_any_presence(results: &[ProbeResult]) -> bool {
+    results
+        .iter()
+        .any(|r| r.activity >= ActivityLevel::ActiveLow)
+}
+
 pub struct MovementStateMachine {
     active_since: Option<Instant>,
+    /// Last time we saw real (≥ ActiveMedium) activity.
+    last_real_activity: Option<Instant>,
 }
 
 impl MovementStateMachine {
     pub fn new() -> Self {
-        Self { active_since: None }
+        Self {
+            active_since: None,
+            last_real_activity: None,
+        }
     }
 
     pub fn update(&mut self, results: &[ProbeResult]) -> ScoredOutput {
         let active_tool_count = count_unique_active_tools(results);
         let has_activity = active_tool_count > 0;
+        let presence = has_any_presence(results);
 
-        if !has_activity {
+        if has_activity {
+            self.last_real_activity = Some(Instant::now());
+        }
+
+        let in_cooldown = !has_activity
+            && presence
+            && self
+                .last_real_activity
+                .map(|t| t.elapsed() < ACTIVITY_COOLDOWN)
+                .unwrap_or(false);
+
+        if !has_activity && !in_cooldown {
+            if !presence {
+                self.last_real_activity = None;
+            }
             self.active_since = None;
             return ScoredOutput {
                 score: 0.0,
                 movement: Movement::Idle,
                 active_tool_count: 0,
+                in_cooldown: false,
             };
         }
 
         let now = Instant::now();
-        if self.active_since.is_none() {
-            self.active_since = Some(now);
-        }
+        let since = *self.active_since.get_or_insert(now);
 
-        let raw_duration_s = now.duration_since(self.active_since.unwrap()).as_secs();
+        let raw_duration_s = now.duration_since(since).as_secs();
 
-        let speed_multiplier: f64 = if active_tool_count >= 3 {
+        let effective_tool_count = if in_cooldown { 1 } else { active_tool_count };
+
+        let speed_multiplier: f64 = if effective_tool_count >= 3 {
             2.5
-        } else if active_tool_count >= 2 {
+        } else if effective_tool_count >= 2 {
             1.8
         } else {
             1.0
@@ -110,7 +146,8 @@ impl MovementStateMachine {
         ScoredOutput {
             score: score.min(100.0),
             movement,
-            active_tool_count,
+            active_tool_count: effective_tool_count,
+            in_cooldown,
         }
     }
 }
@@ -177,7 +214,7 @@ mod tests {
     }
 
     #[test]
-    fn activity_stops_resets_to_idle() {
+    fn activity_stops_fully_resets_to_idle() {
         let mut sm = MovementStateMachine::new();
         let active = make_result(ActivityLevel::ActiveHigh, false);
         sm.update(&[active]);
@@ -187,6 +224,109 @@ mod tests {
         let out = sm.update(&[inactive]);
         assert_eq!(out.movement, Movement::Idle);
         assert!(sm.active_since.is_none());
+    }
+
+    #[test]
+    fn cooldown_keeps_walk_during_low_dip() {
+        let mut sm = MovementStateMachine::new();
+
+        let active = make_result(ActivityLevel::ActiveHigh, false);
+        let out = sm.update(&[active]);
+        assert_eq!(out.movement, Movement::Walk);
+        assert!(sm.last_real_activity.is_some());
+
+        let low = make_result(ActivityLevel::ActiveLow, false);
+        let out = sm.update(&[low]);
+        assert_eq!(
+            out.movement,
+            Movement::Walk,
+            "ActiveLow within cooldown should stay Walk"
+        );
+    }
+
+    #[test]
+    fn cooldown_expires_then_idle() {
+        let mut sm = MovementStateMachine::new();
+
+        let active = make_result(ActivityLevel::ActiveHigh, false);
+        sm.update(&[active]);
+
+        sm.last_real_activity =
+            Some(Instant::now() - ACTIVITY_COOLDOWN - Duration::from_secs(1));
+
+        let low = make_result(ActivityLevel::ActiveLow, false);
+        let out = sm.update(&[low]);
+        assert_eq!(
+            out.movement,
+            Movement::Idle,
+            "ActiveLow after cooldown expires should be Idle"
+        );
+    }
+
+    #[test]
+    fn cooldown_not_triggered_without_presence() {
+        let mut sm = MovementStateMachine::new();
+
+        let active = make_result(ActivityLevel::ActiveHigh, false);
+        sm.update(&[active]);
+
+        let inactive = make_result(ActivityLevel::Inactive, false);
+        let out = sm.update(&[inactive]);
+        assert_eq!(
+            out.movement,
+            Movement::Idle,
+            "No presence at all should not trigger cooldown"
+        );
+    }
+
+    #[test]
+    fn new_activity_resets_cooldown_timer() {
+        let mut sm = MovementStateMachine::new();
+
+        let high = make_result(ActivityLevel::ActiveHigh, false);
+        sm.update(&[high.clone()]);
+
+        sm.last_real_activity =
+            Some(Instant::now() - ACTIVITY_COOLDOWN + Duration::from_secs(5));
+
+        sm.update(&[high]);
+        let elapsed = sm.last_real_activity.unwrap().elapsed();
+        assert!(
+            elapsed < Duration::from_secs(1),
+            "New ActiveHigh should reset cooldown timer"
+        );
+    }
+
+    #[test]
+    fn cooldown_reports_in_cooldown_flag() {
+        let mut sm = MovementStateMachine::new();
+
+        let high = make_result(ActivityLevel::ActiveHigh, false);
+        let out = sm.update(&[high]);
+        assert!(!out.in_cooldown, "Direct activity should not be cooldown");
+
+        let low = make_result(ActivityLevel::ActiveLow, false);
+        let out = sm.update(&[low]);
+        assert!(out.in_cooldown, "ActiveLow within cooldown should flag in_cooldown");
+    }
+
+    #[test]
+    fn alternating_high_low_stays_active() {
+        let mut sm = MovementStateMachine::new();
+        let high = make_result(ActivityLevel::ActiveHigh, false);
+        let low = make_result(ActivityLevel::ActiveLow, false);
+
+        sm.update(&[high.clone()]);
+        let out = sm.update(&[low.clone()]);
+        assert_eq!(out.movement, Movement::Walk);
+
+        sm.update(&[high.clone()]);
+        let out = sm.update(&[low]);
+        assert_eq!(out.movement, Movement::Walk);
+        assert!(
+            sm.active_since.is_some(),
+            "active_since should persist across alternating cycles"
+        );
     }
 
     #[test]

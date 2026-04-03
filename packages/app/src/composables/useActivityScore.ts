@@ -68,6 +68,7 @@ export function useActivityScore() {
   watch(
     () => [monitorStore.score, monitorStore.movement],
     () => update(),
+    { immediate: true },
   )
 
   onMounted(() => {

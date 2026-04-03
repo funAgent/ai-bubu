@@ -27,17 +27,18 @@ scripts/               # 工具脚本
 
 ## 开发命令
 
-| 命令                              | 说明            |
-| --------------------------------- | --------------- |
-| `pnpm dev`                        | 前端开发服务器  |
-| `pnpm tauri dev`                  | Tauri 开发模式  |
-| `pnpm test`                       | 运行前端测试    |
-| `pnpm lint`                       | ESLint 检查     |
-| `pnpm format`                     | Prettier 格式化 |
-| `pnpm validate:skins`             | 校验皮肤资源    |
-| `pnpm dev:site`                   | 官网开发服务器  |
-| `pnpm build:site`                 | 构建官网        |
-| `pnpm bump <patch\|minor\|major>` | 同步更新版本号  |
+| 命令                              | 说明                                          |
+| --------------------------------- | --------------------------------------------- |
+| `pnpm dev`                        | 前端开发服务器（Tauri beforeDevCommand 依赖） |
+| `pnpm tauri dev`                  | Tauri 开发模式                                |
+| `pnpm dev:mock`                   | Tauri 开发模式（带模拟同事数据）              |
+| `pnpm test`                       | 运行前端测试                                  |
+| `pnpm lint`                       | ESLint 检查                                   |
+| `pnpm format`                     | Prettier 格式化                               |
+| `pnpm validate:skins`             | 校验皮肤资源                                  |
+| `pnpm dev:site`                   | 官网开发服务器                                |
+| `pnpm build:site`                 | 构建官网                                      |
+| `pnpm bump <patch\|minor\|major>` | 同步更新版本号                                |
 
 ## Commit 规范
 
@@ -75,7 +76,7 @@ scripts/               # 工具脚本
 
 - 皮肤目录: `packages/app/public/skins/<skin-id>/`
 - 每个皮肤必须有 `skin.json` 和 `pet.png`
-- 目录必须注册到 `catalog.json`
+- 放入目录即自动发现，无需手动注册
 - 修改皮肤后运行 `pnpm validate:skins`
 
 ## 版本管理

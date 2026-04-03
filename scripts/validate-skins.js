@@ -2,17 +2,15 @@
 
 /**
  * Skin consistency validator — runs in pre-commit to ensure:
- *   1. catalog.json lists exactly the directories under public/skins/
- *   2. Every skin directory has skin.json with required fields
- *   3. Every animation references an existing file
- *   4. pet.png exists for each skin
+ *   1. Every skin directory has skin.json with required fields
+ *   2. Every animation references an existing file
+ *   3. pet.png exists for each skin
  */
 
 import { readdirSync, readFileSync, existsSync, statSync } from 'fs'
 import { join, resolve } from 'path'
 
 const SKINS_DIR = resolve(import.meta.dirname, '..', 'packages', 'app', 'public', 'skins')
-const CATALOG_PATH = join(SKINS_DIR, 'catalog.json')
 const REQUIRED_FIELDS = ['name', 'author', 'animations']
 const VALID_STATES = ['idle', 'walk', 'run', 'sprint']
 
@@ -30,20 +28,10 @@ function info(msg) {
 console.log('Validating skins...\n')
 
 const skinDirs = readdirSync(SKINS_DIR)
-  .filter((f) => f !== 'catalog.json' && statSync(join(SKINS_DIR, f)).isDirectory())
+  .filter((f) => statSync(join(SKINS_DIR, f)).isDirectory())
   .sort()
 
-const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
-const catalogSorted = [...catalog].sort()
-
-if (JSON.stringify(catalogSorted) !== JSON.stringify(skinDirs)) {
-  const missing = skinDirs.filter((d) => !catalog.includes(d))
-  const extra = catalog.filter((d) => !skinDirs.includes(d))
-  if (missing.length) fail(`catalog.json 缺少目录: ${missing.join(', ')}`)
-  if (extra.length) fail(`catalog.json 包含不存在的目录: ${extra.join(', ')}`)
-} else {
-  info(`catalog.json 与目录一致 (${skinDirs.length} 个皮肤)`)
-}
+info(`发现 ${skinDirs.length} 个皮肤目录`)
 
 for (const skinId of skinDirs) {
   const skinDir = join(SKINS_DIR, skinId)

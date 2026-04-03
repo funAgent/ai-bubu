@@ -1,23 +1,35 @@
 use crate::monitor::adapter::{ActivityAdapter, ActivityLevel, ProbeResult};
 use crate::monitor::config::ProviderConfig;
 use std::sync::{Arc, Mutex};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use sysinfo::System;
+
+const MIN_REFRESH_INTERVAL: Duration = Duration::from_secs(5);
 
 pub struct SharedProcessScanner {
     system: System,
+    last_refresh: Option<Instant>,
 }
 
 impl SharedProcessScanner {
     pub fn new() -> Self {
         Self {
             system: System::new(),
+            last_refresh: None,
         }
     }
 
     pub fn refresh(&mut self) {
+        let should_refresh = self
+            .last_refresh
+            .map(|t| t.elapsed() >= MIN_REFRESH_INTERVAL)
+            .unwrap_or(true);
+        if !should_refresh {
+            return;
+        }
         self.system
             .refresh_processes(sysinfo::ProcessesToUpdate::All, true);
+        self.last_refresh = Some(Instant::now());
     }
 
     pub fn find_matching_cpu(&self, names: &[String], parent_exclude: &[String]) -> Option<f32> {

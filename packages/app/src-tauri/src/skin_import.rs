@@ -3,11 +3,19 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use tauri::Manager;
 
+include!(concat!(env!("OUT_DIR"), "/builtin_skins.rs"));
+
 #[derive(Serialize)]
 pub struct ImportResult {
     pub success: bool,
     pub skin_id: String,
     pub message: String,
+}
+
+#[derive(Serialize, Clone)]
+pub struct SkinEntry {
+    pub id: String,
+    pub builtin: bool,
 }
 
 fn get_skins_dir(app: &tauri::AppHandle) -> Result<PathBuf, String> {
@@ -22,6 +30,44 @@ fn get_skins_dir(app: &tauri::AppHandle) -> Result<PathBuf, String> {
         .app_data_dir()
         .map_err(|e| format!("Failed to get app data dir: {}", e))?;
     Ok(data_dir.join("skins"))
+}
+
+/// Scan a directory for subdirectories containing `skin.json`.
+fn scan_skin_ids(dir: &Path) -> Vec<String> {
+    let mut ids = Vec::new();
+    if let Ok(entries) = fs::read_dir(dir) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_dir() && path.join("skin.json").exists() {
+                if let Some(name) = entry.file_name().to_str() {
+                    ids.push(name.to_string());
+                }
+            }
+        }
+    }
+    ids.sort();
+    ids
+}
+
+#[tauri::command]
+pub async fn list_skins(app: tauri::AppHandle) -> Vec<SkinEntry> {
+    let mut result: Vec<SkinEntry> = BUILTIN_SKIN_IDS
+        .iter()
+        .map(|id| SkinEntry {
+            id: id.to_string(),
+            builtin: true,
+        })
+        .collect();
+
+    if let Ok(skins_dir) = get_skins_dir(&app) {
+        for id in scan_skin_ids(&skins_dir) {
+            if !BUILTIN_SKIN_IDS.contains(&id.as_str()) {
+                result.push(SkinEntry { id, builtin: false });
+            }
+        }
+    }
+
+    result
 }
 
 fn validate_skin_dir(dir: &Path) -> Result<serde_json::Value, String> {
@@ -148,8 +194,6 @@ pub async fn import_skin_from_dir(app: tauri::AppHandle, source_dir: String) -> 
         };
     }
 
-    update_catalog(&skins_dir, &skin_id);
-
     let name = manifest
         .get("name")
         .and_then(|v| v.as_str())
@@ -162,10 +206,6 @@ pub async fn import_skin_from_dir(app: tauri::AppHandle, source_dir: String) -> 
     }
 }
 
-const BUILTIN_SKINS: &[&str] = &[
-    "vita", "doux", "mort", "tard", "boy", "dinosaur", "line", "glube",
-];
-
 #[tauri::command]
 pub async fn remove_skin(app: tauri::AppHandle, skin_id: String) -> ImportResult {
     if skin_id.contains("..") || skin_id.contains('/') || skin_id.contains('\\') {
@@ -176,7 +216,7 @@ pub async fn remove_skin(app: tauri::AppHandle, skin_id: String) -> ImportResult
         };
     }
 
-    if BUILTIN_SKINS.contains(&skin_id.as_str()) {
+    if BUILTIN_SKIN_IDS.contains(&skin_id.as_str()) {
         return ImportResult {
             success: false,
             skin_id: skin_id.clone(),
@@ -212,8 +252,6 @@ pub async fn remove_skin(app: tauri::AppHandle, skin_id: String) -> ImportResult
         };
     }
 
-    remove_from_catalog(&skins_dir, &skin_id);
-
     ImportResult {
         success: true,
         skin_id: skin_id.clone(),
@@ -221,61 +259,24 @@ pub async fn remove_skin(app: tauri::AppHandle, skin_id: String) -> ImportResult
     }
 }
 
-fn remove_from_catalog(skins_dir: &Path, skin_id: &str) {
-    let catalog_path = skins_dir.join("catalog.json");
-    if !catalog_path.exists() {
-        return;
-    }
-
-    let mut ids: Vec<String> = fs::read_to_string(&catalog_path)
-        .ok()
-        .and_then(|s| serde_json::from_str(&s).ok())
-        .unwrap_or_default();
-
-    ids.retain(|id| id != skin_id);
-
-    if let Ok(json) = serde_json::to_string(&ids) {
-        if let Err(e) = fs::write(&catalog_path, json) {
-            eprintln!("skin: failed to write catalog.json: {}", e);
-        }
-    }
-}
-
 fn copy_dir_contents(src: &Path, dst: &Path) -> Result<(), std::io::Error> {
     for entry in fs::read_dir(src)? {
         let entry = entry?;
-        let path = entry.path();
+        let meta = entry.metadata()?;
         let dest_path = dst.join(entry.file_name());
 
-        if path.is_dir() {
+        if meta.file_type().is_symlink() {
+            continue;
+        }
+
+        if meta.is_dir() {
             fs::create_dir_all(&dest_path)?;
-            copy_dir_contents(&path, &dest_path)?;
-        } else {
-            fs::copy(&path, &dest_path)?;
+            copy_dir_contents(&entry.path(), &dest_path)?;
+        } else if meta.is_file() {
+            fs::copy(&entry.path(), &dest_path)?;
         }
     }
     Ok(())
-}
-
-fn update_catalog(skins_dir: &Path, skin_id: &str) {
-    let catalog_path = skins_dir.join("catalog.json");
-    let mut ids: Vec<String> = if catalog_path.exists() {
-        fs::read_to_string(&catalog_path)
-            .ok()
-            .and_then(|s| serde_json::from_str(&s).ok())
-            .unwrap_or_default()
-    } else {
-        Vec::new()
-    };
-
-    if !ids.contains(&skin_id.to_string()) {
-        ids.push(skin_id.to_string());
-        if let Ok(json) = serde_json::to_string(&ids) {
-            if let Err(e) = fs::write(&catalog_path, json) {
-                eprintln!("skin: failed to write catalog.json: {}", e);
-            }
-        }
-    }
 }
 
 #[cfg(test)]
@@ -392,66 +393,46 @@ mod tests {
     }
 
     #[test]
-    fn update_catalog_creates_new() {
-        let tmp = TempDir::new().unwrap();
-        update_catalog(tmp.path(), "my-skin");
-        let content = fs::read_to_string(tmp.path().join("catalog.json")).unwrap();
-        let ids: Vec<String> = serde_json::from_str(&content).unwrap();
-        assert_eq!(ids, vec!["my-skin"]);
+    fn builtin_skin_ids_contains_expected() {
+        assert!(BUILTIN_SKIN_IDS.contains(&"vita"));
+        assert!(BUILTIN_SKIN_IDS.contains(&"doux"));
+        assert!(BUILTIN_SKIN_IDS.contains(&"line"));
+        assert!(!BUILTIN_SKIN_IDS.contains(&"custom-uploaded"));
     }
 
     #[test]
-    fn update_catalog_appends() {
+    fn scan_skin_ids_finds_valid_dirs() {
         let tmp = TempDir::new().unwrap();
-        fs::write(tmp.path().join("catalog.json"), r#"["existing"]"#).unwrap();
-        update_catalog(tmp.path(), "new-one");
-        let content = fs::read_to_string(tmp.path().join("catalog.json")).unwrap();
-        let ids: Vec<String> = serde_json::from_str(&content).unwrap();
-        assert_eq!(ids, vec!["existing", "new-one"]);
+
+        let skin_a = tmp.path().join("alpha");
+        fs::create_dir(&skin_a).unwrap();
+        fs::write(skin_a.join("skin.json"), "{}").unwrap();
+
+        let skin_b = tmp.path().join("beta");
+        fs::create_dir(&skin_b).unwrap();
+        fs::write(skin_b.join("skin.json"), "{}").unwrap();
+
+        // Directory without skin.json should be ignored
+        let no_skin = tmp.path().join("empty");
+        fs::create_dir(&no_skin).unwrap();
+
+        // Regular file should be ignored
+        fs::write(tmp.path().join("readme.txt"), "hi").unwrap();
+
+        let ids = scan_skin_ids(tmp.path());
+        assert_eq!(ids, vec!["alpha", "beta"]);
     }
 
     #[test]
-    fn update_catalog_no_duplicate() {
+    fn scan_skin_ids_empty_dir() {
         let tmp = TempDir::new().unwrap();
-        fs::write(tmp.path().join("catalog.json"), r#"["my-skin"]"#).unwrap();
-        update_catalog(tmp.path(), "my-skin");
-        let content = fs::read_to_string(tmp.path().join("catalog.json")).unwrap();
-        let ids: Vec<String> = serde_json::from_str(&content).unwrap();
-        assert_eq!(ids, vec!["my-skin"]);
+        let ids = scan_skin_ids(tmp.path());
+        assert!(ids.is_empty());
     }
 
     #[test]
-    fn remove_from_catalog_removes() {
-        let tmp = TempDir::new().unwrap();
-        fs::write(tmp.path().join("catalog.json"), r#"["a","b","c"]"#).unwrap();
-        remove_from_catalog(tmp.path(), "b");
-        let content = fs::read_to_string(tmp.path().join("catalog.json")).unwrap();
-        let ids: Vec<String> = serde_json::from_str(&content).unwrap();
-        assert_eq!(ids, vec!["a", "c"]);
-    }
-
-    #[test]
-    fn remove_from_catalog_nonexistent_id() {
-        let tmp = TempDir::new().unwrap();
-        fs::write(tmp.path().join("catalog.json"), r#"["a","b"]"#).unwrap();
-        remove_from_catalog(tmp.path(), "z");
-        let content = fs::read_to_string(tmp.path().join("catalog.json")).unwrap();
-        let ids: Vec<String> = serde_json::from_str(&content).unwrap();
-        assert_eq!(ids, vec!["a", "b"]);
-    }
-
-    #[test]
-    fn remove_from_catalog_no_file() {
-        let tmp = TempDir::new().unwrap();
-        remove_from_catalog(tmp.path(), "x");
-        assert!(!tmp.path().join("catalog.json").exists());
-    }
-
-    #[test]
-    fn builtin_skins_contains_expected() {
-        assert!(BUILTIN_SKINS.contains(&"vita"));
-        assert!(BUILTIN_SKINS.contains(&"doux"));
-        assert!(BUILTIN_SKINS.contains(&"line"));
-        assert!(!BUILTIN_SKINS.contains(&"custom-uploaded"));
+    fn scan_skin_ids_nonexistent_dir() {
+        let ids = scan_skin_ids(Path::new("/nonexistent/path"));
+        assert!(ids.is_empty());
     }
 }

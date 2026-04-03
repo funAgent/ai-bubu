@@ -81,6 +81,9 @@ pnpm install
 # Development mode
 pnpm tauri dev
 
+# Development mode (with mock peer data)
+pnpm dev:mock
+
 # Build for production
 pnpm tauri build
 ```

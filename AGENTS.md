@@ -25,8 +25,9 @@ AIbubu is a Tauri 2 desktop pet app that monitors AI coding tool activity and vi
 ## Commands
 
 ```bash
-pnpm dev              # Frontend dev server
+pnpm dev              # Frontend dev server (used by Tauri beforeDevCommand)
 pnpm tauri dev        # Full Tauri dev mode
+pnpm dev:mock         # Tauri dev mode with mock peer data
 pnpm test             # Run tests
 pnpm lint             # ESLint
 pnpm format           # Prettier
@@ -59,7 +60,8 @@ Each skin directory under `packages/app/public/skins/` must contain:
 
 - `skin.json` with fields: `name`, `author`, `animations` (at least `idle`)
 - `pet.png` sprite sheet
-- Registered in `catalog.json`
+
+Skins are auto-discovered from directories containing `skin.json`. No manual registration needed.
 
 Run `pnpm validate:skins` after any skin changes.
 

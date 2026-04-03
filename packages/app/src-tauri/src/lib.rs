@@ -50,6 +50,7 @@ pub fn run() {
             social::social_stop,
             social::social_broadcast,
             social::social_get_peers,
+            skin_import::list_skins,
             skin_import::import_skin_from_dir,
             skin_import::remove_skin,
             tray::update_tray_icon,

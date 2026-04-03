@@ -81,59 +81,55 @@ impl MonitorEngine {
             scanner.refresh();
         }
 
-        let (tx, rx) = mpsc::channel();
         let adapter_count = self.adapters.len();
-        let mut handles = Vec::with_capacity(adapter_count);
 
-        for (i, adapter) in self.adapters.iter().enumerate() {
-            let tx = tx.clone();
-            let adapter = adapter.clone();
-            handles.push(thread::spawn(move || {
-                let result = match adapter.try_lock() {
-                    Ok(mut a) => a.probe(),
-                    Err(_) => None,
+        thread::scope(|s| {
+            let (tx, rx) = mpsc::channel();
+
+            for (i, adapter) in self.adapters.iter().enumerate() {
+                let tx = tx.clone();
+                s.spawn(move || {
+                    let result = match adapter.try_lock() {
+                        Ok(mut a) => a.probe(),
+                        Err(_) => None,
+                    };
+                    let _ = tx.send((i, result));
+                });
+            }
+            drop(tx);
+
+            let deadline = Instant::now() + PROBE_TIMEOUT;
+            let mut received = 0usize;
+            {
+                let mut cache = match self.cached_results.lock() {
+                    Ok(c) => c,
+                    Err(e) => e.into_inner(),
                 };
-                let _ = tx.send((i, result));
-            }));
-        }
-        drop(tx);
 
-        let deadline = Instant::now() + PROBE_TIMEOUT;
-        let mut received = 0usize;
-        {
-            let mut cache = match self.cached_results.lock() {
-                Ok(c) => c,
-                Err(e) => e.into_inner(),
-            };
-            // Reset stale cache before receiving new results
-            cache.iter_mut().for_each(|slot| *slot = None);
-
-            loop {
-                let remaining = deadline.saturating_duration_since(Instant::now());
-                if remaining.is_zero() || received == adapter_count {
-                    break;
-                }
-                match rx.recv_timeout(remaining) {
-                    Ok((i, result)) => {
-                        cache[i] = result;
-                        received += 1;
-                    }
-                    Err(RecvTimeoutError::Timeout) => {
-                        eprintln!(
-                            "monitor: scan timeout — {}/{} adapters responded",
-                            received, adapter_count
-                        );
+                loop {
+                    let remaining = deadline.saturating_duration_since(Instant::now());
+                    if remaining.is_zero() || received == adapter_count {
                         break;
                     }
-                    Err(RecvTimeoutError::Disconnected) => break,
+                    match rx.recv_timeout(remaining) {
+                        Ok((i, result)) => {
+                            if result.is_some() {
+                                cache[i] = result;
+                            }
+                            received += 1;
+                        }
+                        Err(RecvTimeoutError::Timeout) => {
+                            eprintln!(
+                                "monitor: scan timeout — {}/{} adapters responded",
+                                received, adapter_count
+                            );
+                            break;
+                        }
+                        Err(RecvTimeoutError::Disconnected) => break,
+                    }
                 }
             }
-        }
-
-        // Join worker threads (bounded wait to prevent leaks)
-        for handle in handles {
-            let _ = handle.join();
-        }
+        });
 
         let results: Vec<ProbeResult> = {
             let cache = match self.cached_results.lock() {
@@ -189,6 +185,7 @@ impl MonitorEngine {
             })
             .collect();
 
+        let cooldown_tag = if scored.in_cooldown { " (cooldown)" } else { "" };
         if active_names.is_empty() {
             eprintln!(
                 "monitor: scan — no active tools → {}  score={:.0}",
@@ -197,9 +194,10 @@ impl MonitorEngine {
             );
         } else {
             eprintln!(
-                "monitor: scan — active=[{}] → {}  score={:.0}  tools={}",
+                "monitor: scan — active=[{}] → {}{}  score={:.0}  tools={}",
                 active_names.join(", "),
                 scored.movement.as_str(),
+                cooldown_tag,
                 scored.score,
                 scored.active_tool_count
             );

@@ -2,7 +2,11 @@ use crate::monitor::adapter::{activity_from_elapsed, ActivityAdapter, ActivityLe
 use crate::monitor::config::ProviderConfig;
 use rusqlite::{Connection, OpenFlags};
 use std::path::PathBuf;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+
+const CACHE_TTL: Duration = Duration::from_secs(5);
+
+type QueryRow = (Option<u64>, Option<String>, Option<u32>, Option<u32>);
 
 pub struct SqliteAdapter {
     provider_id: String,
@@ -13,6 +17,8 @@ pub struct SqliteAdapter {
     status_field: Option<String>,
     metrics_fields: Vec<String>,
     status_map: Vec<(String, ActivityLevel)>,
+    cached_row: Option<QueryRow>,
+    cache_time: Option<Instant>,
 }
 
 impl SqliteAdapter {
@@ -30,6 +36,8 @@ impl SqliteAdapter {
             status_field: sqlite_cfg.status_field.clone(),
             metrics_fields: sqlite_cfg.metrics_fields.clone().unwrap_or_default(),
             status_map,
+            cached_row: None,
+            cache_time: None,
         })
     }
 }
@@ -40,16 +48,27 @@ impl ActivityAdapter for SqliteAdapter {
             return None;
         }
 
-        let query_result = try_sqlite_query(
-            &self.db_path,
-            &self.query,
-            &self.timestamp_field,
-            &self.status_field,
-            &self.metrics_fields,
-        );
+        let cache_fresh = self
+            .cache_time
+            .map(|t| t.elapsed() < CACHE_TTL)
+            .unwrap_or(false);
 
-        let (ts, status, lines_added, files_changed) =
-            query_result.unwrap_or((None, None, None, None));
+        if !cache_fresh {
+            let query_result = try_sqlite_query(
+                &self.db_path,
+                &self.query,
+                &self.timestamp_field,
+                &self.status_field,
+                &self.metrics_fields,
+            );
+            if let Some(row) = query_result {
+                self.cached_row = Some(row);
+                self.cache_time = Some(Instant::now());
+            }
+        }
+
+        let (ts, ref status, lines_added, files_changed) =
+            self.cached_row.clone().unwrap_or((None, None, None, None));
 
         let activity = determine_activity(ts, status.as_deref(), &self.status_map);
 
@@ -66,15 +85,15 @@ impl ActivityAdapter for SqliteAdapter {
     }
 }
 
-/// Run the SQLite query with a hard 1-second timeout via a worker thread.
-/// Returns `None` if the database is busy or the query takes too long.
+/// Run the SQLite query with a hard 2-second timeout via a worker thread.
+/// The worker thread is always joined to prevent thread leaks.
 fn try_sqlite_query(
     db_path: &PathBuf,
     query: &str,
     timestamp_field: &str,
     status_field: &Option<String>,
     metrics_fields: &[String],
-) -> Option<(Option<u64>, Option<String>, Option<u32>, Option<u32>)> {
+) -> Option<QueryRow> {
     use std::sync::mpsc;
     use std::thread;
 
@@ -86,11 +105,11 @@ fn try_sqlite_query(
 
     let (tx, rx) = mpsc::channel();
 
-    thread::spawn(move || {
+    let handle = thread::spawn(move || {
         let flags = OpenFlags::SQLITE_OPEN_READ_ONLY | OpenFlags::SQLITE_OPEN_NO_MUTEX;
         let result = (|| {
             let conn = Connection::open_with_flags(&db, flags).ok()?;
-            conn.busy_timeout(Duration::from_millis(500)).ok();
+            conn.busy_timeout(Duration::from_millis(200)).ok();
             conn.pragma_update(None, "query_only", "ON").ok();
 
             let mut stmt = conn.prepare(&q).ok()?;
@@ -126,13 +145,18 @@ fn try_sqlite_query(
         let _ = tx.send(result);
     });
 
-    match rx.recv_timeout(Duration::from_secs(1)) {
+    let result = match rx.recv_timeout(Duration::from_secs(2)) {
         Ok(result) => result,
         Err(_) => {
             eprintln!("monitor: sqlite query timed out for {:?}", db_path);
             None
         }
-    }
+    };
+
+    // Always join the worker thread to prevent leaks.
+    // Even after timeout, the worker finishes once busy_timeout expires.
+    let _ = handle.join();
+    result
 }
 
 fn now_ms() -> u64 {

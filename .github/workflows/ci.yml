@@ -22,11 +22,11 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install
-      - run: pnpm lint
+      - run: pnpm lint:check
       - run: pnpm validate:skins
 
   test-app:
-    name: Test (Frontend)
+    name: Test & Build (Frontend)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +37,7 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm test
+      - run: pnpm build
 
   test-rust:
     name: Test (Rust)

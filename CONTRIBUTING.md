@@ -86,9 +86,8 @@ chore(deps): upgrade tauri to 2.11
 2. 在 `packages/app/public/skins/` 下创建新目录（如 `my-skin/`）
 3. 添加 `skin.json`（必填字段：`name`, `author`, `animations`）
 4. 添加 `pet.png`（精灵图）
-5. 在 `packages/app/public/skins/catalog.json` 中添加皮肤 ID
-6. 运行 `pnpm validate:skins` 确认通过
-7. 提交 PR，commit 格式：`feat(skin): add xxx skin`
+5. 运行 `pnpm validate:skins` 确认通过
+6. 提交 PR，commit 格式：`feat(skin): add xxx skin`
 
 ### skin.json 示例 | skin.json Example
 

@@ -6,8 +6,12 @@ import { useI18n } from '@/composables/useI18n'
 import type { SkinManifest, MovementState, SkinAnimationConfig } from '@/types'
 import { resolveAnimation } from '@/utils/skin'
 
-const DEFAULT_BUILTIN_IDS = ['vita', 'doux', 'mort', 'tard', 'boy', 'dinosaur', 'line', 'glube']
-let builtinSkinIds = new Set(DEFAULT_BUILTIN_IDS)
+interface SkinEntry {
+  id: string
+  builtin: boolean
+}
+
+let builtinSkinIds = new Set<string>()
 
 export interface CatalogEntry {
   id: string
@@ -74,12 +78,12 @@ export const useSkinStore = defineStore('skin', () => {
 
   async function loadCatalog() {
     try {
-      const resp = await fetch(`/skins/catalog.json?t=${Date.now()}`)
-      if (!resp.ok) return
-      const ids: string[] = await resp.json()
+      const skinEntries = await invoke<SkinEntry[]>('list_skins')
+
+      builtinSkinIds = new Set(skinEntries.filter((e) => e.builtin).map((e) => e.id))
 
       const results = await Promise.allSettled(
-        ids.map(async (id) => {
+        skinEntries.map(async ({ id }) => {
           const r = await fetch(`/skins/${id}/skin.json`)
           if (!r.ok) throw new Error(`HTTP ${r.status}`)
           const manifest: SkinManifest = await r.json()
@@ -91,7 +95,6 @@ export const useSkinStore = defineStore('skin', () => {
         .filter((r): r is PromiseFulfilledResult<CatalogEntry> => r.status === 'fulfilled')
         .map((r) => r.value)
       catalog.value = entries
-      builtinSkinIds = new Set(ids)
       catalogLoaded.value = true
 
       if (entries.length > 0) {
