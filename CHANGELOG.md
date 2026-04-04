@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Bug Fixes
 
+- Fix release workflow
+
+### Features
+
+- Site add download options without Github release page
+
+## [0.3.0] - 2026-04-04
+
+### Bug Fixes
+
 - **(app)** Fix tooltip color mismatch and improve bubble styling
 
 ### Features
@@ -22,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Miscellaneous
 
+- **(app)** Release v0.3.0
 - **(ci)** Pin GitHub Actions to SHA and update release docs
 - **(app)** Remove community providers and clean up config
 - **(app)** Expand mock peers for overflow testing
