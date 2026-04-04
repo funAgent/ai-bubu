@@ -103,7 +103,7 @@ onUnmounted(() => {
   <div class="social-window" :class="{ 'theme-light': isLight }">
     <nav class="sidebar">
       <div class="sidebar-brand">
-        <img class="brand-logo" src="/skins/000-vita/pet.png" :alt="t('brand')" />
+        <img class="brand-logo" src="/skins/vita/pet.png" :alt="t('brand')" />
         <span class="brand-text">{{ t('brand') }}</span>
         <button
           class="lang-toggle"

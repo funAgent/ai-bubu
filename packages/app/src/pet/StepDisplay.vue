@@ -65,13 +65,12 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  background: rgba(30, 32, 48, 0.85);
+  background: rgb(30, 32, 48);
   padding: 6px 10px 5px;
-  border-radius: 8px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-radius: 5px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .step-tooltip-card::after {
@@ -82,7 +81,7 @@ onUnmounted(() => {
   transform: translateX(-50%) rotate(45deg);
   width: 6px;
   height: 6px;
-  background: rgba(30, 32, 48, 0.85);
+  background: rgb(30, 32, 48);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }

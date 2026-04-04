@@ -193,15 +193,14 @@ onMounted(() => loadManifest(props.peer.petSkin))
   position: absolute;
   bottom: calc(100% + 6px);
   left: 50%;
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(6px);
+  background: rgb(15, 23, 42);
   border: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 5px;
   padding: 3px 6px;
   max-width: 140px;
   pointer-events: none;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .tip-arrow {
@@ -210,7 +209,7 @@ onMounted(() => loadManifest(props.peer.petSkin))
   transform: translateX(-50%) rotate(45deg);
   width: 6px;
   height: 6px;
-  background: rgba(15, 23, 42, 0.9);
+  background: rgb(15, 23, 42);
   border-right: 1px solid rgba(148, 163, 184, 0.1);
   border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }

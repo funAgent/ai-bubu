@@ -23,10 +23,9 @@ AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cur
 - **Run** — you and AI are in great sync
 - **Sprint** — you're on fire
 
-|                                Idle                                 |                                Walk                                 |                                Run                                 |                                Sprint                                |
-| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | 
+|                            Idle                            |                            Walk                            |                            Run                            |                            Sprint                            |
+| :--------------------------------------------------------: | :--------------------------------------------------------: | :-------------------------------------------------------: | :----------------------------------------------------------: |
 | <img src="packages/site/public/pet/idle.gif" width="48" /> | <img src="packages/site/public/pet/walk.gif" width="48" /> | <img src="packages/site/public/pet/run.gif" width="48" /> | <img src="packages/site/public/pet/sprint.gif" width="48" /> |
- 
 
 ## Features
 
@@ -110,9 +109,9 @@ scripts/                 # Utility scripts
 
 8 built-in skins with custom import support. See the [Contributing Guide](./CONTRIBUTING.md) for details.
 
-|                                Vita                                 |                                Tard                                 |                                Mort                                 |                                Doux                                 |                                Boy                                 |                                Dinosaur                                 |                                Glube                                 |                                Line                                 |
-| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :----------------------------------------------------------------: | :---------------------------------------------------------------------: | :------------------------------------------------------------------: | :-----------------------------------------------------------------: |
-| <img src="packages/app/public/skins/000-vita/pet.png" width="48" /> | <img src="packages/app/public/skins/001-tard/pet.png" width="48" /> | <img src="packages/app/public/skins/002-mort/pet.png" width="48" /> | <img src="packages/app/public/skins/003-doux/pet.png" width="48" /> | <img src="packages/app/public/skins/004-boy/pet.png" width="48" /> | <img src="packages/app/public/skins/005-dinosaur/pet.png" width="48" /> | <img src="packages/app/public/skins/006-glube/pet.png" width="48" /> | <img src="packages/app/public/skins/007-line/pet.png" width="48" /> |
+|                              Vita                               |                              Tard                               |                              Mort                               |                              Doux                               |                              Boy                               |                              Dinosaur                               |                              Glube                               |                              Line                               |
+| :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: | :------------------------------------------------------------: | :-----------------------------------------------------------------: | :--------------------------------------------------------------: | :-------------------------------------------------------------: |
+| <img src="packages/app/public/skins/vita/pet.png" width="48" /> | <img src="packages/app/public/skins/tard/pet.png" width="48" /> | <img src="packages/app/public/skins/mort/pet.png" width="48" /> | <img src="packages/app/public/skins/doux/pet.png" width="48" /> | <img src="packages/app/public/skins/boy/pet.png" width="48" /> | <img src="packages/app/public/skins/dinosaur/pet.png" width="48" /> | <img src="packages/app/public/skins/glube/pet.png" width="48" /> | <img src="packages/app/public/skins/line/pet.png" width="48" /> |
 
 ## LAN Social
 
