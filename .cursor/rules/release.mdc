@@ -72,8 +72,20 @@ git push origin main --tags
 
 推送后告知用户：
 - GitHub Actions 会自动构建 macOS（双架构）、Windows、Linux 安装包
-- 构建完成后会创建 Draft Release
+- 构建会自动签名并生成 `latest.json`（应用内自动更新所需）
+- 构建完成后会创建 Draft Release，包含安装包和 `latest.json`
 - 需要到 GitHub Releases 页面手动发布
+- 发布后旧版本启动时会自动检测到新版本并提示更新
+
+## 首次配置（签名密钥）
+
+如果仓库还未配置签名密钥，需要先完成以下一次性设置：
+
+1. **生成密钥对**：`pnpm tauri signer generate -w ~/.tauri/aibubu.key`
+2. **填入公钥**：终端输出的公钥字符串 → `tauri.conf.json` 的 `plugins.updater.pubkey`
+3. **配置 GitHub Secrets**（Settings → Secrets → Actions）：
+   - `TAURI_SIGNING_PRIVATE_KEY` — 私钥文件内容（生成时不要设密码）
+4. 提交含 pubkey 的 `tauri.conf.json`
 
 ## 注意事项
 
