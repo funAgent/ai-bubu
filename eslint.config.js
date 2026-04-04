@@ -44,6 +44,7 @@ export default [
         crypto: 'readonly',
         HTMLDivElement: 'readonly',
         Image: 'readonly',
+        __APP_VERSION__: 'readonly',
       },
       parserOptions: {
         parser: tseslint.parser,

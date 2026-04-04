@@ -8,6 +8,7 @@ import Leaderboard from './Leaderboard.vue'
 import TodayView from './TodayView.vue'
 import SkinMarket from './SkinMarket.vue'
 import SettingsView from './SettingsView.vue'
+import AboutView from './AboutView.vue'
 
 const socialStore = useSocialStore()
 const settings = useSettingsStore()
@@ -25,12 +26,13 @@ const isLight = computed(() => {
 })
 
 const TAB_KEY = 'aibubu-active-tab'
-type Tab = 'today' | 'leaderboard' | 'skins' | 'settings'
+type Tab = 'today' | 'leaderboard' | 'skins' | 'settings' | 'about'
 
 function loadTab(): Tab {
   try {
     const saved = localStorage.getItem(TAB_KEY) as Tab | null
-    if (saved && ['today', 'leaderboard', 'skins', 'settings'].includes(saved)) return saved
+    if (saved && ['today', 'leaderboard', 'skins', 'settings', 'about'].includes(saved))
+      return saved
   } catch {
     /* private mode */
   }
@@ -47,7 +49,7 @@ watch(activeTab, (val) => {
   }
 })
 
-const navKeys: Tab[] = ['today', 'leaderboard', 'skins', 'settings']
+const navKeys: Tab[] = ['today', 'leaderboard', 'skins', 'settings', 'about']
 
 function onKeydown(event: KeyboardEvent) {
   if (event.metaKey || event.ctrlKey || event.altKey) return
@@ -58,6 +60,7 @@ function onKeydown(event: KeyboardEvent) {
   else if (key === '2') activeTab.value = 'leaderboard'
   else if (key === '3') activeTab.value = 'skins'
   else if (key === '4') activeTab.value = 'settings'
+  else if (key === '5') activeTab.value = 'about'
 }
 
 const mql = window.matchMedia('(prefers-color-scheme: dark)')
@@ -178,12 +181,28 @@ onUnmounted(() => {
               stroke-linecap="round"
             />
           </svg>
-          <svg v-else class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg
+            v-else-if="tab === 'settings'"
+            class="nav-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
             <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.6" />
             <path
               d="M12 4.5V6.2M12 17.8V19.5M19.5 12H17.8M6.2 12H4.5M17.3 6.7L16.1 7.9M7.9 16.1L6.7 17.3M17.3 17.3L16.1 16.1M7.9 7.9L6.7 6.7"
               stroke="currentColor"
               stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg v-else class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6" />
+            <circle cx="12" cy="8.5" r="1" fill="currentColor" />
+            <path
+              d="M12 11.5V16.5"
+              stroke="currentColor"
+              stroke-width="1.8"
               stroke-linecap="round"
             />
           </svg>
@@ -230,7 +249,9 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <SettingsView v-else />
+      <SettingsView v-else-if="activeTab === 'settings'" />
+
+      <AboutView v-else />
     </main>
   </div>
 </template>
