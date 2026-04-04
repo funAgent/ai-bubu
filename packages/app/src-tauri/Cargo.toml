@@ -1,6 +1,6 @@
 [package]
 name = "aibubu"
-version = "0.2.1"
+version = "0.3.0"
 description = "AI 步步 - AI 开发工具活跃度桌宠"
 authors = [""]
 edition = "2021"
