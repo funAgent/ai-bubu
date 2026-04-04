@@ -1,148 +1,142 @@
 <div align="center">
 
-# AI 步步 (AIbubu)
+# AIbubu
 
-**AI 时代的编码计步器**
+**A coding step counter for the AI era**
 
-监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起赛跑。
+Monitor your AI coding tool activity, turn it into step counts, and drive a desktop pet to walk.
 
-[官网](https://aibubu.funagent.app) · [下载](https://github.com/funAgent/ai-bubu/releases) · [English](./README_EN.md) · [![GitHub stars](https://img.shields.io/github/stars/funAgent/ai-bubu?style=social)](https://github.com/funAgent/ai-bubu/stargazers)
+[Website](https://aibubu.funagent.app) · [Download](https://github.com/funAgent/ai-bubu/releases) · [中文](./README_CN.md)
 
-<video src="https://aibubu.funagent.app/demo/demo.mp4" width="100%" autoplay loop muted playsinline></video>
+<video src="https://aibubu.funagent.app/demo/demo_en.mp4" width="100%" autoplay loop muted playsinline></video>
 
 </div>
 
 ---
 
-## 它是什么？
+## What is it?
 
-AI 步步是一个桌面宠物应用，它会实时监测你使用 Cursor、Claude Code、Trae 等 AI 编码工具的活跃度，把"编码活跃度"量化为步数——你越活跃，宠物跑得越欢。
+AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Copilot, etc., and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs.
 
-- **静止** — 你在摸鱼
-- **行走** — 你正在温和地编码
-- **奔跑** — 你和 AI 配合得很默契
-- **冲刺** — 你正在疯狂输出
+- **Idle** — you're slacking off
+- **Walk** — you're coding at a gentle pace
+- **Run** — you and AI are in great sync
+- **Sprint** — you're on fire
 
-## 功能
+## Features
 
-- **AI 工具活跃度监测** — 支持 Cursor、Claude Code、Codex CLI、Trae、Copilot、Windsurf、Cline、Aider、Continue、Gemini CLI、Goose 等
-- **步数计数器** — 每日步数统计与历史记录
-- **桌面宠物** — 透明窗口、始终置顶、像素风精灵动画
-- **皮肤系统** — 8 款内置皮肤，支持自定义导入
-- **局域网社交** — 自动发现同事的宠物，查看排行榜
-- **双语界面** — 中文 / English
-- **开机自启** — 安静地运行在你的桌面上
+- **AI Tool Activity Monitoring** — supports Cursor, Claude Code, Codex CLI, Trae, Copilot, Windsurf, Cline, Aider, Continue, Gemini CLI, Goose, and more
+- **Step Counter** — daily step counts with history tracking
+- **Desktop Pet** — transparent, always-on-top window with pixel-art sprite animations
+- **Skin System** — 8 built-in skins with custom import support
+- **LAN Social** — auto-discover teammates' pets and view the leaderboard
+- **Bilingual UI** — Chinese / English
+- **Auto-start** — runs quietly on your desktop
 
-## 截图
+## Screenshots
 
-|                              今日概览                               |                               排行榜                               |
-| :-----------------------------------------------------------------: | :----------------------------------------------------------------: |
-| <img src="packages/site/public/screenshot/today.jpg" width="280" /> | <img src="packages/site/public/screenshot/rank.jpg" width="280" /> |
+|                                 Today                                  |                              Leaderboard                              |
+| :--------------------------------------------------------------------: | :-------------------------------------------------------------------: |
+| <img src="packages/site/public/screenshot/today_en.jpg" width="280" /> | <img src="packages/site/public/screenshot/rank_en.jpg" width="280" /> |
 
-|                             皮肤系统                              |                                 设置                                  |
-| :---------------------------------------------------------------: | :-------------------------------------------------------------------: |
-| <img src="packages/site/public/screenshot/pet.jpg" width="280" /> | <img src="packages/site/public/screenshot/setting.jpg" width="280" /> |
+|                                Skins                                 |                                 Settings                                 |
+| :------------------------------------------------------------------: | :----------------------------------------------------------------------: |
+| <img src="packages/site/public/screenshot/pet_en.jpg" width="280" /> | <img src="packages/site/public/screenshot/setting_en.jpg" width="280" /> |
 
-## 安装
+## Installation
 
 ### macOS
 
-从 [Releases](https://github.com/funAgent/ai-bubu/releases) 下载最新的 `.dmg` 文件。
+Download the latest `.dmg` from [Releases](https://github.com/funAgent/ai-bubu/releases).
 
-> 要求 macOS 14.0+
+> Requires macOS 14.0+
 
 ### Windows
 
-从 [Releases](https://github.com/funAgent/ai-bubu/releases) 下载最新的 `.msi` 文件。
+Download the latest `.msi` from [Releases](https://github.com/funAgent/ai-bubu/releases).
 
 ### Linux
 
-从 [Releases](https://github.com/funAgent/ai-bubu/releases) 下载 `.AppImage` 或 `.deb` 文件。
+Download `.AppImage` or `.deb` from [Releases](https://github.com/funAgent/ai-bubu/releases).
 
-## 从源码构建
+## Build from Source
 
-### 前置条件
+### Prerequisites
 
 - [Node.js](https://nodejs.org/) 22+
 - [pnpm](https://pnpm.io/) 9+
 - [Rust](https://www.rust-lang.org/tools/install) (stable)
-- Tauri 2 系统依赖：参见 [Tauri 官方文档](https://v2.tauri.app/start/prerequisites/)
+- Tauri 2 system dependencies: see [Tauri docs](https://v2.tauri.app/start/prerequisites/)
 
-### 步骤
+### Steps
 
 ```bash
-# 克隆仓库
+# Clone the repo
 git clone https://github.com/funAgent/ai-bubu.git
 cd ai-bubu
 
-# 安装依赖
+# Install dependencies
 pnpm install
 
-# 开发模式
+# Development mode
 pnpm tauri dev
 
-# 开发模式（带模拟同事数据）
+# Development mode (with mock peer data)
 pnpm dev:mock
 
-# 构建生产版本
+# Build for production
 pnpm tauri build
 ```
 
-## 项目结构
+## Project Structure
 
 ```
 packages/
-├── app/                 # Tauri 桌面应用
-│   ├── src/             # Vue 3 前端
-│   ├── src-tauri/       # Rust 后端
-│   ├── providers/       # AI 工具监测配置 (TOML)
-│   └── public/skins/   # 内置皮肤资源
-└── site/                # Astro 官网
-scripts/                 # 工具脚本
+├── app/                 # Tauri desktop application
+│   ├── src/             # Vue 3 frontend
+│   ├── src-tauri/       # Rust backend
+│   ├── providers/       # AI tool monitor configs (TOML)
+│   └── public/skins/   # Built-in skin assets
+└── site/                # Astro marketing site
+scripts/                 # Utility scripts
 ```
 
-## 皮肤系统
+## Skin System
 
-内置 8 款皮肤：Vita、Doux、Mort、Tard、Boy、Dinosaur、Line、Glube。
+8 built-in skins: Vita, Doux, Mort, Tard, Boy, Dinosaur, Line, Glube.
 
-支持自定义皮肤导入，详见 [贡献指南](./CONTRIBUTING.md) 和 [BRANDING.md](./BRANDING.md)。
+Custom skin import is supported. See the [Contributing Guide](./CONTRIBUTING.md) and [BRANDING.md](./BRANDING.md) for details.
 
-## 局域网社交
+## LAN Social
 
-开启局域网发现后，AI 步步会通过 UDP 广播（端口 23456）自动发现同一网络中的其他用户，在排行榜中展示各自的今日步数。
+When LAN discovery is enabled, AIbubu uses UDP broadcast (port 23456) to auto-discover other users on the same network and display everyone's daily steps on the leaderboard.
 
-## 技术栈
+## Tech Stack
 
-| 层       | 技术                                                |
-| -------- | --------------------------------------------------- |
-| 桌面框架 | Tauri 2, Rust                                       |
-| 前端     | Vue 3, Pinia, Vite                                  |
-| 官网     | Astro                                               |
-| 测试     | Vitest                                              |
-| 工程化   | pnpm workspace, ESLint, Prettier, Husky, commitlint |
+| Layer             | Technology                                          |
+| ----------------- | --------------------------------------------------- |
+| Desktop framework | Tauri 2, Rust                                       |
+| Frontend          | Vue 3, Pinia, Vite                                  |
+| Website           | Astro                                               |
+| Testing           | Vitest                                              |
+| Tooling           | pnpm workspace, ESLint, Prettier, Husky, commitlint |
 
-## 贡献
+## Contributing
 
-欢迎贡献！请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md) 了解详情。
+Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
-### 贡献者
+### Contributors
 
 <a href="https://github.com/funAgent/ai-bubu/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=funAgent/ai-bubu" />
 </a>
 
-## 联系我们
+## Contact
 
 <div align="center">
 
 [![X (Twitter)](https://img.shields.io/badge/@funAgentApp-000000?style=flat&logo=x&logoColor=white)](https://x.com/funAgentApp)
 [![X (Twitter)](https://img.shields.io/badge/@hash--panda-000000?style=flat&logo=x&logoColor=white)](https://x.com/hash-panda)
-
-**关注公众号和小红书，获取最新动态：**
-
-|                             公众号                              |                              小红书                               |
-| :-------------------------------------------------------------: | :---------------------------------------------------------------: |
-| <img src="packages/site/public/me/wechat_mp.jpg" width="120" /> | <img src="packages/site/public/me/xiaohongshu.jpg" width="120" /> |
 
 </div>
 
@@ -154,10 +148,10 @@ scripts/                 # 工具脚本
 
 </div>
 
-## 致谢
+## Credits
 
-- 像素恐龙角色来自 [arks](https://arks.itch.io/)（itch.io）
+- Pixel dinosaur characters by [arks](https://arks.itch.io/) (itch.io)
 
-## 许可证
+## License
 
 [MIT](./LICENSE)
