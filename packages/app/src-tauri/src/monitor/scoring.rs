@@ -251,8 +251,7 @@ mod tests {
         let active = make_result(ActivityLevel::ActiveHigh, false);
         sm.update(&[active]);
 
-        sm.last_real_activity =
-            Some(Instant::now() - ACTIVITY_COOLDOWN - Duration::from_secs(1));
+        sm.last_real_activity = Some(Instant::now() - ACTIVITY_COOLDOWN - Duration::from_secs(1));
 
         let low = make_result(ActivityLevel::ActiveLow, false);
         let out = sm.update(&[low]);
@@ -286,8 +285,7 @@ mod tests {
         let high = make_result(ActivityLevel::ActiveHigh, false);
         sm.update(&[high.clone()]);
 
-        sm.last_real_activity =
-            Some(Instant::now() - ACTIVITY_COOLDOWN + Duration::from_secs(5));
+        sm.last_real_activity = Some(Instant::now() - ACTIVITY_COOLDOWN + Duration::from_secs(5));
 
         sm.update(&[high]);
         let elapsed = sm.last_real_activity.unwrap().elapsed();
@@ -307,7 +305,10 @@ mod tests {
 
         let low = make_result(ActivityLevel::ActiveLow, false);
         let out = sm.update(&[low]);
-        assert!(out.in_cooldown, "ActiveLow within cooldown should flag in_cooldown");
+        assert!(
+            out.in_cooldown,
+            "ActiveLow within cooldown should flag in_cooldown"
+        );
     }
 
     #[test]

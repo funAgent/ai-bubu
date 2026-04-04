@@ -115,7 +115,9 @@ pub fn run() {
                         Ok(_) => {
                             apply_fullscreen_overlay(app.handle(), true);
                         }
-                        Err(e) => eprintln!("fullscreen-overlay: failed to convert to panel: {e:?}"),
+                        Err(e) => {
+                            eprintln!("fullscreen-overlay: failed to convert to panel: {e:?}")
+                        }
                     }
                 }
             }

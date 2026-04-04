@@ -185,7 +185,11 @@ impl MonitorEngine {
             })
             .collect();
 
-        let cooldown_tag = if scored.in_cooldown { " (cooldown)" } else { "" };
+        let cooldown_tag = if scored.in_cooldown {
+            " (cooldown)"
+        } else {
+            ""
+        };
         if active_names.is_empty() {
             eprintln!(
                 "monitor: scan — no active tools → {}  score={:.0}",
