@@ -10,6 +10,7 @@ alwaysApply: false
 
 ```
 packages/app/public/skins/
+├── order.json            # 内置皮肤展示顺序
 ├── vita/
 │   ├── skin.json         # 皮肤清单
 │   ├── pet.png           # 精灵图（头像）
@@ -19,6 +20,19 @@ packages/app/public/skins/
 ```
 
 皮肤通过扫描目录自动发现，无需手动注册。
+
+## 展示顺序
+
+内置皮肤的展示顺序由 `order.json` 控制，它是一个 JSON 字符串数组：
+
+```json
+["vita", "tard", "mort", "doux", "boy", "dinosaur", "glube", "line"]
+```
+
+- 调整顺序：只需修改数组中元素的位置
+- 新增皮肤：在数组中添加对应的 skin ID
+- `build.rs` 在编译时读取此文件生成 `BUILTIN_SKIN_IDS`
+- 皮肤 ID 即目录名，不带任何前缀，保持稳定
 
 ## skin.json 必填字段
 
@@ -50,5 +64,6 @@ packages/app/public/skins/
 
 1. 创建目录 `packages/app/public/skins/<skin-id>/`
 2. 添加 `skin.json` + `pet.png`
-3. 运行 `pnpm validate:skins`
-4. commit: `feat(skin): add <skin-name> skin`
+3. 在 `order.json` 数组中添加 `<skin-id>`
+4. 运行 `pnpm validate:skins`
+5. commit: `feat(skin): add <skin-name> skin`

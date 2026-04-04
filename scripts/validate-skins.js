@@ -91,6 +91,32 @@ for (const skinId of skinDirs) {
   }
 }
 
+const orderPath = join(SKINS_DIR, 'order.json')
+if (existsSync(orderPath)) {
+  try {
+    const order = JSON.parse(readFileSync(orderPath, 'utf-8'))
+    if (!Array.isArray(order)) {
+      fail('order.json 必须是字符串数组')
+    } else {
+      for (const id of order) {
+        if (!skinDirs.includes(id)) {
+          fail(`order.json 引用了不存在的皮肤目录: ${id}`)
+        }
+      }
+      for (const id of skinDirs) {
+        if (!order.includes(id)) {
+          fail(`皮肤目录 ${id} 未在 order.json 中注册`)
+        }
+      }
+      info(`order.json: ${order.length} 个皮肤，顺序一致`)
+    }
+  } catch {
+    fail('order.json 解析失败')
+  }
+} else {
+  fail('缺少 order.json 文件')
+}
+
 console.log('')
 if (errors > 0) {
   console.error(`发现 ${errors} 个错误，请修复后再提交。`)

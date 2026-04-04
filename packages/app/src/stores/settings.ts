@@ -97,7 +97,7 @@ function loadTheme(): ThemeMode {
   return 'dark'
 }
 
-const DEFAULT_SKIN = '000-vita'
+const DEFAULT_SKIN = 'vita'
 
 function loadSkinId(): string {
   try {
