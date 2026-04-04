@@ -6,8 +6,27 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  release-notes:
+    name: Generate Release Notes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      body: ${{ steps.cliff.outputs.content }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate changelog for this release
+        id: cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+
+  build:
     name: Build & Release (${{ matrix.platform }})
+    needs: release-notes
     permissions:
       contents: write
     strategy:
@@ -56,7 +75,7 @@ jobs:
           projectPath: packages/app
           tagName: v__VERSION__
           releaseName: 'AIbubu v__VERSION__'
-          releaseBody: 'See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.'
+          releaseBody: ${{ needs.release-notes.outputs.body }}
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
