@@ -12,7 +12,7 @@ If you discover a security vulnerability, please report it responsibly.
 
 **Do NOT open a public issue.**
 
-Instead, please email: **security@funagent.app**
+Instead, please email: **security@aibubu.app**
 
 Or use [GitHub Security Advisories](https://github.com/funAgent/ai-bubu/security/advisories/new) to report privately.
 
