@@ -4,11 +4,11 @@
 
 **AI 时代的编码计步器**
 
-监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起赛跑。
+监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起赛跑。<img src="packages/site/public/pet/together.gif" width="48" />
 
 [官网](https://aibubu.app) · [下载](https://github.com/funAgent/ai-bubu/releases) · [English](./README.md) · [![GitHub stars](https://img.shields.io/github/stars/funAgent/ai-bubu?style=social)](https://github.com/funAgent/ai-bubu/stargazers)
 
-<video src="https://aibubu.app/demo/demo.mp4" width="100%" autoplay loop muted playsinline></video>
+https://github.com/user-attachments/assets/94ac53d8-b835-4cbf-afa8-84cbb494dd9f
 
 </div>
 
@@ -23,13 +23,17 @@ AI 步步是一个桌面宠物应用，它会实时监测你使用 Cursor、Clau
 - **奔跑** — 你和 AI 配合得很默契
 - **冲刺** — 你正在疯狂输出
 
+|                                Idle                                 |                                Walk                                 |                                Run                                 |                                Sprint                                |
+| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | 
+| <img src="packages/site/public/pet/idle.gif" width="48" /> | <img src="packages/site/public/pet/walk.gif" width="48" /> | <img src="packages/site/public/pet/run.gif" width="48" /> | <img src="packages/site/public/pet/sprint.gif" width="48" /> |
+
 ## 功能
 
 - **AI 工具活跃度监测** — 支持 Cursor、Claude Code、Codex CLI、Trae（社区贡献更多工具支持）
 - **步数计数器** — 每日步数统计与历史记录
 - **桌面宠物** — 透明窗口、始终置顶、像素风精灵动画
 - **皮肤系统** — 8 款内置皮肤，支持自定义导入
-- **局域网社交** — 自动发现同事的宠物，查看排行榜
+- **局域网社交** — 自动发现同事的宠物，查看排行榜 <img src="packages/site/public/pet/together.gif" width="48" />
 - **双语界面** — 中文 / English
 - **开机自启** — 安静地运行在你的桌面上
 
