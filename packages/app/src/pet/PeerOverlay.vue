@@ -61,6 +61,8 @@ const { visibleBehind, visibleAhead, overflowBehind, overflowAhead, hasPeers } =
   align-items: flex-end;
   gap: 2px;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .side-left {

@@ -57,6 +57,7 @@ const tooltipText = computed(() => {
 
 const peerEl = ref<HTMLElement | null>(null)
 const tipOffset = ref('translateX(-50%)')
+const arrowPos = ref('50%')
 
 function updateTipPosition() {
   if (!peerEl.value) return
@@ -66,10 +67,13 @@ function updateTipPosition() {
   const margin = 60
   if (centerX < margin) {
     tipOffset.value = 'translateX(-10%)'
+    arrowPos.value = '10%'
   } else if (centerX > winW - margin) {
     tipOffset.value = 'translateX(-90%)'
+    arrowPos.value = '90%'
   } else {
     tipOffset.value = 'translateX(-50%)'
+    arrowPos.value = '50%'
   }
   hovered.value = true
 }
@@ -138,6 +142,7 @@ onMounted(() => loadManifest(props.peer.petSkin))
           <span class="tip-steps">{{ tooltipText.steps }}{{ t('steps') }}</span>
           <span class="tip-state">{{ tooltipText.state }}</span>
         </div>
+        <span class="tip-arrow" :style="{ left: arrowPos }"></span>
       </div>
     </Transition>
   </div>
@@ -156,6 +161,7 @@ onMounted(() => loadManifest(props.peer.petSkin))
 .peer-mini:hover {
   opacity: 1;
   transform: scale(1.12);
+  z-index: 50;
 }
 
 .peer-sprite-wrap {
@@ -185,17 +191,28 @@ onMounted(() => loadManifest(props.peer.petSkin))
 /* tooltip */
 .peer-tip {
   position: absolute;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 6px);
   left: 50%;
   background: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 5px;
   padding: 3px 6px;
-  white-space: nowrap;
+  max-width: 140px;
   pointer-events: none;
   z-index: 100;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.tip-arrow {
+  position: absolute;
+  bottom: -4px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 6px;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.9);
+  border-right: 1px solid rgba(148, 163, 184, 0.1);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .tip-name {
@@ -203,12 +220,16 @@ onMounted(() => loadManifest(props.peer.petSkin))
   font-weight: 600;
   color: #f1f5f9;
   margin-bottom: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tip-detail {
   display: flex;
   gap: 4px;
   font-size: 8px;
+  white-space: nowrap;
 }
 
 .tip-steps {
