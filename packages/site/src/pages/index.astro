@@ -3,6 +3,32 @@ import Base from '../layouts/Base.astro'
 
 const GITHUB_REPO = 'https://github.com/funAgent/ai-bubu'
 const RELEASES_URL = `${GITHUB_REPO}/releases/latest`
+
+// Build-time: fetch latest release download URLs from GitHub API
+let dlMac = ''
+let dlMacIntel = ''
+let dlWin = ''
+let dlLinux = ''
+let latestVersion = ''
+
+try {
+  const resp = await fetch('https://api.github.com/repos/funAgent/ai-bubu/releases/latest', {
+    headers: { Accept: 'application/vnd.github.v3+json' },
+  })
+  if (resp.ok) {
+    const data = await resp.json()
+    latestVersion = (data.tag_name || '').replace(/^v/, '')
+    for (const a of data.assets || []) {
+      const n = a.name.toLowerCase()
+      if (n.endsWith('.dmg') && n.includes('aarch64')) dlMac = a.browser_download_url
+      else if (n.endsWith('.dmg') && n.includes('x64')) dlMacIntel = a.browser_download_url
+      else if (n.endsWith('.msi')) dlWin = a.browser_download_url
+      else if (n.endsWith('.appimage')) dlLinux = a.browser_download_url
+    }
+  }
+} catch {
+  /* build-time fetch failed, use fallback URLs */
+}
 ---
 
 <Base
@@ -41,7 +67,16 @@ const RELEASES_URL = `${GITHUB_REPO}/releases/latest`
       </p>
 
       <div class="hero-actions">
-        <a href={RELEASES_URL} class="btn-primary" id="downloadBtn">
+        <a
+          href={dlMac || RELEASES_URL}
+          class="btn-primary"
+          id="downloadBtn"
+          data-dl-mac={dlMac}
+          data-dl-mac-intel={dlMacIntel}
+          data-dl-win={dlWin}
+          data-dl-linux={dlLinux}
+          data-dl-fallback={RELEASES_URL}
+        >
           <span class="dl-icon" id="dlIcon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
@@ -52,20 +87,14 @@ const RELEASES_URL = `${GITHUB_REPO}/releases/latest`
           </span>
           <span data-i18n="dl" id="dlText">下载 macOS 版</span>
         </a>
-        <a
-          href={RELEASES_URL}
-          class="btn-ghost btn-all-platforms"
-          id="allPlatformsBtn"
-          target="_blank"
-          rel="noopener"
-        >
+        <a href="/download" class="btn-ghost btn-all-platforms" id="allPlatformsBtn">
           <span data-i18n="dlAll">所有平台</span>
         </a>
         <a href={GITHUB_REPO} class="btn-ghost" target="_blank" rel="noopener">GitHub</a>
       </div>
 
-      <p class="hero-meta" id="heroMeta" data-i18n="meta">
-        Beta · 支持 Cursor、Claude Code、Codex、Trae 等
+      <p class="hero-meta" id="heroMeta" data-i18n="meta" data-version={latestVersion}>
+        {latestVersion ? `v${latestVersion} · ` : 'Beta · '}支持 Cursor、Claude Code、Codex、Trae 等
       </p>
       <p class="hero-install-hint">
         <a href="/install" data-i18n="installHint">首次打开遇到安全提示？查看安装指南</a>
@@ -371,13 +400,11 @@ const RELEASES_URL = `${GITHUB_REPO}/releases/latest`
     setTimeout(() => {
       applyLangAssets()
       applyDownloadBtn()
+      applyVersionMeta()
     }, 0)
   })
 
   /* ━━ OS Detection & Download ━━━━━━━━━━━━━━━━━ */
-  const GITHUB_API = 'https://api.github.com/repos/funAgent/ai-bubu/releases/latest'
-  const RELEASES_FALLBACK = 'https://github.com/funAgent/ai-bubu/releases/latest'
-
   const SVG_MAC =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.32-2.14 4.45-3.74 4.25z"/></svg>'
   const SVG_WIN =
@@ -401,62 +428,41 @@ const RELEASES_URL = `${GITHUB_REPO}/releases/latest`
   const dlIconMap: Record<OSType, string> = { mac: SVG_MAC, win: SVG_WIN, linux: SVG_LINUX }
 
   function applyDownloadBtn() {
+    const btn = document.getElementById('downloadBtn') as HTMLAnchorElement | null
+    if (!btn) return
+
     const os = detectOS()
     const lang = getLang()
+
     const dlText = document.getElementById('dlText')
     const dlIcon = document.getElementById('dlIcon')
     if (dlText) dlText.textContent = dlTextMap[lang]?.[os] || dlTextMap.en[os]
     if (dlIcon) dlIcon.innerHTML = dlIconMap[os]
+
+    const urlMap: Record<OSType, string> = {
+      mac: btn.dataset.dlMac || '',
+      win: btn.dataset.dlWin || '',
+      linux: btn.dataset.dlLinux || '',
+    }
+    btn.href = urlMap[os] || btn.dataset.dlFallback || btn.href
   }
 
   applyDownloadBtn()
 
-  function matchAsset(
-    assets: Array<{ name: string; browser_download_url: string }>,
-    os: OSType,
-  ): string | null {
-    for (const a of assets) {
-      const n = a.name.toLowerCase()
-      if (os === 'mac' && n.endsWith('.dmg') && n.includes('aarch64')) return a.browser_download_url
-      if (os === 'win' && n.endsWith('.msi')) return a.browser_download_url
-      if (os === 'linux' && n.endsWith('.appimage')) return a.browser_download_url
-    }
-    return null
+  function applyVersionMeta() {
+    const metaEl = document.getElementById('heroMeta')
+    if (!metaEl) return
+    const ver = metaEl.dataset.version
+    if (!ver) return
+    const lang = getLang()
+    const suffix =
+      lang === 'zh'
+        ? ` · 支持 Cursor、Claude Code、Codex、Trae 等`
+        : ` · Supports Cursor, Claude Code, Codex, Trae & more`
+    metaEl.textContent = `v${ver}${suffix}`
   }
 
-  fetch(GITHUB_API)
-    .then((r) => r.json())
-    .then(
-      (data: {
-        tag_name?: string
-        assets?: Array<{ name: string; browser_download_url: string }>
-      }) => {
-        const tag = data.tag_name
-        if (tag) {
-          const ver = tag.replace(/^v/, '')
-          const metaEl = document.getElementById('heroMeta')
-          if (metaEl) {
-            const lang = getLang()
-            const suffix =
-              lang === 'zh'
-                ? ` · 支持 Cursor、Claude Code、Codex、Trae 等`
-                : ` · Supports Cursor, Claude Code, Codex, Trae & more`
-            metaEl.textContent = `v${ver}${suffix}`
-          }
-        }
-
-        if (data.assets) {
-          const os = detectOS()
-          const url = matchAsset(data.assets, os)
-          const btn = document.getElementById('downloadBtn') as HTMLAnchorElement | null
-          if (btn && url) btn.href = url
-        }
-      },
-    )
-    .catch(() => {
-      const btn = document.getElementById('downloadBtn') as HTMLAnchorElement | null
-      if (btn) btn.href = RELEASES_FALLBACK
-    })
+  applyVersionMeta()
 
   /* ━━ Carousel ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
   ;(function initCarousel() {
