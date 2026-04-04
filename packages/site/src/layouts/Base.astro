@@ -8,7 +8,7 @@ interface Props {
 const { title, description, canonical, ogImage } = Astro.props
 const siteUrl = 'https://aibubu.app'
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).href
-const ogImageUrl = ogImage ?? `${siteUrl}/favicon.svg`
+const ogImageUrl = ogImage ?? `${siteUrl}/favicon.png`
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -29,7 +29,7 @@ const ogImageUrl = ogImage ?? `${siteUrl}/favicon.svg`
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
