@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Features
+
+- Update release workflow
+
+## [0.3.1] - 2026-04-04
+
 ### Bug Fixes
 
 - Fix release workflow
@@ -14,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Features
 
 - Site add download options without Github release page
+
+### Miscellaneous
+
+- **(app)** Release v0.3.1
 
 ## [0.3.0] - 2026-04-04
 
