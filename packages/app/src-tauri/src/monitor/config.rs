@@ -27,6 +27,7 @@ fn default_priority() -> u32 {
 
 #[derive(Debug, Deserialize)]
 pub struct DetectConfig {
+    #[allow(dead_code)]
     pub adapter: String,
     pub paths: Option<HashMap<String, String>>,
 }
