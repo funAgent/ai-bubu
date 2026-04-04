@@ -273,7 +273,7 @@ fn copy_dir_contents(src: &Path, dst: &Path) -> Result<(), std::io::Error> {
             fs::create_dir_all(&dest_path)?;
             copy_dir_contents(&entry.path(), &dest_path)?;
         } else if meta.is_file() {
-            fs::copy(&entry.path(), &dest_path)?;
+            fs::copy(entry.path(), &dest_path)?;
         }
     }
     Ok(())
