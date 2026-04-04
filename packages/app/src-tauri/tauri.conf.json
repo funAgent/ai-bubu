@@ -57,6 +57,7 @@
   },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": "all",
     "resources": {
       "../providers/*": "providers/"
