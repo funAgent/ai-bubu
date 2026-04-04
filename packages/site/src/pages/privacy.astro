@@ -8,13 +8,18 @@ import Base from '../layouts/Base.astro'
     position: sticky;
     top: 0;
     z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 24px;
     background: rgba(249,249,249,0.85);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
+  }
+
+  .privacy-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 12px 24px;
   }
 
   .privacy-back {
@@ -105,11 +110,13 @@ import Base from '../layouts/Base.astro'
 </style>
 
 <nav class="privacy-nav">
-  <a href="/" class="privacy-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    <span data-i18n="back">返回首页</span>
-  </a>
-  <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">EN</button>
+  <div class="privacy-nav-inner">
+    <a href="/" class="privacy-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span data-i18n="back">返回首页</span>
+    </a>
+    <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">EN</button>
+  </div>
 </nav>
 
 <div class="privacy">
