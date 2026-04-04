@@ -24,4 +24,4 @@ type_field = "type"
 [process_fallback]
 enabled = true
 names = ["claude"]
-parent_exclude = ["cursor", "code", "windsurf", "trae"]
+parent_exclude = ["cursor", "code", "trae"]

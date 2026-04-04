@@ -202,7 +202,10 @@ describe('computeScore', () => {
 
   it('1 active + 1 inactive → no bonus', () => {
     const out = computeScore(
-      [probe('active_high', NOW - 5_000, 'cursor'), probe('inactive', NOW - 3_600_000, 'copilot')],
+      [
+        probe('active_high', NOW - 5_000, 'cursor'),
+        probe('inactive', NOW - 3_600_000, 'claude-code'),
+      ],
       NOW,
     )
     expect(out.score).toBe(85)

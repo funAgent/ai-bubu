@@ -58,8 +58,8 @@ describe('useMonitorStore', () => {
           modelName: null,
         },
         {
-          providerId: 'copilot',
-          providerName: 'GitHub Copilot',
+          providerId: 'claude-code',
+          providerName: 'Claude Code',
           activity: 'inactive',
           lastActiveTs: null,
           linesAdded: null,

@@ -39,7 +39,7 @@ impl VscodeExtAdapter {
         let app_support =
             std::env::var("APPDATA").unwrap_or_else(|_| format!("{}\\AppData\\Roaming", home_str));
 
-        let ide_names = ["Code", "Cursor", "Windsurf", "Trae"];
+        let ide_names = ["Code", "Cursor", "Trae"];
 
         let mut variants = Vec::new();
 

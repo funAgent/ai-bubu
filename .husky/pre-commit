@@ -1,3 +1,4 @@
 cargo fmt --manifest-path packages/app/src-tauri/Cargo.toml
 node scripts/validate-skins.js
+node scripts/validate-providers.js
 npx lint-staged
