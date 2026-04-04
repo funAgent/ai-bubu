@@ -8,7 +8,7 @@ Monitor your AI coding tool activity, turn it into step counts, and drive a desk
 
 [Website](https://aibubu.funagent.app) · [Download](https://github.com/funAgent/ai-bubu/releases) · [中文](./README.md)
 
-<video src="packages/site/public/demo/demo_en.mp4" width="100%" autoplay loop muted playsinline></video>
+<video src="https://aibubu.funagent.app/demo/demo_en.mp4" width="100%" autoplay loop muted playsinline></video>
 
 </div>
 

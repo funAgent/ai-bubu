@@ -4,11 +4,11 @@
 
 **AI 时代的编码计步器**
 
-监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起跑。
+监测你的 AI 编码工具使用情况，将活跃度转化为步数，驱动桌面宠物行走。还能和同事一起赛跑。
 
 [官网](https://aibubu.funagent.app) · [下载](https://github.com/funAgent/ai-bubu/releases) · [English](./README_EN.md) · [![GitHub stars](https://img.shields.io/github/stars/funAgent/ai-bubu?style=social)](https://github.com/funAgent/ai-bubu/stargazers)
 
-<video src="packages/site/public/demo/demo.mp4" width="100%" autoplay loop muted playsinline></video>
+<video src="https://aibubu.funagent.app/demo/demo.mp4" width="100%" autoplay loop muted playsinline></video>
 
 </div>
 
@@ -140,9 +140,9 @@ scripts/                 # 工具脚本
 
 **关注公众号和小红书，获取最新动态：**
 
-|                                 公众号                                 |                                  小红书                                  |
-| :--------------------------------------------------------------------: | :----------------------------------------------------------------------: |
-| <img src="https://aibubu.funagent.app/me/wechat_mp.jpg" width="120" /> | <img src="https://aibubu.funagent.app/me/xiaohongshu.jpg" width="120" /> |
+|                             公众号                              |                              小红书                               |
+| :-------------------------------------------------------------: | :---------------------------------------------------------------: |
+| <img src="packages/site/public/me/wechat_mp.jpg" width="120" /> | <img src="packages/site/public/me/xiaohongshu.jpg" width="120" /> |
 
 </div>
 
