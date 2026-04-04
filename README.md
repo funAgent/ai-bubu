@@ -8,7 +8,7 @@ Monitor your AI coding tool activity, turn it into step counts, and drive a desk
 
 [Website](https://aibubu.app) · [Download](https://github.com/funAgent/ai-bubu/releases) · [中文](./README_CN.md)
 
-<video src="https://aibubu.app/demo/demo_en.mp4" width="100%" autoplay loop muted playsinline></video>
+https://github.com/user-attachments/assets/2b42508f-95e7-4a6b-b0eb-02efa23425c5
 
 </div>
 
@@ -16,12 +16,17 @@ Monitor your AI coding tool activity, turn it into step counts, and drive a desk
 
 ## What is it?
 
-AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Codex, Trae, and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs.
+AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Codex, Trae, and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs. <img src="packages/site/public/pet/together.gif" width="48" />
 
 - **Idle** — you're slacking off
 - **Walk** — you're coding at a gentle pace
 - **Run** — you and AI are in great sync
 - **Sprint** — you're on fire
+
+|                                Idle                                 |                                Walk                                 |                                Run                                 |                                Sprint                                |
+| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | 
+| <img src="packages/site/public/pet/idle.gif" width="48" /> | <img src="packages/site/public/pet/walk.gif" width="48" /> | <img src="packages/site/public/pet/run.gif" width="48" /> | <img src="packages/site/public/pet/sprint.gif" width="48" /> |
+ 
 
 ## Features
 
@@ -29,7 +34,7 @@ AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cur
 - **Step Counter** — daily step counts with history tracking
 - **Desktop Pet** — transparent, always-on-top window with pixel-art sprite animations
 - **Skin System** — 8 built-in skins with custom import support
-- **LAN Social** — auto-discover teammates' pets and view the leaderboard
+- **LAN Social** — auto-discover teammates' pets and view the leaderboard <img src="packages/site/public/pet/together.gif" width="48" />
 - **Bilingual UI** — Chinese / English
 - **Auto-start** — runs quietly on your desktop
 
