@@ -22,7 +22,7 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "packages/site/src/**/*.{ts,js}": [
+    "packages/site/src/**/*.{ts,js,astro}": [
       "eslint --fix",
       "prettier --write"
     ],
@@ -41,6 +41,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1",
     "smol-toml": "^1.6.1",
     "typescript-eslint": "^8.58.0"
   },
