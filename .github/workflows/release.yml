@@ -33,7 +33,6 @@ jobs:
     permissions:
       contents: write
     env:
-      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
     strategy:
       fail-fast: false
@@ -74,26 +73,15 @@ jobs:
 
       - run: pnpm install
 
-      - name: Verify updater signing key
+      - name: Write signing key to file
         shell: bash
         run: |
-          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
-            echo "::error::TAURI_SIGNING_PRIVATE_KEY is empty!"
-            exit 1
-          fi
-          LINE_COUNT=$(echo "$TAURI_SIGNING_PRIVATE_KEY" | wc -l | tr -d ' ')
-          CHAR_COUNT=${#TAURI_SIGNING_PRIVATE_KEY}
-          echo "Signing key present: ${CHAR_COUNT} chars, ${LINE_COUNT} lines"
-          if echo "$TAURI_SIGNING_PRIVATE_KEY" | head -1 | grep -q "^untrusted comment:"; then
-            echo "Key format: OK (starts with 'untrusted comment:')"
-          else
-            echo "::warning::Key does NOT start with 'untrusted comment:' — may be malformed"
-          fi
-          if [ -z "$TAURI_SIGNING_PRIVATE_KEY_PASSWORD" ]; then
-            echo "::warning::TAURI_SIGNING_PRIVATE_KEY_PASSWORD is empty"
-          else
-            echo "Key password: set (${#TAURI_SIGNING_PRIVATE_KEY_PASSWORD} chars)"
-          fi
+          KEY_FILE="$RUNNER_TEMP/tauri-signing.key"
+          echo "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" > "$KEY_FILE"
+          echo "TAURI_SIGNING_PRIVATE_KEY=$KEY_FILE" >> "$GITHUB_ENV"
+          LINE_COUNT=$(wc -l < "$KEY_FILE" | tr -d ' ')
+          CHAR_COUNT=$(wc -c < "$KEY_FILE" | tr -d ' ')
+          echo "Signing key written to file: ${CHAR_COUNT} bytes, ${LINE_COUNT} lines"
 
       - uses: tauri-apps/tauri-action@51a9f1156b33df106d827c3a78f8f894946c5faa # v0.5.25
         env:
