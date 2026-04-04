@@ -52,7 +52,7 @@
   "plugins": {
     "updater": {
       "endpoints": ["https://github.com/funAgent/ai-bubu/releases/latest/download/latest.json"],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxMTk4N0UyNkEwRkFDQgpSV1RMK3FBbWZwZ1JEZUQ1dnNBV2o3aTM5dkFWakZTVXhrOVRpQ2thTTNnUzhiNk9lbG5HcXdLOAo="
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE1NjIwQTIyMTgyNTlCQUIKUldTcm15VVlJZ3BpRmI3UTBiNEpodnlwMDBCMWtXK3JmbExvSnhZZStnMjJFZFBoL1ZraE5tdlcK"
     }
   },
   "bundle": {
