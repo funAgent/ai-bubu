@@ -77,7 +77,9 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .plugin(tauri_plugin_opener::init());
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init());
 
     #[cfg(target_os = "macos")]
     let builder = builder.plugin(tauri_nspanel::init());
@@ -134,6 +136,7 @@ pub fn run() {
             social::social_get_peers,
             skin_import::list_skins,
             skin_import::import_skin_from_dir,
+            skin_import::import_skin_from_zip,
             skin_import::remove_skin,
             tray::update_tray_icon,
             set_show_over_fullscreen,

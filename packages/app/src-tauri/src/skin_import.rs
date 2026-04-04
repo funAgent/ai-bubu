@@ -1,5 +1,6 @@
 use serde::Serialize;
 use std::fs;
+use std::io;
 use std::path::{Path, PathBuf};
 use tauri::Manager;
 
@@ -68,6 +69,26 @@ pub async fn list_skins(app: tauri::AppHandle) -> Vec<SkinEntry> {
     }
 
     result
+}
+
+fn sanitize_skin_id(raw: &str) -> Result<String, String> {
+    let id = raw.to_lowercase().replace(' ', "-");
+    if id.is_empty() {
+        return Err("角色 ID 不能为空".to_string());
+    }
+    if !id
+        .chars()
+        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-' || c == '_')
+    {
+        return Err(format!(
+            "角色 ID 仅允许小写字母、数字、- 和 _，当前: {}",
+            id
+        ));
+    }
+    if id.starts_with('-') || id.starts_with('_') {
+        return Err(format!("角色 ID 不能以 - 或 _ 开头: {}", id));
+    }
+    Ok(id)
 }
 
 fn validate_skin_dir(dir: &Path) -> Result<serde_json::Value, String> {
@@ -150,12 +171,21 @@ pub async fn import_skin_from_dir(app: tauri::AppHandle, source_dir: String) -> 
         }
     };
 
-    let skin_id = source
+    let raw_name = source
         .file_name()
         .and_then(|n| n.to_str())
-        .unwrap_or("unknown")
-        .to_lowercase()
-        .replace(' ', "-");
+        .unwrap_or("unknown");
+
+    let skin_id = match sanitize_skin_id(raw_name) {
+        Ok(id) => id,
+        Err(msg) => {
+            return ImportResult {
+                success: false,
+                skin_id: String::new(),
+                message: msg,
+            }
+        }
+    };
 
     let skins_dir = match get_skins_dir(&app) {
         Ok(d) => d,
@@ -203,6 +233,209 @@ pub async fn import_skin_from_dir(app: tauri::AppHandle, source_dir: String) -> 
         success: true,
         skin_id: skin_id.clone(),
         message: format!("成功导入角色: {}", name),
+    }
+}
+
+#[tauri::command]
+pub async fn import_skin_from_zip(app: tauri::AppHandle, zip_path: String) -> ImportResult {
+    let zip_file = Path::new(&zip_path);
+    if !zip_file.is_file() {
+        return ImportResult {
+            success: false,
+            skin_id: String::new(),
+            message: "指定的文件不存在".to_string(),
+        };
+    }
+
+    let tmp_dir = match tempfile::tempdir() {
+        Ok(d) => d,
+        Err(e) => {
+            return ImportResult {
+                success: false,
+                skin_id: String::new(),
+                message: format!("创建临时目录失败: {}", e),
+            }
+        }
+    };
+
+    if let Err(e) = extract_zip(zip_file, tmp_dir.path()) {
+        return ImportResult {
+            success: false,
+            skin_id: String::new(),
+            message: format!("解压 ZIP 失败: {}", e),
+        };
+    }
+
+    let skin_root = match find_skin_root(tmp_dir.path()) {
+        Ok(p) => p,
+        Err(msg) => {
+            return ImportResult {
+                success: false,
+                skin_id: String::new(),
+                message: msg,
+            }
+        }
+    };
+
+    let manifest = match validate_skin_dir(&skin_root) {
+        Ok(m) => m,
+        Err(msg) => {
+            return ImportResult {
+                success: false,
+                skin_id: String::new(),
+                message: msg,
+            }
+        }
+    };
+
+    let raw_name = skin_root
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or("unknown");
+
+    let skin_id = match sanitize_skin_id(raw_name) {
+        Ok(id) => id,
+        Err(msg) => {
+            return ImportResult {
+                success: false,
+                skin_id: String::new(),
+                message: msg,
+            }
+        }
+    };
+
+    let skins_dir = match get_skins_dir(&app) {
+        Ok(d) => d,
+        Err(msg) => {
+            return ImportResult {
+                success: false,
+                skin_id: String::new(),
+                message: msg,
+            }
+        }
+    };
+
+    let target_dir = skins_dir.join(&skin_id);
+    if target_dir.exists() {
+        return ImportResult {
+            success: false,
+            skin_id: skin_id.clone(),
+            message: format!("角色 {} 已存在", skin_id),
+        };
+    }
+
+    if let Err(e) = fs::create_dir_all(&target_dir) {
+        return ImportResult {
+            success: false,
+            skin_id: String::new(),
+            message: format!("创建目录失败: {}", e),
+        };
+    }
+
+    if let Err(e) = copy_dir_contents(&skin_root, &target_dir) {
+        let _ = fs::remove_dir_all(&target_dir);
+        return ImportResult {
+            success: false,
+            skin_id: String::new(),
+            message: format!("复制文件失败: {}", e),
+        };
+    }
+
+    let name = manifest
+        .get("name")
+        .and_then(|v| v.as_str())
+        .unwrap_or(&skin_id);
+
+    ImportResult {
+        success: true,
+        skin_id: skin_id.clone(),
+        message: format!("成功导入角色: {}", name),
+    }
+}
+
+const MAX_ZIP_FILES: usize = 200;
+const MAX_ZIP_TOTAL_BYTES: u64 = 50 * 1024 * 1024; // 50 MB
+const MAX_ZIP_SINGLE_FILE_BYTES: u64 = 20 * 1024 * 1024; // 20 MB
+
+fn extract_zip(zip_path: &Path, dest: &Path) -> Result<(), String> {
+    let file = fs::File::open(zip_path).map_err(|e| format!("无法打开 ZIP: {}", e))?;
+    let mut archive =
+        zip::ZipArchive::new(io::BufReader::new(file)).map_err(|e| format!("无效的 ZIP: {}", e))?;
+
+    if archive.len() > MAX_ZIP_FILES {
+        return Err(format!(
+            "ZIP 包含过多条目（{}），上限为 {}",
+            archive.len(),
+            MAX_ZIP_FILES
+        ));
+    }
+
+    let mut total_bytes: u64 = 0;
+
+    for i in 0..archive.len() {
+        let mut entry = archive
+            .by_index(i)
+            .map_err(|e| format!("读取 ZIP 条目失败: {}", e))?;
+
+        if entry.size() > MAX_ZIP_SINGLE_FILE_BYTES {
+            return Err(format!(
+                "ZIP 内单文件过大（{} 字节），上限为 {} MB",
+                entry.size(),
+                MAX_ZIP_SINGLE_FILE_BYTES / 1024 / 1024
+            ));
+        }
+
+        total_bytes += entry.size();
+        if total_bytes > MAX_ZIP_TOTAL_BYTES {
+            return Err(format!(
+                "ZIP 解压总大小超过上限 {} MB",
+                MAX_ZIP_TOTAL_BYTES / 1024 / 1024
+            ));
+        }
+
+        let name = match entry.enclosed_name() {
+            Some(n) => n.to_owned(),
+            None => continue,
+        };
+
+        let out_path = dest.join(&name);
+
+        if entry.is_dir() {
+            fs::create_dir_all(&out_path).map_err(|e| format!("创建目录失败: {}", e))?;
+        } else {
+            if let Some(parent) = out_path.parent() {
+                fs::create_dir_all(parent).map_err(|e| format!("创建目录失败: {}", e))?;
+            }
+            let mut outfile =
+                fs::File::create(&out_path).map_err(|e| format!("创建文件失败: {}", e))?;
+            io::copy(&mut entry, &mut outfile).map_err(|e| format!("写入文件失败: {}", e))?;
+        }
+    }
+    Ok(())
+}
+
+/// Find the directory containing skin.json within extracted ZIP contents.
+/// Handles both flat ZIPs (skin.json at root) and nested ZIPs (skin-folder/skin.json).
+/// Returns an error if multiple candidate directories are found.
+fn find_skin_root(extracted: &Path) -> Result<PathBuf, String> {
+    if extracted.join("skin.json").exists() {
+        return Ok(extracted.to_path_buf());
+    }
+
+    let mut candidates: Vec<PathBuf> = Vec::new();
+    if let Ok(entries) = fs::read_dir(extracted) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_dir() && path.join("skin.json").exists() {
+                candidates.push(path);
+            }
+        }
+    }
+
+    match candidates.len() {
+        0 => Ok(extracted.to_path_buf()),
+        1 => Ok(candidates.into_iter().next().unwrap()),
+        n => Err(format!("ZIP 内包含 {} 个皮肤目录，仅支持导入单个角色", n)),
     }
 }
 

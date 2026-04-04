@@ -52,7 +52,25 @@ async function importFromZip() {
     filters: [{ name: t('skinsZipFilter'), extensions: ['zip'] }],
   })
   if (!selected) return
-  showStatus('info', t('skinZipWip'))
+
+  importing.value = true
+  try {
+    const result = await invoke<{ success: boolean; skin_id: string; message: string }>(
+      'import_skin_from_zip',
+      { zipPath: selected },
+    )
+    if (result.success) {
+      showStatus('success', result.message)
+      await new Promise((r) => setTimeout(r, 300))
+      await skinStore.loadCatalog()
+    } else {
+      showStatus('error', result.message)
+    }
+  } catch (err) {
+    showStatus('error', `${t('skinImportFail')}: ${err}`)
+  } finally {
+    importing.value = false
+  }
 }
 </script>
 
