@@ -26,6 +26,9 @@ packages/site/.astro/
 # Claude
 .claude/
 
+# Marketing materials
+marketing/
+
 # Env
 .env
 .env.local
