@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-AI 步步是一款 Tauri 2 桌面宠物应用，监测 AI 编码工具（Cursor、Claude Code、Trae 等）的使用活跃度，将其量化为步数并驱动像素风桌面宠物。
+AI 步步是一款 Tauri 2 桌面宠物应用，监测 AI 编码工具（Cursor、Claude Code、Codex、Trae）的使用活跃度，将其量化为步数并驱动像素风桌面宠物。
 
 ## 技术栈
 

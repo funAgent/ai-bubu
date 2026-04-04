@@ -127,6 +127,33 @@ chore(deps): upgrade tauri to 2.11
 - 精灵图格式为 PNG
 - 每个动画的 `file` 必须指向实际存在的文件
 
+## 贡献 Provider 监测 | Contributing Providers
+
+为 AIbubu 添加新的 AI 工具监测支持。每个 Provider 是一个 TOML 配置文件。
+
+Adding monitoring support for a new AI coding tool. Each provider is a TOML config file.
+
+### 快速开始 | Quick Start
+
+1. 阅读 [Provider 配置指南](./packages/app/providers/README.md) 了解架构和适配器类型
+2. 在 `packages/app/providers/community/` 下创建 `your-tool.toml`
+3. 以 `pnpm tauri dev` 启动开发模式，观察终端中的 monitor 日志验证检测
+4. 运行 `node scripts/validate-providers.js` 确认配置通过校验
+5. 验证通过后将文件移到 `packages/app/providers/` 根目录
+6. 提交 PR，commit 格式：`feat(monitor): add xxx provider`，附上检测成功的终端日志截图
+
+### 适配器类型 | Adapter Types
+
+| Adapter      | 适用场景                             | 示例        |
+| ------------ | ------------------------------------ | ----------- |
+| `sqlite`     | IDE 类工具，本地 SQLite 数据库       | Cursor      |
+| `jsonl`      | CLI 工具，会话日志为 JSONL 格式      | Claude Code |
+| `process`    | 仅能通过进程检测活跃度               | Trae        |
+| `file_mtime` | 工具会写入本地文件但非 JSONL/SQLite  | —           |
+| `vscode_ext` | VS Code 扩展，数据存于 globalStorage | —           |
+
+详细配置模板和字段说明请参阅 [Provider 配置指南](./packages/app/providers/README.md)。
+
 ## 提交 PR | Submitting a PR
 
 1. Fork 本仓库
@@ -137,7 +164,7 @@ chore(deps): upgrade tauri to 2.11
 
 ### PR 要求 | PR Requirements
 
-- 通过所有 CI 检查（lint、test、skin validation）
+- 通过所有 CI 检查（lint、test、skin validation、provider validation）
 - 如果添加了新功能，请同步更新文档
 - 如果涉及 UI 变更，请附上截图
 

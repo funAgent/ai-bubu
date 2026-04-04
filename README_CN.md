@@ -25,7 +25,7 @@ AI 步步是一个桌面宠物应用，它会实时监测你使用 Cursor、Clau
 
 ## 功能
 
-- **AI 工具活跃度监测** — 支持 Cursor、Claude Code、Codex CLI、Trae、Copilot、Windsurf、Cline、Aider、Continue、Gemini CLI、Goose 等
+- **AI 工具活跃度监测** — 支持 Cursor、Claude Code、Codex CLI、Trae（社区贡献更多工具支持）
 - **步数计数器** — 每日步数统计与历史记录
 - **桌面宠物** — 透明窗口、始终置顶、像素风精灵动画
 - **皮肤系统** — 8 款内置皮肤，支持自定义导入
@@ -103,9 +103,11 @@ scripts/                 # 工具脚本
 
 ## 皮肤系统
 
-内置 8 款皮肤：Vita、Doux、Mort、Tard、Boy、Dinosaur、Line、Glube。
+内置 8 款皮肤，支持自定义导入。详见 [贡献指南](./CONTRIBUTING.md)。
 
-支持自定义皮肤导入，详见 [贡献指南](./CONTRIBUTING.md) 和 [BRANDING.md](./BRANDING.md)。
+|                                Vita                                 |                                Tard                                 |                                Mort                                 |                                Doux                                 |                                Boy                                 |                                Dinosaur                                 |                                Glube                                 |                                Line                                 |
+| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :----------------------------------------------------------------: | :---------------------------------------------------------------------: | :------------------------------------------------------------------: | :-----------------------------------------------------------------: |
+| <img src="packages/app/public/skins/000-vita/pet.png" width="48" /> | <img src="packages/app/public/skins/001-tard/pet.png" width="48" /> | <img src="packages/app/public/skins/002-mort/pet.png" width="48" /> | <img src="packages/app/public/skins/003-doux/pet.png" width="48" /> | <img src="packages/app/public/skins/004-boy/pet.png" width="48" /> | <img src="packages/app/public/skins/005-dinosaur/pet.png" width="48" /> | <img src="packages/app/public/skins/006-glube/pet.png" width="48" /> | <img src="packages/app/public/skins/007-line/pet.png" width="48" /> |
 
 ## 局域网社交
 

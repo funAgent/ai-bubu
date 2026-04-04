@@ -16,7 +16,7 @@ Monitor your AI coding tool activity, turn it into step counts, and drive a desk
 
 ## What is it?
 
-AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Copilot, etc., and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs.
+AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Codex, Trae, and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs.
 
 - **Idle** — you're slacking off
 - **Walk** — you're coding at a gentle pace
@@ -25,7 +25,7 @@ AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cur
 
 ## Features
 
-- **AI Tool Activity Monitoring** — supports Cursor, Claude Code, Codex CLI, Trae, Copilot, Windsurf, Cline, Aider, Continue, Gemini CLI, Goose, and more
+- **AI Tool Activity Monitoring** — supports Cursor, Claude Code, Codex CLI, and Trae (community providers for more tools)
 - **Step Counter** — daily step counts with history tracking
 - **Desktop Pet** — transparent, always-on-top window with pixel-art sprite animations
 - **Skin System** — 8 built-in skins with custom import support
@@ -103,9 +103,11 @@ scripts/                 # Utility scripts
 
 ## Skin System
 
-8 built-in skins: Vita, Doux, Mort, Tard, Boy, Dinosaur, Line, Glube.
+8 built-in skins with custom import support. See the [Contributing Guide](./CONTRIBUTING.md) for details.
 
-Custom skin import is supported. See the [Contributing Guide](./CONTRIBUTING.md) and [BRANDING.md](./BRANDING.md) for details.
+|                                Vita                                 |                                Tard                                 |                                Mort                                 |                                Doux                                 |                                Boy                                 |                                Dinosaur                                 |                                Glube                                 |                                Line                                 |
+| :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------------------------------: | :----------------------------------------------------------------: | :---------------------------------------------------------------------: | :------------------------------------------------------------------: | :-----------------------------------------------------------------: |
+| <img src="packages/app/public/skins/000-vita/pet.png" width="48" /> | <img src="packages/app/public/skins/001-tard/pet.png" width="48" /> | <img src="packages/app/public/skins/002-mort/pet.png" width="48" /> | <img src="packages/app/public/skins/003-doux/pet.png" width="48" /> | <img src="packages/app/public/skins/004-boy/pet.png" width="48" /> | <img src="packages/app/public/skins/005-dinosaur/pet.png" width="48" /> | <img src="packages/app/public/skins/006-glube/pet.png" width="48" /> | <img src="packages/app/public/skins/007-line/pet.png" width="48" /> |
 
 ## LAN Social
 
