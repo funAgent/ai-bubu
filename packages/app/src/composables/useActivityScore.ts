@@ -3,16 +3,19 @@ import { useMonitorStore } from '@/stores/monitor'
 import { usePetStore } from '@/stores/pet'
 import { useActivityStore } from '@/stores/activity'
 import { getLocalDateString, msUntilLocalMidnight } from '@/utils/activity'
-import type { MovementState } from '@/types'
+import type { MovementState, StepRecord } from '@/types'
 
 function accumulateSteps(
   movement: MovementState,
   score: number,
   petStore: ReturnType<typeof usePetStore>,
+  activityStore: ReturnType<typeof useActivityStore>,
 ) {
   const isMoving = movement === 'walk' || movement === 'run' || movement === 'sprint'
   if (isMoving) {
-    petStore.addSteps(Math.floor(score / 10))
+    const steps = Math.floor(score / 10)
+    petStore.addSteps(steps)
+    activityStore.addHourlySteps(steps)
   }
 }
 
@@ -20,18 +23,22 @@ function handleDateRollover(
   petStore: ReturnType<typeof usePetStore>,
   activityStore: ReturnType<typeof useActivityStore>,
 ) {
-  const { rolled, previousPeak, previousMinutes } = activityStore.tryRollover()
+  const { rolled, previousPeak, previousMinutes, previousHourly, previousProviders } =
+    activityStore.tryRollover()
   if (!rolled) return
 
   if (petStore.dailySteps > 0) {
     const d = new Date()
     d.setDate(d.getDate() - 1)
-    activityStore.addHistoryRecord({
+    const record: StepRecord = {
       date: getLocalDateString(d),
       steps: petStore.dailySteps,
       peakScore: previousPeak,
       activeMinutes: previousMinutes,
-    })
+      hourlySteps: previousHourly,
+      providerMinutes: previousProviders,
+    }
+    activityStore.addHistoryRecord(record)
   }
   petStore.resetDailySteps()
 }
@@ -50,9 +57,11 @@ export function useActivityScore() {
     petStore.setMovement(movement, Math.round(score))
 
     activityStore.updatePeak(score)
-    activityStore.trackActiveMinute(score)
 
-    accumulateSteps(movement, score, petStore)
+    const activeIds = monitorStore.activeProviders.map((p) => p.providerId)
+    activityStore.trackActiveMinute(score, activeIds)
+
+    accumulateSteps(movement, score, petStore, activityStore)
     handleDateRollover(petStore, activityStore)
   }
 

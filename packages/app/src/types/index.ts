@@ -7,6 +7,8 @@ export interface StepRecord {
   steps: number
   peakScore: number
   activeMinutes: number
+  hourlySteps?: number[]
+  providerMinutes?: Record<string, number>
 }
 
 // === Monitor ===

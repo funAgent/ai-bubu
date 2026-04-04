@@ -47,7 +47,7 @@ describe('TIMING constants', () => {
 })
 
 describe('LIMITS constants', () => {
-  it('history max days is 30', () => {
-    expect(LIMITS.historyMaxDays).toBe(30)
+  it('history max days is 90', () => {
+    expect(LIMITS.historyMaxDays).toBe(90)
   })
 })

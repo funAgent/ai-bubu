@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::sync::Arc;
 use tauri::AppHandle;
 use tauri_plugin_store::StoreExt;
@@ -10,6 +11,10 @@ pub struct StepRecord {
     pub steps: u64,
     pub peak_score: f64,
     pub active_minutes: u32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub hourly_steps: Option<Vec<u64>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub provider_minutes: Option<HashMap<String, u32>>,
 }
 
 static STORE_PATH: &str = "steps.json";
@@ -71,6 +76,8 @@ pub fn save_steps(
     steps: u64,
     peak_score: f64,
     active_minutes: u32,
+    hourly_steps: Option<Vec<u64>>,
+    provider_minutes: Option<HashMap<String, u32>>,
 ) -> Result<(), String> {
     if !is_valid_date(&date) {
         return Err("Invalid date format, expected YYYY-MM-DD".to_string());
@@ -83,6 +90,8 @@ pub fn save_steps(
         steps,
         peak_score,
         active_minutes,
+        hourly_steps,
+        provider_minutes,
     };
 
     store.set(
@@ -119,15 +128,29 @@ pub fn load_step_history(app: AppHandle) -> Result<Vec<StepRecord>, String> {
 
     for (key, val) in store.entries() {
         match serde_json::from_value::<StepRecord>(val.clone()) {
-            Ok(record) => records.push(record),
+            Ok(record) => {
+                records.push(record);
+            }
             Err(e) => eprintln!("steps: skipping corrupt entry '{}': {}", key, e),
         }
     }
 
     records.sort_by(|a, b| a.date.cmp(&b.date));
 
-    if records.len() > 30 {
-        records = records[records.len() - 30..].to_vec();
+    if records.len() > 90 {
+        let to_remove = records.len() - 90;
+        let stale_dates: Vec<String> = records[..to_remove]
+            .iter()
+            .map(|r| r.date.clone())
+            .collect();
+        records = records[to_remove..].to_vec();
+
+        for date in &stale_dates {
+            store.delete(date);
+        }
+        if !stale_dates.is_empty() {
+            let _ = store.save();
+        }
     }
 
     Ok(records)

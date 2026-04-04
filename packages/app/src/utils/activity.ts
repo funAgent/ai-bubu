@@ -27,7 +27,7 @@ export const TIMING = {
 } as const
 
 export const LIMITS = {
-  historyMaxDays: 30,
+  historyMaxDays: 90,
 } as const
 
 export const SELF_PEER_ID = '__self__'

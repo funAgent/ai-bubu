@@ -18,6 +18,8 @@ export function useStepCounter() {
         steps: petStore.dailySteps,
         peakScore: activityStore.peakScore,
         activeMinutes: activityStore.activeMinutes,
+        hourlySteps: [...activityStore.hourlySteps],
+        providerMinutes: { ...activityStore.providerMinutes },
       })
     } catch (err) {
       console.error('Failed to save steps:', err)
@@ -33,6 +35,7 @@ export function useStepCounter() {
         petStore.dailySteps = record.steps
         activityStore.peakScore = record.peakScore
         activityStore.activeMinutes = record.activeMinutes
+        activityStore.restoreToday(record)
       }
     } catch (err) {
       console.error('Failed to load steps:', err)
@@ -54,7 +57,7 @@ export function useStepCounter() {
   }
 
   watch(
-    () => petStore.dailySteps,
+    [() => petStore.dailySteps, () => activityStore.activeMinutes, () => activityStore.peakScore],
     () => {
       scheduleSave()
     },
