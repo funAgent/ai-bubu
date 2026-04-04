@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Refactor
+
+- Update release workflow
+
+## [0.3.3] - 2026-04-04
+
 ### Bug Fixes
 
 - Workflow release
+
+### Miscellaneous
+
+- **(app)** Release v0.3.3
 
 ## [0.3.2] - 2026-04-04
 
