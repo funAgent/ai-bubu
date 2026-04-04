@@ -7,15 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Added
+### Bug Fixes
 
-- Initial project setup with Tauri 2 + Vue 3
-- AI coding tool activity monitoring (Cursor, Claude Code, Codex CLI, Trae, Copilot, Windsurf, Cline, Aider, Continue, Gemini CLI, Goose)
-- Step counter with daily history
-- Desktop pet with pixel-art sprite animations
-- Skin system with 8 built-in skins (Vita, Doux, Mort, Tard, Boy, Dinosaur, Line, Glube)
-- Custom skin import support
-- LAN social discovery and leaderboard (UDP port 23456)
-- Bilingual UI (Chinese / English)
-- Auto-start support
-- Astro marketing site
+- **(skin)** 统一皮肤 ID 格式并修正 Boy 尺寸
+- **(ci)** Specify pnpm version and format Rust code
+
+### Features
+
+- **(app)** 支持在全屏应用上显示宠物
+- **(site)** 在官网和 README 添加 GitHub Star 按钮
+
+### Miscellaneous
+
+- Modify
+- **(app)** Refresh monitor, skins, and project tooling
+- Restructure project as monorepo and add open-source infrastructure

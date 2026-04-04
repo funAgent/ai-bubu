@@ -151,6 +151,10 @@ chore(deps): upgrade tauri to 2.11
 - 期望行为 vs 实际行为
 - 相关日志或截图
 
+## 发布流程 | Releasing
+
+如果你是项目维护者，请参阅 [RELEASING.md](./RELEASING.md) 了解版本发布流程。
+
 ## 许可证 | License
 
 参与贡献即表示你同意你的贡献将在 [MIT License](./LICENSE) 下发布。
