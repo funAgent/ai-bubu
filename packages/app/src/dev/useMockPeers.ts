@@ -11,12 +11,24 @@ interface MockDef {
   stepsOffset: number
 }
 
+const BASE_PEERS: MockDef[] = [
+  { zh: '代码喵', en: 'CodeCat', petSkin: '002-mort', movementState: 'sprint', stepsOffset: 1800 },
+  { zh: '冲刺鸟', en: 'SprintBird', petSkin: '001-tard', movementState: 'run', stepsOffset: 900 },
+  { zh: '键盘侠', en: 'KeyHero', petSkin: '003-doux', movementState: 'idle', stepsOffset: -100 },
+  { zh: '摸鱼侠', en: 'SlackMan', petSkin: '000-vita', movementState: 'walk', stepsOffset: -1200 },
+  { zh: '咖啡因', en: 'Caffeine', petSkin: '001-tard', movementState: 'idle', stepsOffset: -2500 },
+]
+
 const MOCK_PEERS: MockDef[] = [
-  { zh: '代码喵', en: 'CodeCat', petSkin: 'mort', movementState: 'sprint', stepsOffset: 1800 },
-  { zh: '冲刺鸟', en: 'SprintBird', petSkin: 'tard', movementState: 'run', stepsOffset: 900 },
-  { zh: '键盘侠', en: 'KeyHero', petSkin: 'doux', movementState: 'idle', stepsOffset: -100 },
-  { zh: '摸鱼侠', en: 'SlackMan', petSkin: 'vita', movementState: 'walk', stepsOffset: -1200 },
-  { zh: '咖啡因', en: 'Caffeine', petSkin: 'tard', movementState: 'idle', stepsOffset: -2500 },
+  ...Array.from({ length: 6 }, (_, i) => ({
+    ...BASE_PEERS[0],
+    stepsOffset: BASE_PEERS[0].stepsOffset + i * 200,
+  })),
+  ...BASE_PEERS.slice(1),
+  ...Array.from({ length: 3 }, (_, i) => ({
+    ...BASE_PEERS[4],
+    stepsOffset: BASE_PEERS[4].stepsOffset - i * 300,
+  })),
 ]
 
 export function startMockPeers() {
