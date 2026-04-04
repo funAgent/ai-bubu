@@ -2,7 +2,7 @@ use crate::monitor::adapter::{activity_from_elapsed, ActivityAdapter, ProbeResul
 use crate::monitor::config::ProviderConfig;
 use std::fs;
 use std::io::{Read as _, Seek, SeekFrom};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub struct JsonlAdapter {
@@ -76,7 +76,7 @@ impl ActivityAdapter for JsonlAdapter {
 /// Read the tail of a JSONL file and extract the timestamp from the last
 /// entry that contains the field. Scans backwards through lines because
 /// some tools (e.g. Claude Code) append metadata entries without timestamps.
-fn read_last_line_timestamp(path: &PathBuf, ts_field: &str) -> Option<u64> {
+fn read_last_line_timestamp(path: &Path, ts_field: &str) -> Option<u64> {
     let mut file = fs::File::open(path).ok()?;
     let file_len = file.metadata().ok()?.len();
     if file_len == 0 {
@@ -124,7 +124,7 @@ fn parse_timestamp_value(val: &serde_json::Value) -> Option<u64> {
 /// Find the most recently modified JSONL file matching the pattern.
 /// Returns (path, mtime). The mtime is the OS file modification time —
 /// no content parsing needed, no timezone concerns, works with any line size.
-fn find_latest_jsonl(base: &PathBuf, pattern: &str) -> Option<(PathBuf, SystemTime)> {
+fn find_latest_jsonl(base: &Path, pattern: &str) -> Option<(PathBuf, SystemTime)> {
     let glob_pattern = format!("{}/**/{}", base.display(), pattern);
 
     glob::glob(&glob_pattern)

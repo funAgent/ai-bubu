@@ -41,7 +41,7 @@ impl ActivityAdapter for FileMtimeAdapter {
             for entry in paths.flatten() {
                 if let Ok(meta) = fs::metadata(&entry) {
                     if let Ok(mtime) = meta.modified() {
-                        if latest_mtime.map_or(true, |prev| mtime > prev) {
+                        if latest_mtime.is_none_or(|prev| mtime > prev) {
                             latest_mtime = Some(mtime);
                         }
                     }

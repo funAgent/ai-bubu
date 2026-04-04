@@ -81,7 +81,7 @@ impl ActivityAdapter for VscodeExtAdapter {
             if let Some(result) = probe_variant(variant) {
                 if best_result
                     .as_ref()
-                    .map_or(true, |prev| result.activity > prev.activity)
+                    .is_none_or(|prev| result.activity > prev.activity)
                 {
                     best_result = Some(result);
                 }
@@ -106,7 +106,7 @@ fn probe_variant(variant: &VariantInfo) -> Option<ProbeResult> {
         let history_file = task_dir.join("api_conversation_history.json");
         if let Ok(meta) = fs::metadata(&history_file) {
             if let Ok(mtime) = meta.modified() {
-                if latest_mtime.map_or(true, |prev| mtime > prev) {
+                if latest_mtime.is_none_or(|prev| mtime > prev) {
                     latest_mtime = Some(mtime);
                 }
             }

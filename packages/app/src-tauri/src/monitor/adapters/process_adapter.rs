@@ -36,7 +36,7 @@ impl SharedProcessScanner {
         let mut total_cpu: f32 = 0.0;
         let mut found = false;
 
-        for (_pid, process) in self.system.processes() {
+        for process in self.system.processes().values() {
             let proc_name = process.name().to_string_lossy().to_lowercase();
 
             let matches = names
