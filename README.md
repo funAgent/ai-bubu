@@ -6,9 +6,9 @@
 
 Monitor your AI coding tool activity, turn it into step counts, and drive a desktop pet to walk.
 
-[Website](https://aibubu.funagent.app) · [Download](https://github.com/funAgent/ai-bubu/releases) · [中文](./README_CN.md)
+[Website](https://aibubu.app) · [Download](https://github.com/funAgent/ai-bubu/releases) · [中文](./README_CN.md)
 
-<video src="https://aibubu.funagent.app/demo/demo_en.mp4" width="100%" autoplay loop muted playsinline></video>
+<video src="https://aibubu.app/demo/demo_en.mp4" width="100%" autoplay loop muted playsinline></video>
 
 </div>
 

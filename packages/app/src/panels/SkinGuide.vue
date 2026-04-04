@@ -10,9 +10,9 @@ const emit = defineEmits<{
 
 async function downloadExample() {
   try {
-    await openUrl('https://aibubu.funagent.app/demo/vita-example.zip')
+    await openUrl('https://aibubu.app/demo/vita-example.zip')
   } catch {
-    emit('status', 'info', '请从官网下载示例：aibubu.funagent.app')
+    emit('status', 'info', '请从官网下载示例：aibubu.app')
   }
 }
 </script>

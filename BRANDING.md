@@ -2,19 +2,19 @@
 
 ## 产品名称
 
-| 场景               | 名称                |
-| ------------------ | ------------------- |
-| 中文品牌名         | AI 步步             |
-| 英文品牌名         | AIbubu              |
-| 打包/安装名        | AIbubu              |
-| npm package (root) | aibubu              |
-| npm package (app)  | aibubu              |
-| npm package (site) | aibubu-site         |
-| Rust crate         | aibubu              |
-| Tauri productName  | AIbubu              |
-| macOS .app 名称    | AIbubu.app          |
-| 域名               | aibubu.funagent.app |
-| GitHub repo        | funAgent/ai-bubu    |
+| 场景               | 名称             |
+| ------------------ | ---------------- |
+| 中文品牌名         | AI 步步          |
+| 英文品牌名         | AIbubu           |
+| 打包/安装名        | AIbubu           |
+| npm package (root) | aibubu           |
+| npm package (app)  | aibubu           |
+| npm package (site) | aibubu-site      |
+| Rust crate         | aibubu           |
+| Tauri productName  | AIbubu           |
+| macOS .app 名称    | AIbubu.app       |
+| 域名               | aibubu.app       |
+| GitHub repo        | funAgent/ai-bubu |
 
 ## localStorage key 前缀
 

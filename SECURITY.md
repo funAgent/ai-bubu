@@ -38,7 +38,7 @@ The following are in scope:
 - Skin import and validation
 - Data stored locally (SQLite, Tauri Store)
 
-The marketing site (aibubu.funagent.app) is also in scope.
+The marketing site (aibubu.app) is also in scope.
 
 ## Disclosure
 

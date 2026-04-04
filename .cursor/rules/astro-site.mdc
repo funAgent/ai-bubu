@@ -10,7 +10,7 @@ alwaysApply: false
 
 - Astro 6，纯静态输出
 - 部署到 Vercel（配置在根 `vercel.json`）
-- 域名: aibubu.funagent.app
+- 域名: aibubu.app
 
 ## 开发命令
 
