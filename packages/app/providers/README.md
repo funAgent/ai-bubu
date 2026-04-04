@@ -10,14 +10,10 @@ providers/
 ├── claude-code.toml     # ✅ Verified
 ├── codex-cli.toml       # ✅ Verified
 ├── trae.toml            # ✅ Verified
-├── community/           # Unverified — not loaded by default
-│   ├── windsurf.toml
-│   └── ...
 └── README.md            # ← You are here
 ```
 
-- Files in the **root** directory are loaded at runtime and ship with the app.
-- Files in **`community/`** are reference examples. Move them to the root to enable.
+- All `.toml` files in this directory are loaded at runtime and ship with the app.
 
 ## Adapter Types
 
@@ -38,7 +34,6 @@ windows = "${APPDATA}/ToolName/User/globalStorage/state.vscdb"
 [activity]
 adapter = "sqlite"
 [activity.sqlite]
-table = "tableName"
 latest_query = """
 SELECT timestamp_col as ts, status_col as status
 FROM tableName

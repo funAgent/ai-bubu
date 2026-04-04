@@ -15,7 +15,6 @@ windows = "${APPDATA}/Cursor/User/globalStorage/state.vscdb"
 adapter = "sqlite"
 
 [activity.sqlite]
-table = "cursorDiskKV"
 latest_query = """
 SELECT
   json_extract(value, '$.lastUpdatedAt') as ts,

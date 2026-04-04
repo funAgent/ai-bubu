@@ -12,8 +12,4 @@ adapter = "process"
 
 [activity.process]
 names = ["trae", "trae helper"]
-cpu_active_threshold = 5.0
-
-[process_fallback]
-enabled = true
-names = ["trae", "trae helper"]
+cpu_active_threshold = 15.0

@@ -15,11 +15,8 @@ windows = "${HOME}/.codex/sessions/"
 adapter = "jsonl"
 
 [activity.jsonl]
-dir_pattern = "**"
 file_pattern = "rollout-*.jsonl"
-sort_by = "mtime"
 timestamp_field = "timestamp"
-type_field = "type"
 
 [process_fallback]
 enabled = true

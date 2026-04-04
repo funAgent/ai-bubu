@@ -12,10 +12,10 @@ pub struct ProviderConfig {
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct MetaConfig {
     pub id: String,
     pub name: String,
+    #[allow(dead_code)]
     pub category: String,
     #[serde(default = "default_priority")]
     pub priority: u32,
@@ -26,7 +26,6 @@ fn default_priority() -> u32 {
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct DetectConfig {
     pub adapter: String,
     pub paths: Option<HashMap<String, String>>,
@@ -43,9 +42,7 @@ pub struct ActivityConfig {
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct SqliteActivityConfig {
-    pub table: String,
     pub latest_query: String,
     pub timestamp_field: String,
     pub status_field: Option<String>,
@@ -53,27 +50,19 @@ pub struct SqliteActivityConfig {
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct JsonlActivityConfig {
-    pub dir_pattern: Option<String>,
     pub file_pattern: String,
-    pub sort_by: Option<String>,
     pub timestamp_field: String,
-    pub type_field: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct FileMtimeConfig {
     pub watch_pattern: String,
-    pub metadata_file: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct ProcessActivityConfig {
     pub names: Vec<String>,
-    pub parent_patterns: Option<Vec<String>>,
     pub cpu_active_threshold: Option<f32>,
 }
 
@@ -203,8 +192,7 @@ macos = "${HOME}/.test/db.sqlite"
 adapter = "sqlite"
 
 [activity.sqlite]
-table = "data"
-latest_query = "SELECT * FROM data LIMIT 1"
+latest_query = "SELECT ts FROM data LIMIT 1"
 timestamp_field = "ts"
 "#;
         std::fs::write(tmp.path().join("test.toml"), toml_content).unwrap();
