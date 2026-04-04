@@ -161,7 +161,10 @@ fn position_pet_below_tray(app: &tauri::AppHandle) {
             return;
         }
 
-        let win_w = 120.0;
+        let win_w = window
+            .outer_size()
+            .map(|s| s.width as f64 / scale)
+            .unwrap_or(80.0);
         let tray_center = px + tray_w / 2.0;
         let x = (tray_center - win_w / 2.0).max(0.0);
         let y = py + tray_h + 4.0;

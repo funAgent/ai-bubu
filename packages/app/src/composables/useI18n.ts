@@ -131,6 +131,7 @@ const messages: Record<Lang, Record<string, string>> = {
     skinRemoveFail: '移除失败',
     skinZipWip: 'ZIP 导入功能开发中，请先使用文件夹导入',
     skinImportFail: '导入失败',
+    dragHint: '按住拖拽',
   },
   en: {
     brand: 'AIbubu',
@@ -228,6 +229,7 @@ const messages: Record<Lang, Record<string, string>> = {
     skinRemoveFail: 'Failed to remove',
     skinZipWip: 'ZIP import coming soon, please use folder import',
     skinImportFail: 'Import failed',
+    dragHint: 'Hold to drag',
   },
 }
 

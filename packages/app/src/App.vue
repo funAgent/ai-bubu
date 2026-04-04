@@ -12,7 +12,10 @@ import { useActivityScore } from './composables/useActivityScore'
 import { useStepCounter } from './composables/useStepCounter'
 import { useSocial } from './composables/useSocial'
 import { useTrayIcon } from './composables/useTrayIcon'
+import { useWindowSize } from './composables/useWindowSize'
+import { useI18n } from './composables/useI18n'
 import { useSkinStore } from './stores/skin'
+import { usePetStore } from './stores/pet'
 import { useSettingsStore } from './stores/settings'
 
 let cleanupMockPeers: (() => void) | null = null
@@ -23,12 +26,14 @@ if (import.meta.env.VITE_MOCK_PEERS === 'true') {
 }
 
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 useMonitor()
 useActivityScore()
 useStepCounter()
 useSocial()
 const skinStore = useSkinStore()
+const petStore = usePetStore()
 skinStore.loadCatalog()
 useTrayIcon()
 
@@ -46,6 +51,8 @@ if (isSocialWindow) {
 }
 
 if (isPetWindow) {
+  useWindowSize()
+
   onMounted(() => {
     invoke('set_show_over_fullscreen', { visible: settingsStore.showOverFullscreen }).catch((e) =>
       console.error('set_show_over_fullscreen failed', e),
@@ -63,7 +70,29 @@ if (isPetWindow) {
 }
 
 const showTooltip = ref(false)
+const isHovering = ref(false)
+const pressing = ref(false)
 let hoverTimer: ReturnType<typeof setTimeout> | null = null
+let dragTimer: ReturnType<typeof setTimeout> | null = null
+let cleanupDragTimer: ReturnType<typeof setTimeout> | null = null
+let isClick = true
+
+function onWindowEnter() {
+  isHovering.value = true
+}
+
+function onWindowLeave() {
+  isHovering.value = false
+  pressing.value = false
+  if (hoverTimer) clearTimeout(hoverTimer)
+  hoverTimer = null
+  showTooltip.value = false
+  if (dragTimer) {
+    clearTimeout(dragTimer)
+    dragTimer = null
+  }
+  isClick = false
+}
 
 function onPetEnter() {
   hoverTimer = setTimeout(() => {
@@ -75,6 +104,40 @@ function onPetLeave() {
   if (hoverTimer) clearTimeout(hoverTimer)
   hoverTimer = null
   showTooltip.value = false
+}
+
+function onWindowMouseDown(e: MouseEvent) {
+  if (e.button !== 0) return
+  isClick = true
+  pressing.value = true
+
+  dragTimer = setTimeout(async () => {
+    isClick = false
+    pressing.value = false
+    petStore.isDragging = true
+    try {
+      await currentWindow.startDragging()
+    } finally {
+      petStore.isDragging = false
+    }
+  }, 150)
+}
+
+function onWindowMouseUp(e: MouseEvent) {
+  pressing.value = false
+  if (dragTimer) {
+    clearTimeout(dragTimer)
+    dragTimer = null
+  }
+  if (isClick) {
+    const petEl = (e.currentTarget as HTMLElement)?.querySelector('.pet-canvas')
+    if (petEl && e.target instanceof HTMLElement && petEl.contains(e.target)) {
+      onPetClick()
+    }
+  }
+  cleanupDragTimer = setTimeout(() => {
+    petStore.isDragging = false
+  }, 50)
 }
 
 function onStorageChange(e: StorageEvent) {
@@ -90,6 +153,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('storage', onStorageChange)
   if (hoverTimer) clearTimeout(hoverTimer)
+  if (dragTimer) clearTimeout(dragTimer)
+  if (cleanupDragTimer) clearTimeout(cleanupDragTimer)
   if (cleanupMockPeers) cleanupMockPeers()
 })
 
@@ -119,13 +184,29 @@ async function onPetClick() {
   <SocialPanel v-if="isSocialWindow" />
 
   <!-- Pet window -->
-  <div v-else class="pet-app">
+  <div
+    v-else
+    class="pet-app"
+    :class="{ hovering: isHovering, pressing }"
+    @mouseenter="onWindowEnter"
+    @mouseleave="onWindowLeave"
+    @mousedown="onWindowMouseDown"
+    @mouseup="onWindowMouseUp"
+  >
+    <Transition name="drag-hint">
+      <div v-if="isHovering" class="drag-hint">
+        <span class="grip-icon" aria-hidden="true"></span>
+        <span class="drag-text">{{ t('dragHint') }}</span>
+      </div>
+    </Transition>
     <div class="pet-zone">
-      <Transition name="tooltip">
-        <StepDisplay v-if="showTooltip" class="step-tooltip" />
-      </Transition>
       <PeerOverlay>
-        <PetCanvas @click="onPetClick" @mouseenter="onPetEnter" @mouseleave="onPetLeave" />
+        <div class="pet-center" @mouseenter="onPetEnter" @mouseleave="onPetLeave">
+          <Transition name="tooltip">
+            <StepDisplay v-if="showTooltip" class="step-tooltip" />
+          </Transition>
+          <PetCanvas />
+        </div>
       </PeerOverlay>
     </div>
   </div>
@@ -133,6 +214,7 @@ async function onPetClick() {
 
 <style scoped>
 .pet-app {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -141,6 +223,72 @@ async function onPetClick() {
   justify-content: flex-end;
   padding-bottom: 4px;
   background: transparent;
+  cursor: grab;
+  border-radius: 10px;
+  transition:
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.pet-app.hovering {
+  box-shadow:
+    inset 0 0 0 1px rgba(128, 128, 128, 0.15),
+    0 0 8px rgba(128, 128, 128, 0.06);
+}
+
+.pet-app.pressing {
+  cursor: grabbing;
+  box-shadow:
+    inset 0 0 0 1px rgba(128, 128, 128, 0.2),
+    0 0 6px rgba(128, 128, 128, 0.08);
+}
+
+.drag-hint {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.grip-icon {
+  display: inline-grid;
+  grid-template-columns: 2px 2px;
+  gap: 1.5px;
+  width: 7px;
+  height: 9px;
+}
+.grip-icon::before,
+.grip-icon::after {
+  content: '';
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(128, 128, 128, 0.45);
+  box-shadow:
+    0 3.5px 0 rgba(128, 128, 128, 0.45),
+    0 7px 0 rgba(128, 128, 128, 0.45);
+}
+
+.drag-text {
+  font-size: 8px;
+  color: rgba(128, 128, 128, 0.5);
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.drag-hint-enter-active {
+  transition: opacity 0.25s ease;
+}
+.drag-hint-leave-active {
+  transition: opacity 0.15s ease;
+}
+.drag-hint-enter-from,
+.drag-hint-leave-to {
+  opacity: 0;
 }
 
 .pet-zone {
@@ -150,9 +298,18 @@ async function onPetClick() {
   align-items: center;
 }
 
+.pet-center {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .step-tooltip {
   position: absolute;
   bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   margin-bottom: 0;
   z-index: 10;
   pointer-events: none;
@@ -166,10 +323,10 @@ async function onPetClick() {
 }
 .tooltip-enter-from {
   opacity: 0;
-  transform: translateY(4px) scale(0.92);
+  transform: translateX(-50%) translateY(4px) scale(0.92);
 }
 .tooltip-leave-to {
   opacity: 0;
-  transform: translateY(3px) scale(0.95);
+  transform: translateX(-50%) translateY(3px) scale(0.95);
 }
 </style>
