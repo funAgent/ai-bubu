@@ -45,9 +45,15 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: https://asset.localhost data: blob:; connect-src 'self' ipc: http://ipc.localhost"
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: https://asset.localhost data: blob:; connect-src 'self' ipc: http://ipc.localhost https://github.com https://api.github.com"
     },
     "trayIcon": null
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": ["https://github.com/funAgent/ai-bubu/releases/latest/download/latest.json"],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxMTk4N0UyNkEwRkFDQgpSV1RMK3FBbWZwZ1JEZUQ1dnNBV2o3aTM5dkFWakZTVXhrOVRpQ2thTTNnUzhiNk9lbG5HcXdLOAo="
+    }
   },
   "bundle": {
     "active": true,

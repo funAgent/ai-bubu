@@ -23,6 +23,8 @@
     "store:default",
     "dialog:allow-open",
     "fs:allow-resource-read-recursive",
-    "opener:default"
+    "opener:default",
+    "updater:default",
+    "process:allow-restart"
   ]
 }

@@ -41,6 +41,13 @@ const currentWindow = getCurrentWindow()
 const isSocialWindow = currentWindow.label === 'social'
 const isPetWindow = currentWindow.label === 'pet'
 
+if (isPetWindow) {
+  import('./composables/useAutoUpdater').then(({ useAutoUpdater }) => {
+    const { checkForUpdate } = useAutoUpdater()
+    checkForUpdate(true)
+  })
+}
+
 if (isSocialWindow) {
   onMounted(() => {
     currentWindow.onCloseRequested(async (event) => {

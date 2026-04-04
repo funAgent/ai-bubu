@@ -1,0 +1,90 @@
+import { ref } from 'vue'
+import { check } from '@tauri-apps/plugin-updater'
+import { relaunch } from '@tauri-apps/plugin-process'
+
+export type UpdateStatus = 'idle' | 'checking' | 'available' | 'downloading' | 'ready' | 'error'
+
+const status = ref<UpdateStatus>('idle')
+const newVersion = ref('')
+const errorMessage = ref('')
+const downloadProgress = ref(0)
+
+let updateInstance: Awaited<ReturnType<typeof check>> | null = null
+let contentLength = 0
+let downloaded = 0
+
+async function checkForUpdate(silent = true) {
+  if (status.value === 'checking' || status.value === 'downloading') return
+
+  status.value = 'checking'
+  errorMessage.value = ''
+  updateInstance = null
+
+  try {
+    const update = await check()
+    if (update) {
+      updateInstance = update
+      newVersion.value = update.version
+      status.value = 'available'
+    } else {
+      updateInstance = null
+      status.value = 'idle'
+    }
+  } catch (err) {
+    updateInstance = null
+    if (!silent) {
+      errorMessage.value = String(err)
+      status.value = 'error'
+    } else {
+      status.value = 'idle'
+    }
+  }
+}
+
+async function downloadAndInstall() {
+  if (!updateInstance || status.value === 'downloading') return
+
+  status.value = 'downloading'
+  downloadProgress.value = 0
+  contentLength = 0
+  downloaded = 0
+
+  try {
+    await updateInstance.downloadAndInstall((event) => {
+      if (event.event === 'Started') {
+        contentLength = event.data.contentLength ?? 0
+        downloaded = 0
+        downloadProgress.value = 0
+      } else if (event.event === 'Progress') {
+        downloaded += event.data.chunkLength
+        if (contentLength > 0) {
+          downloadProgress.value = Math.min(99, Math.round((downloaded / contentLength) * 100))
+        } else {
+          downloadProgress.value = Math.min(downloadProgress.value + 1, 90)
+        }
+      } else if (event.event === 'Finished') {
+        downloadProgress.value = 100
+      }
+    })
+    status.value = 'ready'
+  } catch (err) {
+    errorMessage.value = String(err)
+    status.value = 'error'
+  }
+}
+
+async function installAndRelaunch() {
+  await relaunch()
+}
+
+export function useAutoUpdater() {
+  return {
+    status,
+    newVersion,
+    errorMessage,
+    downloadProgress,
+    checkForUpdate,
+    downloadAndInstall,
+    installAndRelaunch,
+  }
+}

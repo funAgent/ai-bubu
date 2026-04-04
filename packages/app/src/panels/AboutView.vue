@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { useI18n } from '@/composables/useI18n'
+import { useAutoUpdater } from '@/composables/useAutoUpdater'
 
 const { t } = useI18n()
 const appVersion = __APP_VERSION__
+const {
+  status: updateStatus,
+  newVersion,
+  errorMessage: updateError,
+  checkForUpdate,
+  downloadAndInstall,
+  installAndRelaunch,
+} = useAutoUpdater()
 
 async function open(url: string) {
   try {
@@ -21,16 +30,48 @@ async function open(url: string) {
     </header>
 
     <div class="about-brand">
-      <img class="about-logo" src="/skins/000-vita/pet.png" alt="AIbubu" />
+      <img class="about-logo" src="/skins/vita/pet.png" alt="AIbubu" />
       <div class="brand-info">
         <p class="brand-name">{{ t('brand') }}</p>
         <p class="brand-desc">{{ t('aboutDesc') }}</p>
-        <p class="brand-version">v{{ appVersion }}</p>
+        <div class="brand-version-row">
+          <span class="brand-version">v{{ appVersion }}</span>
+          <span class="version-sep">·</span>
+          <template v-if="updateStatus === 'idle' || updateStatus === 'error'">
+            <button class="inline-update-btn" @click="checkForUpdate(false)">
+              {{ t('updateCheckBtn') }}
+            </button>
+          </template>
+          <template v-else-if="updateStatus === 'checking'">
+            <span class="update-inline-status">{{ t('updateChecking') }}</span>
+          </template>
+          <template v-else-if="updateStatus === 'available'">
+            <button class="inline-update-btn accent" @click="downloadAndInstall()">
+              {{ t('updateNewVersion') }} {{ newVersion }} — {{ t('updateDownloadBtn') }}
+            </button>
+          </template>
+          <template v-else-if="updateStatus === 'downloading'">
+            <span class="update-inline-status">{{ t('updateDownloading') }}</span>
+          </template>
+          <template v-else-if="updateStatus === 'ready'">
+            <button class="inline-update-btn accent" @click="installAndRelaunch()">
+              {{ t('updateRestartBtn') }}
+            </button>
+          </template>
+        </div>
+        <p v-if="updateStatus === 'error'" class="update-error">{{ updateError }}</p>
       </div>
     </div>
 
     <div class="about-section">
-      <div class="about-row" @click="open('https://aibubu.app')">
+      <div
+        class="about-row"
+        role="button"
+        tabindex="0"
+        @click="open('https://aibubu.app')"
+        @keydown.enter="open('https://aibubu.app')"
+        @keydown.space.prevent="open('https://aibubu.app')"
+      >
         <div class="row-icon-wrap">
           <svg class="row-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.4" />
@@ -62,7 +103,14 @@ async function open(url: string) {
         </svg>
       </div>
 
-      <div class="about-row" @click="open('https://github.com/funAgent/ai-bubu')">
+      <div
+        class="about-row"
+        role="button"
+        tabindex="0"
+        @click="open('https://github.com/funAgent/ai-bubu')"
+        @keydown.enter="open('https://github.com/funAgent/ai-bubu')"
+        @keydown.space.prevent="open('https://github.com/funAgent/ai-bubu')"
+      >
         <div class="row-icon-wrap">
           <svg class="row-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path
@@ -86,7 +134,14 @@ async function open(url: string) {
         </svg>
       </div>
 
-      <div class="about-row" @click="open('https://github.com/funAgent/ai-bubu/issues')">
+      <div
+        class="about-row"
+        role="button"
+        tabindex="0"
+        @click="open('https://github.com/funAgent/ai-bubu/issues')"
+        @keydown.enter="open('https://github.com/funAgent/ai-bubu/issues')"
+        @keydown.space.prevent="open('https://github.com/funAgent/ai-bubu/issues')"
+      >
         <div class="row-icon-wrap">
           <svg class="row-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path
@@ -197,12 +252,12 @@ async function open(url: string) {
 
 <style scoped>
 .about-view {
-  padding: 0 24px 16px;
+  padding: 0 20px 12px;
 }
 .view-header {
   display: flex;
   align-items: center;
-  padding: 16px 0 12px;
+  padding: 14px 0 10px;
 }
 .view-title {
   font-size: 18px;
@@ -217,39 +272,80 @@ async function open(url: string) {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px;
+  padding: 12px;
   background: var(--bg-surface);
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .about-logo {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   image-rendering: pixelated;
   flex-shrink: 0;
 }
 .brand-info {
   min-width: 0;
+  flex: 1;
 }
 .brand-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-bright);
   margin: 0;
   letter-spacing: -0.2px;
 }
 .brand-desc {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-tertiary);
-  margin: 2px 0 0;
+  margin: 1px 0 0;
+}
+.brand-version-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
 }
 .brand-version {
   font-size: 11px;
   color: var(--text-muted);
-  margin: 2px 0 0;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+}
+.version-sep {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.inline-update-btn {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+}
+.inline-update-btn:hover {
+  color: var(--text);
+}
+.inline-update-btn.accent {
+  color: var(--accent);
+}
+.inline-update-btn.accent:hover {
+  opacity: 0.85;
+}
+.update-inline-status {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.update-error {
+  font-size: 10px;
+  color: var(--error, #ef4444);
+  margin: 2px 0 0;
 }
 
 /* === Section === */
@@ -257,7 +353,7 @@ async function open(url: string) {
   background: var(--bg-surface);
   border-radius: 10px;
   border: 1px solid var(--border);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   overflow: hidden;
 }
 
@@ -266,7 +362,7 @@ async function open(url: string) {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 9px 12px;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -280,18 +376,18 @@ async function open(url: string) {
   cursor: default;
 }
 .row-icon-wrap {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 5px;
   background: var(--accent-bg-strong);
   flex-shrink: 0;
 }
 .row-icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   color: var(--accent);
 }
 .row-content {
@@ -300,23 +396,23 @@ async function open(url: string) {
 }
 .row-label {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-label);
 }
 .row-value {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   font-weight: 500;
 }
 .row-hint {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-tertiary);
   margin-top: 1px;
 }
 .row-value-static {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   font-weight: 500;
   flex-shrink: 0;
@@ -330,7 +426,7 @@ async function open(url: string) {
 
 /* === Privacy Card === */
 .privacy-card {
-  padding: 12px 14px;
+  padding: 10px 12px;
   background: var(--bg-surface);
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -338,31 +434,31 @@ async function open(url: string) {
 .privacy-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 6px;
+  margin-bottom: 4px;
 }
 .privacy-icon {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   color: var(--success);
   flex-shrink: 0;
 }
 .privacy-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-label);
 }
 .privacy-desc {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-tertiary);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   line-height: 1.4;
 }
 .privacy-link {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--accent);
   background: none;
@@ -375,7 +471,7 @@ async function open(url: string) {
   opacity: 0.8;
 }
 .link-arrow-sm {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
 }
 </style>
