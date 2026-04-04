@@ -19,7 +19,7 @@
     "@tauri-apps/plugin-fs": "^2.4.5",
     "@tauri-apps/plugin-opener": "^2.5.3",
     "@tauri-apps/plugin-store": "^2",
-    "@vueuse/core": "^13",
+    "@vueuse/core": "^14",
     "lottie-web": "^5",
     "pinia": "^3",
     "vue": "^3.5"
