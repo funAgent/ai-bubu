@@ -2,7 +2,8 @@ export function initI18n(
   messages: Record<string, Record<string, string>>,
   pageTitles: Record<string, string>,
 ) {
-  let lang = localStorage.getItem('aibubu-lang') || 'zh'
+  const stored = localStorage.getItem('aibubu-lang')
+  let lang = stored ?? (navigator.language.startsWith('zh') ? 'zh' : 'en')
   const toggle = document.getElementById('langToggle')!
 
   function setLang(l: string) {
