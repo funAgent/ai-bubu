@@ -20,6 +20,9 @@ packages/site/.astro/
 # Rust
 *.pdb
 
+# Tauri auto-generated schemas
+packages/app/src-tauri/gen/schemas/
+
 # Logs
 *.log
 
