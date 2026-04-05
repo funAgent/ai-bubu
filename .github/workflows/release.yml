@@ -33,6 +33,7 @@ jobs:
     permissions:
       contents: write
     env:
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
     strategy:
       fail-fast: false
@@ -72,16 +73,6 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
 
       - run: pnpm install
-
-      - name: Write signing key to file
-        shell: bash
-        run: |
-          KEY_FILE="$RUNNER_TEMP/tauri-signing.key"
-          echo "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" > "$KEY_FILE"
-          echo "TAURI_SIGNING_PRIVATE_KEY=$KEY_FILE" >> "$GITHUB_ENV"
-          LINE_COUNT=$(wc -l < "$KEY_FILE" | tr -d ' ')
-          CHAR_COUNT=$(wc -c < "$KEY_FILE" | tr -d ' ')
-          echo "Signing key written to file: ${CHAR_COUNT} bytes, ${LINE_COUNT} lines"
 
       - uses: tauri-apps/tauri-action@51a9f1156b33df106d827c3a78f8f894946c5faa # v0.5.25
         env:
