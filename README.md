@@ -6,7 +6,10 @@
 
 Monitor your AI coding tool activity, turn it into step counts, and drive a desktop pet to walk.
 
-[Website](https://aibubu.app) · [Download](https://github.com/funAgent/ai-bubu/releases) · [中文](./README_CN.md)
+[Website](https://aibubu.app) · [中文](./README_CN.md) · [![Release](https://img.shields.io/github/v/release/funAgent/ai-bubu?style=flat-square)](https://github.com/funAgent/ai-bubu/releases)
+[![License](https://img.shields.io/github/license/funAgent/ai-bubu?style=flat-square)](./LICENSE)
+[![Stars](https://img.shields.io/github/stars/funAgent/ai-bubu?style=flat-square)](https://github.com/funAgent/ai-bubu/stargazers)
+[![Downloads](https://img.shields.io/github/downloads/funAgent/ai-bubu/total?style=flat-square)](https://github.com/funAgent/ai-bubu/releases)
 
 https://github.com/user-attachments/assets/2b42508f-95e7-4a6b-b0eb-02efa23425c5
 
