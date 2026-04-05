@@ -2,7 +2,14 @@ import { ref } from 'vue'
 import { check } from '@tauri-apps/plugin-updater'
 import { relaunch } from '@tauri-apps/plugin-process'
 
-export type UpdateStatus = 'idle' | 'checking' | 'available' | 'downloading' | 'ready' | 'error'
+export type UpdateStatus =
+  | 'idle'
+  | 'checking'
+  | 'up-to-date'
+  | 'available'
+  | 'downloading'
+  | 'ready'
+  | 'error'
 
 const status = ref<UpdateStatus>('idle')
 const newVersion = ref('')
@@ -28,7 +35,14 @@ async function checkForUpdate(silent = true) {
       status.value = 'available'
     } else {
       updateInstance = null
-      status.value = 'idle'
+      if (silent) {
+        status.value = 'idle'
+      } else {
+        status.value = 'up-to-date'
+        setTimeout(() => {
+          if (status.value === 'up-to-date') status.value = 'idle'
+        }, 3000)
+      }
     }
   } catch (err) {
     updateInstance = null

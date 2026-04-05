@@ -45,6 +45,9 @@ async function open(url: string) {
           <template v-else-if="updateStatus === 'checking'">
             <span class="update-inline-status">{{ t('updateChecking') }}</span>
           </template>
+          <template v-else-if="updateStatus === 'up-to-date'">
+            <span class="update-inline-status up-to-date">{{ t('updateUpToDate') }}</span>
+          </template>
           <template v-else-if="updateStatus === 'available'">
             <button class="inline-update-btn accent" @click="downloadAndInstall()">
               {{ t('updateNewVersion') }} {{ newVersion }} — {{ t('updateDownloadBtn') }}
@@ -341,6 +344,9 @@ async function open(url: string) {
 .update-inline-status {
   font-size: 11px;
   color: var(--text-tertiary);
+}
+.update-inline-status.up-to-date {
+  color: var(--success, #22c55e);
 }
 .update-error {
   font-size: 10px;
