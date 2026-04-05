@@ -152,6 +152,12 @@ scripts/                 # 工具脚本
 
 </div>
 
+## 支持我们
+
+如果 AI 步步让你的编码更有趣，请给个 ⭐ Star 支持一下——这能帮助更多开发者发现这个项目！
+
+[![给个 Star](https://img.shields.io/github/stars/funAgent/ai-bubu?style=social)](https://github.com/funAgent/ai-bubu)
+
 ## Star History
 
 <div align="center">

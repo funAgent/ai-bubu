@@ -149,6 +149,12 @@ Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for 
 
 </div>
 
+## Support
+
+If AIbubu makes your coding sessions more fun, consider giving it a ⭐ — it helps others discover the project!
+
+[![Star this repo](https://img.shields.io/github/stars/funAgent/ai-bubu?style=social)](https://github.com/funAgent/ai-bubu)
+
 ## Star History
 
 <div align="center">
