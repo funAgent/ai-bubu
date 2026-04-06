@@ -31,7 +31,7 @@ dependencies = [
 
 [[package]]
 name = "aibubu"
-version = "0.3.8"
+version = "0.4.0"
 dependencies = [
  "chrono",
  "dirs 6.0.0",

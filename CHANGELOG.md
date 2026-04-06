@@ -7,8 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Refactor
+
+- **(app)** High cohesion low coupling refactoring
+- Update function refactor
+
+## [0.3.8] - 2026-04-05
+
 ### Miscellaneous
 
+- **(app)** Release v0.3.8
+
+### Refactor
+
+- Workflow release
+
+## [0.3.7] - 2026-04-04
+
+### Bug Fixes
+
+- Workflow release
+
+### Miscellaneous
+
+- **(app)** Release v0.3.7
+
+## [0.3.6] - 2026-04-04
+
+### Bug Fixes
+
+- Update tauri.conf.json
+
+### Miscellaneous
+
+- **(app)** Release v0.3.6
+- Add new workflow verify signing key
+
+## [0.3.5] - 2026-04-04
+
+### Miscellaneous
+
+- **(app)** Release v0.3.5
 - Update
 
 ## [0.3.4] - 2026-04-04
