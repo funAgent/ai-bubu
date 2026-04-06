@@ -4,6 +4,7 @@ import { usePetStore } from '@/stores/pet'
 import { getScoreColor } from '@/utils/activity'
 import { useI18n } from '@/composables/useI18n'
 import { MOVEMENT_STATE_KEYS } from '@/utils/movement'
+import MoodIcon from './MoodIcon.vue'
 
 const petStore = usePetStore()
 const { t } = useI18n()
@@ -47,7 +48,14 @@ onUnmounted(() => {
       <span class="step-number">{{ petStore.formattedSteps }}</span>
       <span class="step-unit">{{ t('steps') }}</span>
     </div>
-    <div class="movement-label">{{ movementLabel }}</div>
+    <div class="movement-label">
+      {{ movementLabel }}
+      <MoodIcon
+        v-if="petStore.moodState !== 'normal'"
+        :mood="petStore.moodState"
+        class="mood-tag"
+      />
+    </div>
     <div class="score-bar">
       <div class="score-fill" :style="{ width: scoreBarWidth, background: scoreColor }"></div>
     </div>
@@ -109,6 +117,13 @@ onUnmounted(() => {
   font-size: 9px;
   color: #94a3b8;
   letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mood-tag {
+  font-size: 10px;
 }
 
 .score-bar {

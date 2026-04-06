@@ -143,7 +143,7 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
-  watch(socialEnabled, () => {
+  watch([nickname, showOverFullscreen, socialEnabled], () => {
     persistUserFields()
   })
 

@@ -32,13 +32,89 @@ AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cur
 
 ## Features
 
-- **AI Tool Activity Monitoring** — supports Cursor, Claude Code, Codex CLI, and Trae (community providers for more tools)
-- **Step Counter** — daily step counts with history tracking
-- **Desktop Pet** — transparent, always-on-top window with pixel-art sprite animations
-- **Skin System** — 8 built-in skins with custom import support
-- **LAN Social** — auto-discover teammates' pets and view the leaderboard <img src="packages/site/public/pet/together.gif" width="48" />
-- **Bilingual UI** — Chinese / English
-- **Auto-start** — runs quietly on your desktop
+### AI Tool Activity Monitoring
+
+AIbubu monitors your AI coding tools in real-time through a pluggable adapter system — no hooks to install, no config to change. It reads existing local data (databases, logs, process info) passively.
+
+- **Cursor** — polls the local SQLite database (`state.vscdb`), maps Composer statuses like `generating` / `streaming` to high activity
+- **Claude Code** — parses JSONL session logs under `~/.claude/projects/`
+- **Codex CLI** — parses `rollout-*.jsonl` session logs
+- **Trae** — monitors process CPU usage
+- **Process fallback** — when the primary adapter finds nothing, each provider can fall back to process-level CPU detection automatically
+- **Multi-tool boost** — using multiple AI tools simultaneously accelerates your pet's progression (2 tools ×1.8, 3+ tools ×2.5 speed multiplier)
+- **Community extensible** — add support for any tool by writing a TOML config file; 5 adapter types available (`sqlite` / `jsonl` / `process` / `file_mtime` / `vscode_ext`)
+
+### Movement & Mood
+
+**Movement** — your pet's speed reflects how long you've been actively coding:
+
+| State  | Condition    | Score  |
+| :----: | :----------- | :----- |
+|  Idle  | No activity  | 0      |
+|  Walk  | Active < 60s | 25–49  |
+|  Run   | Active 60s+  | 50–74  |
+| Sprint | Active 180s+ | 75–100 |
+
+A **45-second cooldown bridge** keeps the pet moving during brief gaps between agent tool calls, so your coding flow feels continuous.
+
+**Mood** — visual effects layer on top of movement:
+
+| Mood       | Trigger                       | Visual Effect                                |
+| :--------- | :---------------------------- | :------------------------------------------- |
+| Sleepy 💤  | Idle for 10 minutes           | Drifting "zzz" letters + breathing + dimming |
+| Excited 🔥 | Sprint or activity score ≥ 90 | Speed smoke puffs + shake + glow             |
+| Normal     | Default                       | No effects                                   |
+
+### Pet Interaction
+
+- **Single click** — pat reaction with floating ❤️ 💕 particles
+- **Double click** — poke reaction with ❗ ❓ particles
+- **Hold & drag** — grab the pet and drag it anywhere on screen (150ms hold threshold to distinguish from clicks)
+- **Right-click** — open the social panel
+- **Hover tooltip** — "Hold to drag" / "Click to interact · Right-click for menu"
+
+### Step Counter & Insights
+
+- **Daily steps** — each monitor tick adds `⌊score / 10⌋` steps based on your current activity score
+- **90-day history** — stored locally, rolls over at local midnight
+- **Insights dashboard**:
+  - 7-day and 30-day trend charts
+  - 24-hour activity heatmap
+  - AI tool usage breakdown (active minutes per provider)
+  - Consecutive active days streak
+
+### Skin System
+
+8 built-in skins with custom import support:
+
+|                              Vita                               |                              Tard                               |                              Mort                               |                              Doux                               |                              Boy                               |                              Dinosaur                               |                              Glube                               |                              Line                               |
+| :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: | :------------------------------------------------------------: | :-----------------------------------------------------------------: | :--------------------------------------------------------------: | :-------------------------------------------------------------: |
+| <img src="packages/app/public/skins/vita/pet.png" width="48" /> | <img src="packages/app/public/skins/tard/pet.png" width="48" /> | <img src="packages/app/public/skins/mort/pet.png" width="48" /> | <img src="packages/app/public/skins/doux/pet.png" width="48" /> | <img src="packages/app/public/skins/boy/pet.png" width="48" /> | <img src="packages/app/public/skins/dinosaur/pet.png" width="48" /> | <img src="packages/app/public/skins/glube/pet.png" width="48" /> | <img src="packages/app/public/skins/line/pet.png" width="48" /> |
+
+- **Custom import** — import from folder or ZIP archive
+- **Multiple formats** — Sprite Sheet (PNG), Lottie, GIF, APNG
+- **4 required animation states** — idle / walk / run / sprint, each with configurable frame rate, frame count, and start frame
+- **Downloadable template** — built-in example with creation guide
+
+### LAN Social <img src="packages/site/public/pet/together.gif" width="48" />
+
+- **Auto-discovery** — UDP broadcast on port 23456, finds teammates on the same network automatically
+- **Leaderboard** — ranked by daily step count
+- **5-second heartbeat** — syncs nickname, steps, activity score, movement state, and skin in real-time
+- **Pet escort** — online teammates appear as miniature pets walking alongside yours
+- **Privacy-first** — LAN-only, no server, no account required
+
+### System
+
+- **Transparent window** — frameless, transparent background, always on top, hidden from taskbar
+- **macOS fullscreen overlay** — optionally keep the pet visible over fullscreen apps (NSPanel)
+- **System tray** — show/hide pet, leaderboard, quit; tray icon updates with live pet sprite frames
+- **Launch at login** — auto-start on macOS / Windows / Linux
+- **Auto-update** — checks GitHub Releases for new versions, download and install in-app
+- **Bilingual UI** — Chinese / English, auto-detects system language
+- **Theme** — Light / Dark / System
+- **Privacy** — all data stored locally, nothing uploaded to any server
+- **Cross-platform** — macOS 14+, Windows, Linux (AppImage / deb)
 
 ## Screenshots
 
@@ -46,9 +122,9 @@ AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cur
 | :--------------------------------------------------------------------: | :-------------------------------------------------------------------: |
 | <img src="packages/site/public/screenshot/today_en.jpg" width="280" /> | <img src="packages/site/public/screenshot/rank_en.jpg" width="280" /> |
 
-|                                Skins                                 |                                 Settings                                 |
-| :------------------------------------------------------------------: | :----------------------------------------------------------------------: |
-| <img src="packages/site/public/screenshot/pet_en.jpg" width="280" /> | <img src="packages/site/public/screenshot/setting_en.jpg" width="280" /> |
+|                                Skins                                 |                                 Settings                                 |                                 About                                  |
+| :------------------------------------------------------------------: | :----------------------------------------------------------------------: | :--------------------------------------------------------------------: |
+| <img src="packages/site/public/screenshot/pet_en.jpg" width="280" /> | <img src="packages/site/public/screenshot/setting_en.jpg" width="280" /> | <img src="packages/site/public/screenshot/about_en.jpg" width="280" /> |
 
 ## Installation
 
@@ -108,17 +184,9 @@ packages/
 scripts/                 # Utility scripts
 ```
 
-## Skin System
+## Adding Custom Providers
 
-8 built-in skins with custom import support. See the [Contributing Guide](./CONTRIBUTING.md) for details.
-
-|                              Vita                               |                              Tard                               |                              Mort                               |                              Doux                               |                              Boy                               |                              Dinosaur                               |                              Glube                               |                              Line                               |
-| :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: | :------------------------------------------------------------: | :-----------------------------------------------------------------: | :--------------------------------------------------------------: | :-------------------------------------------------------------: |
-| <img src="packages/app/public/skins/vita/pet.png" width="48" /> | <img src="packages/app/public/skins/tard/pet.png" width="48" /> | <img src="packages/app/public/skins/mort/pet.png" width="48" /> | <img src="packages/app/public/skins/doux/pet.png" width="48" /> | <img src="packages/app/public/skins/boy/pet.png" width="48" /> | <img src="packages/app/public/skins/dinosaur/pet.png" width="48" /> | <img src="packages/app/public/skins/glube/pet.png" width="48" /> | <img src="packages/app/public/skins/line/pet.png" width="48" /> |
-
-## LAN Social
-
-When LAN discovery is enabled, AIbubu uses UDP broadcast (port 23456) to auto-discover other users on the same network and display everyone's daily steps on the leaderboard.
+AIbubu's monitoring is driven by TOML config files. Adding support for a new AI tool is as simple as writing a `.toml` file — no code changes needed. See the [Provider Configuration Guide](./packages/app/providers/README.md) for templates and instructions.
 
 ## Tech Stack
 

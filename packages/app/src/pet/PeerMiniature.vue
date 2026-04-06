@@ -7,6 +7,8 @@ import { resolveAnimation } from '@/utils/skin'
 import { MOVEMENT_STATE_KEYS } from '@/utils/movement'
 import SpriteRenderer from './renderers/SpriteRenderer.vue'
 import ImageRenderer from './renderers/ImageRenderer.vue'
+import MoodEffect from './MoodEffect.vue'
+import MoodIcon from './MoodIcon.vue'
 
 const { t } = useI18n()
 const skinStore = useSkinStore()
@@ -46,6 +48,17 @@ const capsuleSize = computed(() => {
     height: `${s}px`,
     fontSize: `${Math.max(9, Math.round(11 * props.scale))}px`,
   }
+})
+
+const effectiveMood = computed(() => {
+  const mood = props.peer.moodState ?? 'normal'
+  if (mood === 'sleepy' && props.peer.movementState !== 'idle') return 'normal'
+  return mood
+})
+
+const moodClass = computed(() => {
+  if (effectiveMood.value === 'normal') return ''
+  return `mood-${effectiveMood.value}`
 })
 
 const tooltipText = computed(() => {
@@ -91,14 +104,11 @@ async function loadManifest(skinId: string) {
     loadFailed.value = true
     return
   }
-  try {
-    const resp = await fetch(`/skins/${skinId}/skin.json`)
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-    const m: SkinManifest = await resp.json()
-    m.id = skinId
+  const m = await skinStore.getManifest(skinId)
+  if (m) {
     manifest.value = m
     loadFailed.value = false
-  } catch {
+  } else {
     loadFailed.value = true
   }
 }
@@ -114,7 +124,12 @@ onMounted(() => loadManifest(props.peer.petSkin))
 <template>
   <div ref="peerEl" class="peer-mini" @mouseenter="onEnter" @mouseleave="onLeave">
     <!-- sprite 动画渲染 -->
-    <div v-if="currentAnimation && !loadFailed" class="peer-sprite-wrap" :style="rendererStyle">
+    <div
+      v-if="currentAnimation && !loadFailed"
+      class="peer-sprite-wrap"
+      :class="moodClass"
+      :style="rendererStyle"
+    >
       <SpriteRenderer
         v-if="manifest?.format === 'sprite' && currentAnimation.config.sprite"
         :src="currentAnimation.src"
@@ -127,11 +142,13 @@ onMounted(() => loadManifest(props.peer.petSkin))
         :loop="currentAnimation.config.loop"
       />
       <ImageRenderer v-else :src="currentAnimation.src" />
+      <MoodEffect v-if="effectiveMood !== 'normal'" :mood="effectiveMood" />
     </div>
 
     <!-- 非内置皮肤 fallback: 圆形首字母 -->
-    <div v-else class="peer-capsule" :style="capsuleSize">
+    <div v-else class="peer-capsule" :class="moodClass" :style="capsuleSize">
       <span class="peer-initial">{{ initial }}</span>
+      <MoodEffect v-if="effectiveMood !== 'normal'" :mood="effectiveMood" />
     </div>
 
     <!-- hover tooltip -->
@@ -141,6 +158,7 @@ onMounted(() => loadManifest(props.peer.petSkin))
         <div class="tip-detail">
           <span class="tip-steps">{{ tooltipText.steps }}{{ t('steps') }}</span>
           <span class="tip-state">{{ tooltipText.state }}</span>
+          <MoodIcon v-if="effectiveMood !== 'normal'" :mood="effectiveMood" class="tip-mood" />
         </div>
         <span class="tip-arrow" :style="{ left: arrowPos }"></span>
       </div>
@@ -169,9 +187,11 @@ onMounted(() => loadManifest(props.peer.petSkin))
   align-items: center;
   justify-content: center;
   image-rendering: pixelated;
+  position: relative;
 }
 
 .peer-capsule {
+  position: relative;
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.6), rgba(139, 92, 246, 0.5));
   display: flex;
@@ -238,6 +258,10 @@ onMounted(() => loadManifest(props.peer.petSkin))
 
 .tip-state {
   color: #94a3b8;
+}
+
+.tip-mood {
+  font-size: 9px;
 }
 
 .tip-enter-active {

@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
-import PetCanvas from './pet/PetCanvas.vue'
+import PetRenderer from './pet/PetRenderer.vue'
 import PeerOverlay from './pet/PeerOverlay.vue'
 import StepDisplay from './pet/StepDisplay.vue'
+import PetEffects from './pet/PetEffects.vue'
+import MoodEffect from './pet/MoodEffect.vue'
 import SocialPanel from './panels/SocialPanel.vue'
 import { useMonitor } from './composables/useMonitor'
 import { useActivityScore } from './composables/useActivityScore'
 import { useStepCounter } from './composables/useStepCounter'
 import { useSocial } from './composables/useSocial'
+import { usePetMood } from './composables/usePetMood'
 import { useTrayIcon } from './composables/useTrayIcon'
 import { useWindowSize } from './composables/useWindowSize'
 import { useI18n } from './composables/useI18n'
+import { usePetInteraction } from './composables/usePetInteraction'
 import { useSkinStore } from './stores/skin'
 import { usePetStore } from './stores/pet'
 import { useSettingsStore } from './stores/settings'
@@ -32,6 +35,7 @@ useMonitor()
 useActivityScore()
 useStepCounter()
 useSocial()
+usePetMood()
 const skinStore = useSkinStore()
 const petStore = usePetStore()
 skinStore.loadCatalog()
@@ -76,76 +80,18 @@ if (isPetWindow) {
   )
 }
 
-const showTooltip = ref(false)
-const isHovering = ref(false)
-const pressing = ref(false)
-let hoverTimer: ReturnType<typeof setTimeout> | null = null
-let dragTimer: ReturnType<typeof setTimeout> | null = null
-let cleanupDragTimer: ReturnType<typeof setTimeout> | null = null
-let isClick = true
-
-function onWindowEnter() {
-  isHovering.value = true
-}
-
-function onWindowLeave() {
-  isHovering.value = false
-  pressing.value = false
-  if (hoverTimer) clearTimeout(hoverTimer)
-  hoverTimer = null
-  showTooltip.value = false
-  if (dragTimer) {
-    clearTimeout(dragTimer)
-    dragTimer = null
-  }
-  isClick = false
-}
-
-function onPetEnter() {
-  hoverTimer = setTimeout(() => {
-    showTooltip.value = true
-  }, 300)
-}
-
-function onPetLeave() {
-  if (hoverTimer) clearTimeout(hoverTimer)
-  hoverTimer = null
-  showTooltip.value = false
-}
-
-function onWindowMouseDown(e: MouseEvent) {
-  if (e.button !== 0) return
-  isClick = true
-  pressing.value = true
-
-  dragTimer = setTimeout(async () => {
-    isClick = false
-    pressing.value = false
-    petStore.isDragging = true
-    try {
-      await currentWindow.startDragging()
-    } finally {
-      petStore.isDragging = false
-    }
-  }, 150)
-}
-
-function onWindowMouseUp(e: MouseEvent) {
-  pressing.value = false
-  if (dragTimer) {
-    clearTimeout(dragTimer)
-    dragTimer = null
-  }
-  if (isClick) {
-    const petEl = (e.currentTarget as HTMLElement)?.querySelector('.pet-canvas')
-    if (petEl && e.target instanceof HTMLElement && petEl.contains(e.target)) {
-      onPetClick()
-    }
-  }
-  cleanupDragTimer = setTimeout(() => {
-    petStore.isDragging = false
-  }, 50)
-}
+const {
+  showTooltip,
+  isHovering,
+  pressing,
+  onWindowEnter,
+  onWindowLeave,
+  onPetEnter,
+  onPetLeave,
+  onWindowMouseDown,
+  onWindowMouseUp,
+  onContextMenu,
+} = usePetInteraction()
 
 function onStorageChange(e: StorageEvent) {
   if (e.key === 'aibubu-skin' && e.newValue) {
@@ -159,31 +105,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('storage', onStorageChange)
-  if (hoverTimer) clearTimeout(hoverTimer)
-  if (dragTimer) clearTimeout(dragTimer)
-  if (cleanupDragTimer) clearTimeout(cleanupDragTimer)
   if (cleanupMockPeers) cleanupMockPeers()
 })
-
-async function onPetClick() {
-  showTooltip.value = false
-  if (hoverTimer) clearTimeout(hoverTimer)
-
-  try {
-    const social = await WebviewWindow.getByLabel('social')
-    if (social) {
-      const visible = await social.isVisible()
-      if (visible) {
-        await social.hide()
-      } else {
-        await social.show()
-        await social.setFocus()
-      }
-    }
-  } catch (err) {
-    console.error('Failed to toggle social window:', err)
-  }
-}
 </script>
 
 <template>
@@ -199,6 +122,7 @@ async function onPetClick() {
     @mouseleave="onWindowLeave"
     @mousedown="onWindowMouseDown"
     @mouseup="onWindowMouseUp"
+    @contextmenu="onContextMenu"
   >
     <Transition name="drag-hint">
       <div v-if="isHovering" class="drag-hint">
@@ -212,7 +136,13 @@ async function onPetClick() {
           <Transition name="tooltip">
             <StepDisplay v-if="showTooltip" class="step-tooltip" />
           </Transition>
-          <PetCanvas />
+          <MoodEffect
+            v-if="petStore.moodState !== 'normal'"
+            :mood="petStore.moodState"
+            class="mood-layer"
+          />
+          <PetEffects class="effects-layer" />
+          <PetRenderer />
         </div>
       </PeerOverlay>
     </div>
@@ -318,8 +248,16 @@ async function onPetClick() {
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 0;
-  z-index: 10;
+  z-index: 5;
   pointer-events: none;
+}
+
+.mood-layer {
+  z-index: 10;
+}
+
+.effects-layer {
+  z-index: 20;
 }
 
 .tooltip-enter-active {

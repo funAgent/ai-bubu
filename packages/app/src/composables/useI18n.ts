@@ -171,6 +171,12 @@ const messages: Record<Lang, Record<string, string>> = {
     historyDetailHourly: '小时分布',
     historyDetailProviders: '工具使用',
     historyNoDetail: '无详细数据',
+
+    moodNormal: '',
+    moodSleepy: '💤',
+    moodExcited: '🔥',
+    moodHappy: '😊',
+    interactHint: '单击互动 · 右键菜单',
   },
   en: {
     brand: 'AIbubu',
@@ -308,6 +314,12 @@ const messages: Record<Lang, Record<string, string>> = {
     historyDetailHourly: 'Hourly',
     historyDetailProviders: 'Tools',
     historyNoDetail: 'No detail data',
+
+    moodNormal: '',
+    moodSleepy: '💤',
+    moodExcited: '🔥',
+    moodHappy: '😊',
+    interactHint: 'Click to interact · Right-click for menu',
   },
 }
 

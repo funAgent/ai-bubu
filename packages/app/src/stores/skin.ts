@@ -11,8 +11,6 @@ interface SkinEntry {
   builtin: boolean
 }
 
-let builtinSkinIds = new Set<string>()
-
 export interface CatalogEntry {
   id: string
   manifest: SkinManifest
@@ -21,6 +19,8 @@ export interface CatalogEntry {
 export const useSkinStore = defineStore('skin', () => {
   const settings = useSettingsStore()
   const { t } = useI18n()
+
+  let builtinSkinIds = new Set<string>()
 
   const catalog = ref<CatalogEntry[]>([])
   const catalogLoaded = ref(false)
@@ -112,6 +112,27 @@ export const useSkinStore = defineStore('skin', () => {
     return builtinSkinIds.has(skinId)
   }
 
+  const manifestCache = new Map<string, SkinManifest>()
+
+  async function getManifest(skinId: string): Promise<SkinManifest | null> {
+    const catalogEntry = catalog.value.find((e) => e.id === skinId)
+    if (catalogEntry) return catalogEntry.manifest
+
+    const cached = manifestCache.get(skinId)
+    if (cached) return cached
+
+    try {
+      const resp = await fetch(`/skins/${skinId}/skin.json`)
+      if (!resp.ok) return null
+      const manifest: SkinManifest = await resp.json()
+      manifest.id = skinId
+      manifestCache.set(skinId, manifest)
+      return manifest
+    } catch {
+      return null
+    }
+  }
+
   async function removeSkin(skinId: string): Promise<{ success: boolean; message: string }> {
     if (isBuiltin(skinId)) {
       return { success: false, message: t('skinCannotRemove') }
@@ -153,6 +174,7 @@ export const useSkinStore = defineStore('skin', () => {
     loadSkin,
     loadCatalog,
     isBuiltin,
+    getManifest,
     removeSkin,
   }
 })

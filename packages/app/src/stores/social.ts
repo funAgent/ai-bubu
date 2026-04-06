@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { PeerInfo } from '@/types'
-import { isValidMovementState } from '@/types'
+import { isValidMovementState } from '@/utils/movement'
 
 export const useSocialStore = defineStore('social', () => {
   const peers = ref<Map<string, PeerInfo>>(new Map())

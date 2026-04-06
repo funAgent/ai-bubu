@@ -3,6 +3,7 @@ import { ref, computed, nextTick, onUnmounted } from 'vue'
 import type { PeerInfo } from '@/types'
 import { useI18n } from '@/composables/useI18n'
 import { useSkinStore } from '@/stores/skin'
+import MoodIcon from './MoodIcon.vue'
 
 const { t, isZh } = useI18n()
 const skinStore = useSkinStore()
@@ -30,7 +31,8 @@ const peerRows = computed(() =>
     const stepsLabel = isZh.value ? `${steps}步` : `${steps} steps`
     const avatarUrl = skinStore.isBuiltin(p.petSkin) ? `/skins/${p.petSkin}/pet.png` : null
     const initial = (p.nickname || '?').charAt(0)
-    return { name, stepsLabel, avatarUrl, initial }
+    const moodState = p.moodState ?? 'normal'
+    return { name, stepsLabel, avatarUrl, initial, moodState }
   }),
 )
 
@@ -111,7 +113,7 @@ function onImgError(idx: number) {
   <div ref="badgeEl" class="overflow-badge" @mouseenter="onBadgeEnter" @mouseleave="onBadgeLeave">
     <span class="badge-label">{{ label }}</span>
     <Teleport to="body">
-      <Transition name="fade">
+      <Transition name="ob-fade">
         <div
           v-if="hovered"
           class="overflow-tooltip"
@@ -128,6 +130,7 @@ function onImgError(idx: number) {
             />
             <span v-else class="ob-avatar-fallback">{{ row.initial }}</span>
             <span class="ob-name">{{ row.name }}</span>
+            <MoodIcon v-if="row.moodState !== 'normal'" :mood="row.moodState" class="ob-mood" />
             <span class="ob-steps">{{ row.stepsLabel }}</span>
           </div>
           <span class="ob-arrow" :style="{ left: arrowLeft }"></span>
@@ -252,6 +255,11 @@ function onImgError(idx: number) {
   white-space: nowrap;
 }
 
+.ob-mood {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
 .ob-steps {
   font-size: 9px;
   color: #a78bfa;
@@ -260,12 +268,12 @@ function onImgError(idx: number) {
   flex-shrink: 0;
 }
 
-.fade-enter-active,
-.fade-leave-active {
+.ob-fade-enter-active,
+.ob-fade-leave-active {
   transition: opacity 0.15s ease;
 }
-.fade-enter-from,
-.fade-leave-to {
+.ob-fade-enter-from,
+.ob-fade-leave-to {
   opacity: 0;
 }
 </style>

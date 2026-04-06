@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { ProviderStatus, MonitorUpdate, MovementState } from '@/types'
-import { isValidMovementState } from '@/types'
+import { isValidMovementState } from '@/utils/movement'
 
 export const useMonitorStore = defineStore('monitor', () => {
   const providers = ref<ProviderStatus[]>([])

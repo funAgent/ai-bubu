@@ -36,7 +36,11 @@ export function useWindowSize() {
 
   const contentWidth = computed(() => {
     const totalRow = leftWidth.value + petSize.value.width + rightWidth.value
-    return Math.max(totalRow, TOOLTIP_MIN_WIDTH)
+    const tooltipHalf = Math.ceil(TOOLTIP_MIN_WIDTH / 2)
+    const petCenter = leftWidth.value + Math.floor(petSize.value.width / 2)
+    const leftOverhang = Math.max(0, tooltipHalf - petCenter)
+    const rightOverhang = Math.max(0, tooltipHalf - (totalRow - petCenter))
+    return totalRow + leftOverhang + rightOverhang
   })
 
   const windowWidth = computed(() => contentWidth.value + OUTER_PADDING)

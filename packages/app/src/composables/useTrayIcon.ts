@@ -24,22 +24,30 @@ export function useTrayIcon() {
     }
   }
 
-  const offscreen = document.createElement('canvas')
-  offscreen.width = TRAY_SIZE
-  offscreen.height = TRAY_SIZE
-  const offCtx = offscreen.getContext('2d')!
-  offCtx.imageSmoothingEnabled = false
+  let offCtx: CanvasRenderingContext2D | null = null
+
+  function getOffscreenCtx(): CanvasRenderingContext2D {
+    if (!offCtx) {
+      const offscreen = document.createElement('canvas')
+      offscreen.width = TRAY_SIZE
+      offscreen.height = TRAY_SIZE
+      offCtx = offscreen.getContext('2d')!
+      offCtx.imageSmoothingEnabled = false
+    }
+    return offCtx
+  }
 
   function extractAndSend(img: HTMLImageElement, config: SkinAnimationConfig, frame: number) {
     const sp = config.sprite
     if (!sp) return
 
+    const ctx = getOffscreenCtx()
     const absFrame = (sp.startFrame ?? 0) + frame
     const col = absFrame % sp.columns
     const row = Math.floor(absFrame / sp.columns)
 
-    offCtx.clearRect(0, 0, TRAY_SIZE, TRAY_SIZE)
-    offCtx.drawImage(
+    ctx.clearRect(0, 0, TRAY_SIZE, TRAY_SIZE)
+    ctx.drawImage(
       img,
       col * sp.frameWidth,
       row * sp.frameHeight,
@@ -51,7 +59,7 @@ export function useTrayIcon() {
       TRAY_SIZE,
     )
 
-    const rgba = offCtx.getImageData(0, 0, TRAY_SIZE, TRAY_SIZE).data
+    const rgba = ctx.getImageData(0, 0, TRAY_SIZE, TRAY_SIZE).data
     for (let i = 0; i < rgba.length; i++) rgbaBuffer[i] = rgba[i]
 
     invoke('update_tray_icon', {

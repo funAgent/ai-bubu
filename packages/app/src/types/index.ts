@@ -2,6 +2,14 @@
 
 export type MovementState = 'sprint' | 'run' | 'walk' | 'idle'
 
+// === Mood & Interaction ===
+
+export type MoodState = 'sleepy' | 'excited' | 'happy' | 'normal'
+
+export type InteractionAnimation = 'pat' | 'poke' | 'celebrate' | 'wave'
+
+export type PetAnimationState = MovementState | MoodState | InteractionAnimation
+
 export interface StepRecord {
   date: string
   steps: number
@@ -33,10 +41,6 @@ export interface MonitorUpdate {
   timestamp: number
 }
 
-export function isValidMovementState(s: string): s is MovementState {
-  return s === 'sprint' || s === 'run' || s === 'walk' || s === 'idle'
-}
-
 // === Social ===
 
 export interface PeerInfo {
@@ -45,6 +49,7 @@ export interface PeerInfo {
   dailySteps: number
   activityScore: number
   movementState: MovementState
+  moodState?: MoodState
   petSkin: string
   lastSeen: number
   isOnline: boolean

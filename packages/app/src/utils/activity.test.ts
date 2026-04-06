@@ -1,5 +1,13 @@
-import { describe, it, expect } from 'vitest'
-import { getScoreColor, MOVEMENT_COLORS, SCORE_THRESHOLDS, TIMING, LIMITS } from './activity'
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import {
+  getScoreColor,
+  MOVEMENT_COLORS,
+  SCORE_THRESHOLDS,
+  TIMING,
+  LIMITS,
+  getLocalDateString,
+  msUntilLocalMidnight,
+} from './activity'
 
 describe('getScoreColor', () => {
   it.each([
@@ -49,5 +57,57 @@ describe('TIMING constants', () => {
 describe('LIMITS constants', () => {
   it('history max days is 90', () => {
     expect(LIMITS.historyMaxDays).toBe(90)
+  })
+})
+
+describe('getLocalDateString', () => {
+  it('formats date as YYYY-MM-DD', () => {
+    const d = new Date(2026, 0, 5)
+    expect(getLocalDateString(d)).toBe('2026-01-05')
+  })
+
+  it('pads month and day with zeros', () => {
+    const d = new Date(2026, 3, 1)
+    expect(getLocalDateString(d)).toBe('2026-04-01')
+  })
+
+  it('defaults to today when no arg', () => {
+    const result = getLocalDateString()
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
+})
+
+describe('msUntilLocalMidnight', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('returns positive ms until next midnight', () => {
+    const ms = msUntilLocalMidnight()
+    expect(ms).toBeGreaterThan(0)
+    expect(ms).toBeLessThanOrEqual(24 * 60 * 60 * 1000)
+  })
+
+  it('returns ~1ms near midnight', () => {
+    vi.useFakeTimers()
+    const nearMidnight = new Date()
+    nearMidnight.setHours(23, 59, 59, 999)
+    vi.setSystemTime(nearMidnight)
+
+    const ms = msUntilLocalMidnight()
+    expect(ms).toBeGreaterThan(0)
+    expect(ms).toBeLessThanOrEqual(2)
+    vi.useRealTimers()
+  })
+
+  it('returns ~24h at midnight', () => {
+    vi.useFakeTimers()
+    const midnight = new Date()
+    midnight.setHours(0, 0, 0, 0)
+    vi.setSystemTime(midnight)
+
+    const ms = msUntilLocalMidnight()
+    expect(ms).toBe(24 * 60 * 60 * 1000)
+    vi.useRealTimers()
   })
 })
