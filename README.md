@@ -227,7 +227,7 @@ If AIbubu makes your coding sessions more fun, consider giving it a ⭐ — it h
 
 <div align="center">
 
-[![Star History Chart](https://api.star-history.com/svg?repos=funAgent/ai-bubu&type=Date)](https://star-history.com/#funAgent/ai-bubu&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=funAgent/ai-bubu&type=date&legend=top-left)](https://star-history.com/#funAgent/ai-bubu&type=date&legend=top-left)
 
 </div>
 
