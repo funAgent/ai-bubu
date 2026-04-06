@@ -72,6 +72,12 @@ export default {
         title: 'Make it yours',
         desc: 'Name, theme, auto-start — fully yours',
       },
+      {
+        img: '/screenshot/about_en.jpg',
+        alt: 'AIbubu about view: version info, privacy and feedback',
+        title: 'About',
+        desc: 'Updates, privacy, feedback — all in one place',
+      },
     ],
   },
   chars: {

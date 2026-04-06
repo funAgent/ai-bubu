@@ -60,6 +60,12 @@ export default {
         title: '自由定制',
         desc: '昵称 · 主题 · 自启动，一切由你做主',
       },
+      {
+        img: '/screenshot/about.jpg',
+        alt: 'AI 步步关于界面：版本信息、隐私政策、反馈',
+        title: '关于',
+        desc: '版本更新 · 隐私保护 · 意见反馈',
+      },
     ],
   },
   chars: {
