@@ -7,9 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Bug Fixes
+
+- **(app)** Optimize leaderboard empty state text when LAN discovery is enabled
+
+### Documentation
+
+- Remove community directory references that no longer exist
+
+### Features
+
+- **(app)** Open leaderboard on macOS Dock icon click
+
+### Miscellaneous
+
+- **(app)** Sync Cargo.lock version to 0.4.1
+
+### Refactor
+
+- **(site)** Remove install guide page and references
+
+## [0.4.1] - 2026-04-07
+
+### Miscellaneous
+
+- **(app)** Release v0.4.1
+- Update workflow
+- Update mock status
+- **(site)** Update image display
+
+## [0.4.0] - 2026-04-06
+
+### Features
+
+- **(site)** Update screenshots and i18n content
+- **(site)** Add OG image and SEO optimization
+- **(site)** Add google analysis
+- Refactor release workflow
+
+### Miscellaneous
+
+- **(app)** Release v0.4.0
+- Update readme
+- **(site)** Remove legacy i18n implementation
+
 ### Refactor
 
 - **(app)** High cohesion low coupling refactoring
+- **(site)** Restructure i18n to dynamic [locale] routing
 - Update function refactor
 
 ## [0.3.8] - 2026-04-05
