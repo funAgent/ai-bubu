@@ -20,7 +20,6 @@ export default {
     versionPrefix: 'v{ver} · ',
     betaPrefix: 'Beta · ',
     toolList: '支持 Cursor、Claude Code、Codex、Trae 等',
-    installHint: '首次打开遇到安全提示？查看安装指南',
     demoVideo: '/demo/demo.mp4',
   },
   states: {
@@ -74,7 +73,6 @@ export default {
   },
   footer: {
     credits: '像素角色来自',
-    installGuide: '安装指南',
     privacy: '隐私协议',
     copyright: '© 2026 aibubu.app',
   },
@@ -84,7 +82,6 @@ export default {
     description: '免费下载 AI 步步桌面宠物，支持 macOS、Windows、Linux 三大平台。',
     subtitle: '选择适合你系统的版本',
     githubLink: '在 GitHub 查看所有版本',
-    installGuide: 'macOS 安装指南',
     platforms: {
       macArm: { label: 'macOS (Apple Silicon)', desc: '适用于 M1 / M2 / M3 / M4 芯片的 Mac' },
       macIntel: { label: 'macOS (Intel)', desc: '适用于 Intel 芯片的 Mac' },
@@ -95,10 +92,6 @@ export default {
   privacy: {
     pageTitle: '隐私政策 — AI 步步',
     description: 'AI 步步的隐私政策，所有数据仅存储在本地，不上传任何信息。',
-  },
-  install: {
-    pageTitle: '安装指南 — AI 步步',
-    description: '首次打开 AI 步步遇到安全提示？查看 macOS 和 Windows 的安装与信任设置指南。',
   },
   jsonLd: {
     description: '一款桌面宠物，追踪你的 AI 编码工具使用量并转化为步数。',

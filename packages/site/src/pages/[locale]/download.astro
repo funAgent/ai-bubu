@@ -142,8 +142,6 @@ const platforms = [
 
     <div class="dl-footer-links">
       <a href={RELEASES_URL} target="_blank" rel="noopener">{i18n.download.githubLink}</a>
-      <span class="dl-dot">·</span>
-      <a href={localePath(locale, '/install')}>{i18n.download.installGuide}</a>
     </div>
   </main>
 </Base>
@@ -365,11 +363,6 @@ const platforms = [
   .dl-footer-links a:hover {
     color: var(--text-2);
     text-decoration-color: rgba(0, 0, 0, 0.4);
-  }
-
-  .dl-dot {
-    margin: 0 8px;
-    opacity: 0.4;
   }
 
   @keyframes fadeUp {

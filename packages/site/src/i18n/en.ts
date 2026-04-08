@@ -20,7 +20,6 @@ export default {
     versionPrefix: 'v{ver} · ',
     betaPrefix: 'Beta · ',
     toolList: 'Supports Cursor, Claude Code, Codex, Trae & more',
-    installHint: 'Security warning on first launch? See install guide',
     demoVideo: '/demo/demo_en.mp4',
   },
   states: {
@@ -86,7 +85,6 @@ export default {
   },
   footer: {
     credits: 'Pixel art by',
-    installGuide: 'Install Guide',
     privacy: 'Privacy',
     copyright: '© 2026 aibubu.app',
   },
@@ -96,7 +94,6 @@ export default {
     description: 'Free download AIbubu desktop pet for macOS, Windows, and Linux.',
     subtitle: 'Choose the version for your system',
     githubLink: 'View all releases on GitHub',
-    installGuide: 'macOS install guide',
     platforms: {
       macArm: { label: 'macOS (Apple Silicon)', desc: 'For Mac with M1 / M2 / M3 / M4 chip' },
       macIntel: { label: 'macOS (Intel)', desc: 'For Mac with Intel chip' },
@@ -108,10 +105,6 @@ export default {
     pageTitle: 'Privacy Policy — AIbubu',
     description:
       'AIbubu privacy policy. All data is stored locally on your device. Nothing is uploaded.',
-  },
-  install: {
-    pageTitle: 'Install Guide — AIbubu',
-    description: 'Security warning on first launch? See how to open AIbubu on macOS.',
   },
   jsonLd: {
     description: 'A desktop pet that tracks your AI coding tool activity and turns it into steps.',

@@ -123,9 +123,6 @@ try {
       >
         {latestVersion ? `v${latestVersion} · ` : `${i18n.hero.betaPrefix}`}{i18n.hero.toolList}
       </p>
-      <p class="hero-install-hint">
-        <a href={localePath(locale, '/install')}>{i18n.hero.installHint}</a>
-      </p>
     </section>
 
     <section class="states" aria-label="Pet states">
@@ -213,15 +210,6 @@ try {
       </div>
       <p class="chars-note">{i18n.chars.note}</p>
     </section>
-
-    <section class="install-hint-section">
-      <div class="install-hint-card">
-        <span class="install-hint-icon" aria-hidden="true">🛡️</span>
-        <p class="install-hint-text">
-          <a href={localePath(locale, '/install')}>{i18n.hero.installHint}</a>
-        </p>
-      </div>
-    </section>
   </main>
 
   <footer class="footer">
@@ -229,8 +217,6 @@ try {
       <span class="footer-brand">{i18n.nav.brand}</span>
       <span class="footer-dot">·</span>
       <a href={GITHUB_REPO} target="_blank" rel="noopener">GitHub</a>
-      <span class="footer-dot">·</span>
-      <a href={localePath(locale, '/install')}>{i18n.footer.installGuide}</a>
       <span class="footer-dot">·</span>
       <a href={localePath(locale, '/privacy')}>{i18n.footer.privacy}</a>
     </div>
@@ -611,25 +597,6 @@ try {
     animation: fadeUp 0.6s ease-out 0.18s both;
   }
 
-  .hero-install-hint {
-    margin-top: 10px;
-    font-size: 12px;
-    animation: fadeUp 0.6s ease-out 0.22s both;
-  }
-
-  .hero-install-hint a {
-    color: var(--text-3);
-    text-decoration: underline;
-    text-decoration-color: rgba(0, 0, 0, 0.15);
-    text-underline-offset: 2px;
-    transition: all 0.2s;
-  }
-
-  .hero-install-hint a:hover {
-    color: var(--text-2);
-    text-decoration-color: rgba(0, 0, 0, 0.4);
-  }
-
   .states {
     max-width: 860px;
     margin: 0 auto;
@@ -910,53 +877,6 @@ try {
   .chars-note {
     font-size: 13px;
     color: var(--text-3);
-  }
-
-  .install-hint-section {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
-    text-align: center;
-  }
-
-  .install-hint-card {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 28px;
-    border: 1px dashed var(--border);
-    border-radius: 12px;
-    background: var(--surface);
-    transition: all 0.2s ease-out;
-  }
-
-  .install-hint-card:hover {
-    border-color: rgba(0, 0, 0, 0.2);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  }
-
-  .install-hint-icon {
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .install-hint-text {
-    font-size: 13px;
-    color: var(--text-3);
-    line-height: 1.5;
-  }
-
-  .install-hint-text a {
-    color: var(--text-2);
-    text-decoration: underline;
-    text-decoration-color: rgba(0, 0, 0, 0.15);
-    text-underline-offset: 2px;
-    transition: all 0.2s;
-  }
-
-  .install-hint-text a:hover {
-    color: var(--text);
-    text-decoration-color: rgba(0, 0, 0, 0.4);
   }
 
   .footer {
