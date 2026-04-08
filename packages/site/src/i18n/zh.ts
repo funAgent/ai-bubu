@@ -51,7 +51,7 @@ export default {
         img: '/screenshot/pet.jpg',
         alt: 'AI 步步角色选择界面：多款像素宠物',
         title: '挑选角色',
-        desc: '8 款像素伙伴，还能导入社区创作',
+        desc: '8 款像素伙伴，支持自定义角色',
       },
       {
         img: '/screenshot/setting.jpg',
@@ -69,7 +69,7 @@ export default {
   },
   chars: {
     title: '挑选你的伙伴',
-    note: '支持自定义角色 · 社区创作持续更新',
+    note: '支持自定义角色 · 更多角色持续更新中',
   },
   footer: {
     credits: '像素角色来自',

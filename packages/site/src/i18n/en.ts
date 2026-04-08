@@ -63,7 +63,7 @@ export default {
         img: '/screenshot/pet_en.jpg',
         alt: 'AIbubu character picker: multiple pixel pets to choose',
         title: 'Pick a buddy',
-        desc: '8 pixel pals plus community imports',
+        desc: '8 pixel pals, custom skins supported',
       },
       {
         img: '/screenshot/setting_en.jpg',
@@ -81,7 +81,7 @@ export default {
   },
   chars: {
     title: 'Pick your companion',
-    note: 'Custom skins supported · More from the community',
+    note: 'Custom skins supported · More on the way',
   },
   footer: {
     credits: 'Pixel art by',

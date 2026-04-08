@@ -136,7 +136,7 @@ Adding monitoring support for a new AI coding tool. Each provider is a TOML conf
 ### 快速开始 | Quick Start
 
 1. 阅读 [Provider 配置指南](./packages/app/providers/README.md) 了解架构和适配器类型
-2. 在 `packages/app/providers/community/` 下创建 `your-tool.toml`
+2. 在 `packages/app/providers/` 下创建 `your-tool.toml`
 3. 以 `pnpm tauri dev` 启动开发模式，观察终端中的 monitor 日志验证检测
 4. 运行 `node scripts/validate-providers.js` 确认配置通过校验
 5. 验证通过后将文件移到 `packages/app/providers/` 根目录

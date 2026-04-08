@@ -163,7 +163,7 @@ Find how the tool stores activity data:
 
 ### Step 2: Create the TOML file
 
-Start from the template above that matches your adapter type. Save as `community/your-tool.toml`.
+Start from the template above that matches your adapter type. Save as `providers/your-tool.toml`.
 
 ### Step 3: Test locally
 
@@ -186,7 +186,7 @@ The provider should work on at least **one** platform, with correct paths for al
 ### Step 5: Submit
 
 1. Run `node scripts/validate-providers.js` to check your TOML
-2. Move the file from `community/` to the root `providers/` directory
+2. Ensure the file is in the root `providers/` directory
 3. Open a PR with evidence of successful detection (terminal logs or screenshots)
 
 ## Validation

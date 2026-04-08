@@ -42,7 +42,7 @@ AIbubu monitors your AI coding tools in real-time through a pluggable adapter sy
 - **Trae** — monitors process CPU usage
 - **Process fallback** — when the primary adapter finds nothing, each provider can fall back to process-level CPU detection automatically
 - **Multi-tool boost** — using multiple AI tools simultaneously accelerates your pet's progression (2 tools ×1.8, 3+ tools ×2.5 speed multiplier)
-- **Community extensible** — add support for any tool by writing a TOML config file; 5 adapter types available (`sqlite` / `jsonl` / `process` / `file_mtime` / `vscode_ext`)
+- **Extensible** — add support for any tool by writing a TOML config file; 5 adapter types available (`sqlite` / `jsonl` / `process` / `file_mtime` / `vscode_ext`)
 
 ### Movement & Mood
 
