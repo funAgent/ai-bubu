@@ -141,6 +141,18 @@ pub fn run() {
             tray::update_tray_icon,
             set_show_over_fullscreen,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running aibubu");
+        .build(tauri::generate_context!())
+        .expect("error while building aibubu")
+        .run(|app, event| {
+            #[cfg(target_os = "macos")]
+            if let tauri::RunEvent::Reopen { .. } = event {
+                if let Some(window) = app.get_webview_window("social") {
+                    if !window.is_visible().unwrap_or(false) {
+                        let _ = window.show();
+                        let _ = window.set_focus();
+                    }
+                }
+            }
+            let _ = event;
+        });
 }
