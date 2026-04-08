@@ -73,7 +73,9 @@ const fullLeaderboard = computed(() => {
           stroke-width="1.4"
         />
       </svg>
-      <div class="empty-title">{{ t('lbEmpty') }}</div>
+      <div class="empty-title">
+        {{ settings.socialEnabled ? t('lbEmptySearching') : t('lbEmpty') }}
+      </div>
     </div>
   </div>
 </template>

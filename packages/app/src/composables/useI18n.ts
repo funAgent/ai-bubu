@@ -67,6 +67,7 @@ const messages: Record<Lang, Record<string, string>> = {
     lbTitle: '排行榜',
     lbPeople: '人',
     lbEmpty: '开启局域网发现，看看谁在线',
+    lbEmptySearching: '正在寻找附近的同事…',
     lbSelf: '我',
 
     skinsTitle: '角色',
@@ -210,6 +211,7 @@ const messages: Record<Lang, Record<string, string>> = {
     lbTitle: 'Leaderboard',
     lbPeople: '',
     lbEmpty: "Enable LAN discovery to see who's online",
+    lbEmptySearching: 'Searching for nearby teammates…',
     lbSelf: 'Me',
 
     skinsTitle: 'Skins',
