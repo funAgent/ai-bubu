@@ -2,7 +2,7 @@ export default {
   site: {
     title: 'AI 步步 — AI 时代的编码计步器',
     description:
-      '实时监测 Cursor、Claude Code、Codex、Trae 等 AI 工具的使用量，化为桌面宠物的步数和动作。',
+      '实时监测 Cursor、Claude Code、Codex、OpenCode、Trae 等 AI 工具的使用量，化为桌面宠物的步数和动作。',
   },
   nav: {
     brand: 'AI 步步',
@@ -19,7 +19,7 @@ export default {
     allPlatforms: '所有平台',
     versionPrefix: 'v{ver} · ',
     betaPrefix: 'Beta · ',
-    toolList: '支持 Cursor、Claude Code、Codex、Trae 等',
+    toolList: '支持 Cursor、Claude Code、Codex、OpenCode、Trae 等',
     demoVideo: '/demo/demo.mp4',
   },
   states: {

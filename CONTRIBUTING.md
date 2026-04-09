@@ -144,13 +144,13 @@ Adding monitoring support for a new AI coding tool. Each provider is a TOML conf
 
 ### 适配器类型 | Adapter Types
 
-| Adapter      | 适用场景                             | 示例        |
-| ------------ | ------------------------------------ | ----------- |
-| `sqlite`     | IDE 类工具，本地 SQLite 数据库       | Cursor      |
-| `jsonl`      | CLI 工具，会话日志为 JSONL 格式      | Claude Code |
-| `process`    | 仅能通过进程检测活跃度               | Trae        |
-| `file_mtime` | 工具会写入本地文件但非 JSONL/SQLite  | —           |
-| `vscode_ext` | VS Code 扩展，数据存于 globalStorage | —           |
+| Adapter      | 适用场景                             | 示例                  |
+| ------------ | ------------------------------------ | --------------------- |
+| `sqlite`     | IDE 类工具，本地 SQLite 数据库       | Cursor                |
+| `jsonl`      | CLI 工具，会话日志为 JSONL 格式      | Claude Code、OpenCode |
+| `process`    | 仅能通过进程检测活跃度               | Trae                  |
+| `file_mtime` | 工具会写入本地文件但非 JSONL/SQLite  | —                     |
+| `vscode_ext` | VS Code 扩展，数据存于 globalStorage | —                     |
 
 详细配置模板和字段说明请参阅 [Provider 配置指南](./packages/app/providers/README.md)。
 
