@@ -19,7 +19,7 @@ https://github.com/user-attachments/assets/2b42508f-95e7-4a6b-b0eb-02efa23425c5
 
 ## What is it?
 
-AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Codex, Trae, and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs. <img src="packages/site/public/pet/together.gif" width="48" />
+AIbubu is a desktop pet app that monitors your usage of AI coding tools like Cursor, Claude Code, Codex, OpenCode, Trae, and quantifies your "coding activity" into steps — the more active you are, the faster your pet runs. <img src="packages/site/public/pet/together.gif" width="48" />
 
 - **Idle** — you're slacking off
 - **Walk** — you're coding at a gentle pace
@@ -39,6 +39,7 @@ AIbubu monitors your AI coding tools in real-time through a pluggable adapter sy
 - **Cursor** — polls the local SQLite database (`state.vscdb`), maps Composer statuses like `generating` / `streaming` to high activity
 - **Claude Code** — parses JSONL session logs under `~/.claude/projects/`
 - **Codex CLI** — parses `rollout-*.jsonl` session logs
+- **OpenCode** — parses JSONL session logs under `~/.local/state/opencode/`
 - **Trae** — monitors process CPU usage
 - **Process fallback** — when the primary adapter finds nothing, each provider can fall back to process-level CPU detection automatically
 - **Multi-tool boost** — using multiple AI tools simultaneously accelerates your pet's progression (2 tools ×1.8, 3+ tools ×2.5 speed multiplier)

@@ -2,7 +2,7 @@ export default {
   site: {
     title: 'AIbubu — A Coding Step Counter for the AI Era',
     description:
-      'Track your AI coding tool activity (Cursor, Claude Code, Codex, Trae) and watch your desktop pet run. Free and open source.',
+      'Track your AI coding tool activity (Cursor, Claude Code, Codex, OpenCode, Trae) and watch your desktop pet run. Free and open source.',
   },
   nav: {
     brand: 'AIbubu',
@@ -19,7 +19,7 @@ export default {
     allPlatforms: 'All Platforms',
     versionPrefix: 'v{ver} · ',
     betaPrefix: 'Beta · ',
-    toolList: 'Supports Cursor, Claude Code, Codex, Trae & more',
+    toolList: 'Supports Cursor, Claude Code, Codex, OpenCode, Trae & more',
     demoVideo: '/demo/demo_en.mp4',
   },
   states: {

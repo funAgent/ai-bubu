@@ -85,7 +85,7 @@ draw.line([(left, 310), (left + 80, 310)], fill=(255, 255, 255, 180), width=3)
 draw.text((left, 340), "A Coding Step Counter", fill=TEXT_W, font=font_sub)
 draw.text((left, 390), "for the AI Era", fill=TEXT_W, font=font_sub)
 
-draw.text((left, 470), "Cursor · Claude Code · Codex · Trae & more", fill=TEXT_SUB, font=font_tools)
+draw.text((left, 470), "Cursor · Claude Code · Codex · Trae · OpenCode & more", fill=TEXT_SUB, font=font_tools)
 
 # Bottom bar
 draw.rectangle([(0, H - 4), (W, H)], fill=(255, 255, 255, 40))
