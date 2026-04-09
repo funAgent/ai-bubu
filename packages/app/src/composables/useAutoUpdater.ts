@@ -11,6 +11,8 @@ export type UpdateStatus =
   | 'ready'
   | 'error'
 
+const CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000
+
 const status = ref<UpdateStatus>('idle')
 const newVersion = ref('')
 const errorMessage = ref('')
@@ -19,9 +21,11 @@ const downloadProgress = ref(0)
 let updateInstance: Awaited<ReturnType<typeof check>> | null = null
 let contentLength = 0
 let downloaded = 0
+let periodicTimer: ReturnType<typeof setInterval> | null = null
 
 async function checkForUpdate(silent = true) {
   if (status.value === 'checking' || status.value === 'downloading') return
+  if (silent && (status.value === 'available' || status.value === 'ready')) return
 
   status.value = 'checking'
   errorMessage.value = ''
@@ -52,6 +56,18 @@ async function checkForUpdate(silent = true) {
     } else {
       status.value = 'idle'
     }
+  }
+}
+
+function startPeriodicCheck() {
+  if (periodicTimer) return
+  periodicTimer = setInterval(() => checkForUpdate(true), CHECK_INTERVAL_MS)
+}
+
+function stopPeriodicCheck() {
+  if (periodicTimer) {
+    clearInterval(periodicTimer)
+    periodicTimer = null
   }
 }
 
@@ -100,5 +116,7 @@ export function useAutoUpdater() {
     checkForUpdate,
     downloadAndInstall,
     installAndRelaunch,
+    startPeriodicCheck,
+    stopPeriodicCheck,
   }
 }

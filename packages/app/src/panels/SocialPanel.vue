@@ -4,6 +4,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import { useSocialStore } from '@/stores/social'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from '@/composables/useI18n'
+import { useAutoUpdater } from '@/composables/useAutoUpdater'
 import Leaderboard from './Leaderboard.vue'
 import TodayView from './TodayView.vue'
 import SkinMarket from './SkinMarket.vue'
@@ -11,6 +12,8 @@ import SettingsView from './SettingsView.vue'
 import AboutView from './AboutView.vue'
 
 const socialStore = useSocialStore()
+const { status: updateStatus } = useAutoUpdater()
+const hasUpdate = computed(() => updateStatus.value === 'available')
 const settings = useSettingsStore()
 const { t, lang, setLang, isZh } = useI18n()
 
@@ -207,6 +210,7 @@ onUnmounted(() => {
             />
           </svg>
           <span class="nav-label">{{ t(tab) }}</span>
+          <span v-if="tab === 'about' && hasUpdate" class="update-dot"></span>
         </button>
       </div>
 
@@ -326,6 +330,7 @@ onUnmounted(() => {
   padding: 12px 8px;
 }
 .nav-btn {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -339,6 +344,16 @@ onUnmounted(() => {
     background 0.15s,
     color 0.15s;
   color: var(--text-tertiary);
+}
+.update-dot {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--error, #ef4444);
+  box-shadow: 0 0 0 2px var(--bg-sidebar);
 }
 .nav-btn:hover {
   background: var(--bg-surface-hover);

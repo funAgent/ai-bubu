@@ -47,8 +47,9 @@ const isPetWindow = currentWindow.label === 'pet'
 
 if (isPetWindow) {
   import('./composables/useAutoUpdater').then(({ useAutoUpdater }) => {
-    const { checkForUpdate } = useAutoUpdater()
+    const { checkForUpdate, startPeriodicCheck } = useAutoUpdater()
     checkForUpdate(true)
+    startPeriodicCheck()
   })
 }
 
