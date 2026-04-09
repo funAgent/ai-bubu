@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Features
+
+- **(monitor)** Add opencode provider
+- **(app)** Add periodic update check and update indicator dot
+
+## [0.4.2] - 2026-04-08
+
 ### Bug Fixes
 
 - **(app)** Optimize leaderboard empty state text when LAN discovery is enabled
@@ -21,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Miscellaneous
 
+- Delete
+- **(app)** Release v0.4.2
 - **(app)** Sync Cargo.lock version to 0.4.1
 
 ### Refactor
