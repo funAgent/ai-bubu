@@ -21,7 +21,7 @@
     "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-store": "^2",
     "@tauri-apps/plugin-updater": "^2.10.0",
-    "@vueuse/core": "^13",
+    "@vueuse/core": "^14",
     "lottie-web": "^5",
     "pinia": "^3",
     "vue": "^3.5"
