@@ -5,6 +5,7 @@ import { useSocialStore } from '@/stores/social'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from '@/composables/useI18n'
 import { useAutoUpdater } from '@/composables/useAutoUpdater'
+import { SKIN_BASE } from '@/stores/skin'
 import Leaderboard from './Leaderboard.vue'
 import TodayView from './TodayView.vue'
 import SkinMarket from './SkinMarket.vue'
@@ -106,7 +107,7 @@ onUnmounted(() => {
   <div class="social-window" :class="{ 'theme-light': isLight }">
     <nav class="sidebar">
       <div class="sidebar-brand">
-        <img class="brand-logo" src="/skins/vita/pet.png" :alt="t('brand')" />
+        <img class="brand-logo" :src="`${SKIN_BASE}/vita/pet.png`" :alt="t('brand')" />
         <span class="brand-text">{{ t('brand') }}</span>
         <button
           class="lang-toggle"

@@ -2,7 +2,7 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import type { PeerInfo, SkinManifest } from '@/types'
 import { useI18n } from '@/composables/useI18n'
-import { useSkinStore } from '@/stores/skin'
+import { useSkinStore, SKIN_BASE } from '@/stores/skin'
 import { resolveAnimation } from '@/utils/skin'
 import { MOVEMENT_STATE_KEYS } from '@/utils/movement'
 import SpriteRenderer from './renderers/SpriteRenderer.vue'
@@ -22,7 +22,7 @@ const manifest = ref<SkinManifest | null>(null)
 const loadFailed = ref(false)
 const hovered = ref(false)
 
-const skinBasePath = computed(() => `/skins/${props.peer.petSkin}/`)
+const skinBasePath = computed(() => `${SKIN_BASE}/${props.peer.petSkin}/`)
 
 const currentAnimation = computed(() => {
   if (!manifest.value) return null

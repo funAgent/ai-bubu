@@ -45,7 +45,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: https://asset.localhost data: blob:; connect-src 'self' ipc: http://ipc.localhost https://github.com https://api.github.com"
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: https://asset.localhost skin: https://skin.localhost data: blob:; connect-src 'self' ipc: http://ipc.localhost skin: https://skin.localhost https://github.com https://api.github.com"
     },
     "trayIcon": null
   },

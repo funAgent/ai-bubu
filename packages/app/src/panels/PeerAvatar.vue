@@ -4,6 +4,7 @@ import type { PeerInfo } from '@/types'
 import { MOVEMENT_COLORS } from '@/utils/activity'
 import { useI18n } from '@/composables/useI18n'
 import { MOVEMENT_STATE_KEYS } from '@/utils/movement'
+import { SKIN_BASE } from '@/stores/skin'
 
 const { t } = useI18n()
 
@@ -20,7 +21,7 @@ const rankDisplay = computed(() => (props.rank ? String(props.rank) : ''))
 const avatarFailed = ref(false)
 const avatarSrc = computed(() => {
   if (props.peer.petSkin && !avatarFailed.value) {
-    return `/skins/${props.peer.petSkin}/pet.png`
+    return `${SKIN_BASE}/${props.peer.petSkin}/pet.png`
   }
   return ''
 })

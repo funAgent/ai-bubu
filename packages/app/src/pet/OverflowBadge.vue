@@ -2,7 +2,7 @@
 import { ref, computed, nextTick, onUnmounted } from 'vue'
 import type { PeerInfo } from '@/types'
 import { useI18n } from '@/composables/useI18n'
-import { useSkinStore } from '@/stores/skin'
+import { useSkinStore, SKIN_BASE } from '@/stores/skin'
 import MoodIcon from './MoodIcon.vue'
 
 const { t, isZh } = useI18n()
@@ -29,7 +29,7 @@ const peerRows = computed(() =>
     const name = p.nickname || t('lbSelf')
     const steps = p.dailySteps.toLocaleString()
     const stepsLabel = isZh.value ? `${steps}步` : `${steps} steps`
-    const avatarUrl = skinStore.isBuiltin(p.petSkin) ? `/skins/${p.petSkin}/pet.png` : null
+    const avatarUrl = skinStore.isBuiltin(p.petSkin) ? `${SKIN_BASE}/${p.petSkin}/pet.png` : null
     const initial = (p.nickname || '?').charAt(0)
     const moodState = p.moodState ?? 'normal'
     return { name, stepsLabel, avatarUrl, initial, moodState }
