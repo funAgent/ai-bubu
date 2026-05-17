@@ -1,0 +1,62 @@
+{
+  "name": "Sketch Boy",
+  "version": "1.0.0",
+  "author": "AIbubu",
+  "description": "简笔画风格的小男孩皮肤",
+  "style": "ai-generated",
+  "format": "sprite",
+  "size": {
+    "width": 80,
+    "height": 80
+  },
+  "animations": {
+    "idle": {
+      "file": "idle.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "walk": {
+      "file": "walk.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "run": {
+      "file": "run.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0
+      }
+    },
+    "sprint": {
+      "file": "sprint.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0
+      }
+    }
+  }
+}
