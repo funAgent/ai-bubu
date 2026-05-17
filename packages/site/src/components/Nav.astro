@@ -1,0 +1,187 @@
+---
+import { t, localePath, getLocale } from '../i18n'
+
+interface Props {
+  variant?: 'main' | 'sub'
+}
+
+const { variant = 'main' } = Astro.props
+const locale = getLocale(Astro.url)
+const i18n = t(locale)
+const GITHUB_REPO = 'https://github.com/funAgent/ai-bubu'
+const isMain = variant === 'main'
+---
+
+{
+  isMain ? (
+    <nav class="nav" aria-label="main">
+      <a href={localePath(locale, '/')} class="logo">
+        <span class="logo-label">{i18n.nav.brand}</span>
+      </a>
+      <div class="nav-end">
+        <a href={localePath(locale, '/market')} class="nav-link">
+          {i18n.nav.market}
+        </a>
+        <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">
+          {i18n.nav.switchLang}
+        </button>
+        <a href={GITHUB_REPO} class="nav-link" target="_blank" rel="noopener">
+          GitHub
+        </a>
+      </div>
+    </nav>
+  ) : (
+    <nav class="sub-nav" aria-label="navigation">
+      <div class="sub-nav-inner">
+        <a href={localePath(locale, '/')} class="sub-back">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          <span>{i18n.nav.backHome}</span>
+        </a>
+        <div class="sub-nav-end">
+          <a href={localePath(locale, '/market')} class="nav-link">
+            {i18n.nav.market}
+          </a>
+          <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">
+            {i18n.nav.switchLang}
+          </button>
+        </div>
+      </div>
+    </nav>
+  )
+}
+
+<style>
+  .nav {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .nav-end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    color: var(--text-3);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-3);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .lang-btn:hover {
+    border-color: rgba(0, 0, 0, 0.2);
+    color: var(--text-2);
+  }
+
+  .sub-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(249, 249, 249, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sub-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 12px 24px;
+  }
+
+  .sub-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--text-2);
+    transition: color 0.2s;
+  }
+
+  .sub-back:hover {
+    color: var(--text);
+  }
+
+  .sub-nav-end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .sub-nav .nav-link {
+    font-size: 13px;
+    color: var(--text-3);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .sub-nav .nav-link:hover {
+    color: var(--text);
+  }
+
+  .sub-nav .lang-btn {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sub-nav .lang-btn:hover {
+    color: var(--text);
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+</style>

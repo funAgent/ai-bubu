@@ -6,6 +6,7 @@ export default {
   },
   nav: {
     brand: 'AI 步步',
+    market: '宠物市场',
     switchLang: 'EN',
     backHome: '返回首页',
   },
@@ -70,6 +71,24 @@ export default {
   chars: {
     title: '挑选你的伙伴',
     note: '支持自定义角色 · 更多角色持续更新中',
+    browseAll: '浏览全部角色 →',
+  },
+  market: {
+    pageTitle: '宠物市场 — AI 步步',
+    description: '浏览 AI 步步的所有角色皮肤，挑选你的桌面伙伴。',
+    title: '宠物市场',
+    subtitle: '{count} 款角色，更多持续更新中',
+    filterAll: '全部',
+    filterPixel: '像素风',
+    filterAI: 'AI 生成',
+    searchPlaceholder: '搜索角色...',
+    stateIdle: '待机',
+    stateWalk: '走路',
+    stateRun: '跑步',
+    stateSprint: '冲刺',
+    author: '作者',
+    cta: '下载 AI 步步，使用更多角色',
+    ctaBtn: '立即下载',
   },
   footer: {
     credits: '像素角色来自',

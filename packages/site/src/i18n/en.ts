@@ -6,6 +6,7 @@ export default {
   },
   nav: {
     brand: 'AIbubu',
+    market: 'Pet Market',
     switchLang: '中',
     backHome: 'Back to Home',
   },
@@ -82,6 +83,24 @@ export default {
   chars: {
     title: 'Pick your companion',
     note: 'Custom skins supported · More on the way',
+    browseAll: 'Browse all characters →',
+  },
+  market: {
+    pageTitle: 'Pet Market — AIbubu',
+    description: 'Browse all AIbubu character skins and pick your desktop companion.',
+    title: 'Pet Market',
+    subtitle: '{count} characters, more on the way',
+    filterAll: 'All',
+    filterPixel: 'Pixel Art',
+    filterAI: 'AI Generated',
+    searchPlaceholder: 'Search characters...',
+    stateIdle: 'Idle',
+    stateWalk: 'Walk',
+    stateRun: 'Run',
+    stateSprint: 'Sprint',
+    author: 'by',
+    cta: 'Download AIbubu to use more characters',
+    ctaBtn: 'Download Now',
   },
   footer: {
     credits: 'Pixel art by',

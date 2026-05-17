@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
-import { t, localePath, type Locale } from '../../i18n'
+import Nav from '../../components/Nav.astro'
+import { t, type Locale } from '../../i18n'
 
 export function getStaticPaths() {
   return [{ params: { locale: 'zh' } }, { params: { locale: 'en' } }]
@@ -75,28 +76,7 @@ const platforms = [
 ---
 
 <Base title={i18n.download.pageTitle} description={i18n.download.description}>
-  <nav class="dl-nav" aria-label="download">
-    <div class="dl-nav-inner">
-      <a href={localePath(locale, '/')} class="dl-back">
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M15 18l-6-6 6-6"></path>
-        </svg>
-        <span>{i18n.nav.backHome}</span>
-      </a>
-      <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">
-        {i18n.nav.switchLang}
-      </button>
-    </div>
-  </nav>
+  <Nav variant="sub" />
 
   <main class="dl-page">
     <h1>{i18n.download.title}</h1>
@@ -152,54 +132,6 @@ const platforms = [
 </script>
 
 <style>
-  .dl-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(249, 249, 249, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .dl-nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 12px 24px;
-  }
-
-  .dl-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    color: var(--text-2);
-    transition: color 0.2s;
-  }
-
-  .dl-back:hover {
-    color: var(--text);
-  }
-
-  .lang-btn {
-    font-size: 13px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
-    color: var(--text-2);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .lang-btn:hover {
-    color: var(--text);
-    border-color: rgba(0, 0, 0, 0.15);
-  }
-
   .dl-page {
     max-width: 680px;
     margin: 0 auto;

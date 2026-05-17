@@ -1,0 +1,716 @@
+[
+  {
+    "id": "vita",
+    "name": "Vita",
+    "author": "arks",
+    "description": "像素风小恐龙 Vita",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/vita/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 4,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 5,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 8,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 6,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 17,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "tard",
+    "name": "Tard",
+    "author": "arks",
+    "description": "像素风小恐龙 Tard",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/tard/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 4,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 5,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 8,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 6,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 17,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "mort",
+    "name": "Mort",
+    "author": "arks",
+    "description": "像素风小恐龙 Mort",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/mort/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 4,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 5,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 8,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 6,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 17,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "doux",
+    "name": "Doux",
+    "author": "arks",
+    "description": "像素风小恐龙 Doux",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/doux/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 4,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 5,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 8,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 6,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 16,
+        "startFrame": 17,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "boy",
+    "name": "Boy",
+    "author": "pzuh",
+    "description": "Boy 角色皮肤",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/boy/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 10,
+        "columns": 40,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 10,
+        "columns": 40,
+        "fps": 3,
+        "startFrame": 20,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 10,
+        "columns": 40,
+        "fps": 10,
+        "startFrame": 20,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 10,
+        "columns": 40,
+        "fps": 24,
+        "startFrame": 20,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "dinosaur",
+    "name": "Dinosaur",
+    "author": "voidcord54",
+    "description": "像素风小恐龙 Dinosaur",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/dinosaur/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 4,
+        "startFrame": 2,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 8,
+        "startFrame": 2,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 16,
+        "startFrame": 2,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "glube",
+    "name": "Glube",
+    "author": "SketchesWithKevin",
+    "description": "像素风小怪兽 Glube",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/glube/pet.png",
+    "animations": {
+      "idle": {
+        "file": "idle.png",
+        "frameWidth": 44,
+        "frameHeight": 31,
+        "frameCount": 6,
+        "columns": 6,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "walk.png",
+        "frameWidth": 65,
+        "frameHeight": 32,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "run.png",
+        "frameWidth": 65,
+        "frameHeight": 32,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "run.png",
+        "frameWidth": 65,
+        "frameHeight": 32,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 24,
+        "startFrame": 0,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "line",
+    "name": "Line",
+    "author": "itch.io",
+    "description": "Line 角色皮肤",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/line/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 4,
+        "columns": 28,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 8,
+        "columns": 28,
+        "fps": 6,
+        "startFrame": 4,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 8,
+        "columns": 28,
+        "fps": 10,
+        "startFrame": 12,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 8,
+        "columns": 28,
+        "fps": 24,
+        "startFrame": 12,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "buddy",
+    "name": "Buddy",
+    "author": "ChatGPT Image",
+    "description": "卡通风橙色小人皮肤",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/buddy/pet.png",
+    "animations": {
+      "idle": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 4
+      },
+      "walk": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 8,
+        "sheetRows": 4
+      },
+      "run": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 16,
+        "sheetRows": 4
+      },
+      "sprint": {
+        "file": "skin.png",
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 24,
+        "sheetRows": 4
+      }
+    }
+  },
+  {
+    "id": "hoodie",
+    "name": "Hoodie",
+    "author": "ChatGPT Image",
+    "description": "红色卫衣少年皮肤",
+    "style": "pixel",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/hoodie/pet.png",
+    "animations": {
+      "idle": {
+        "file": "idle.png",
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "walk.png",
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "run.png",
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "sprint.png",
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "panda",
+    "name": "Panda",
+    "author": "AIbubu",
+    "description": "A cute panda desk-pet skin.",
+    "style": "ai-generated",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/panda/pet.png",
+    "animations": {
+      "idle": {
+        "file": "idle.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "walk.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "run.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "sprint.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "sketch-boy",
+    "name": "Sketch Boy",
+    "author": "AIbubu",
+    "description": "简笔画风格的小男孩皮肤",
+    "style": "ai-generated",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/sketch-boy/pet.png",
+    "animations": {
+      "idle": {
+        "file": "idle.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "walk.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "run.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "sprint.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "cartoon-horse",
+    "name": "Cartoon Horse",
+    "author": "AIbubu",
+    "description": "A cute cartoon horse desk-pet skin.",
+    "style": "ai-generated",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/cartoon-horse/pet.png",
+    "animations": {
+      "idle": {
+        "file": "idle.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "walk.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "run.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "sprint.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0,
+        "sheetRows": 1
+      }
+    }
+  },
+  {
+    "id": "cartoon-pig",
+    "name": "Cartoon Pig",
+    "author": "AIbubu",
+    "description": "A cute cartoon piglet desk-pet skin.",
+    "style": "ai-generated",
+    "states": ["idle", "walk", "run", "sprint"],
+    "pet": "/skins/cartoon-pig/pet.png",
+    "animations": {
+      "idle": {
+        "file": "idle.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "walk": {
+        "file": "walk.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "run": {
+        "file": "run.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0,
+        "sheetRows": 1
+      },
+      "sprint": {
+        "file": "sprint.png",
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0,
+        "sheetRows": 1
+      }
+    }
+  }
+]
