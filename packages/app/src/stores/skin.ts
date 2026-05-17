@@ -6,6 +6,8 @@ import { useI18n } from '@/composables/useI18n'
 import type { SkinManifest, MovementState, SkinAnimationConfig } from '@/types'
 import { resolveAnimation } from '@/utils/skin'
 
+export const SKIN_BASE = 'skin://localhost'
+
 interface SkinEntry {
   id: string
   builtin: boolean
@@ -36,7 +38,7 @@ export const useSkinStore = defineStore('skin', () => {
     size: { width: 48, height: 48 },
     animations: {},
   })
-  const skinBasePath = computed(() => `/skins/${currentManifest.value.id}/`)
+  const skinBasePath = computed(() => `${SKIN_BASE}/${currentManifest.value.id}/`)
 
   function getAnimationForState(state: MovementState): {
     state: MovementState
@@ -63,7 +65,7 @@ export const useSkinStore = defineStore('skin', () => {
     abortController = new AbortController()
 
     try {
-      const resp = await fetch(`/skins/${skinId}/skin.json`, {
+      const resp = await fetch(`${SKIN_BASE}/${skinId}/skin.json`, {
         signal: abortController.signal,
       })
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
@@ -84,7 +86,7 @@ export const useSkinStore = defineStore('skin', () => {
 
       const results = await Promise.allSettled(
         skinEntries.map(async ({ id }) => {
-          const r = await fetch(`/skins/${id}/skin.json`)
+          const r = await fetch(`${SKIN_BASE}/${id}/skin.json`)
           if (!r.ok) throw new Error(`HTTP ${r.status}`)
           const manifest: SkinManifest = await r.json()
           manifest.id = id
@@ -122,7 +124,7 @@ export const useSkinStore = defineStore('skin', () => {
     if (cached) return cached
 
     try {
-      const resp = await fetch(`/skins/${skinId}/skin.json`)
+      const resp = await fetch(`${SKIN_BASE}/${skinId}/skin.json`)
       if (!resp.ok) return null
       const manifest: SkinManifest = await resp.json()
       manifest.id = skinId

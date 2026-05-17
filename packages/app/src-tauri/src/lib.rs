@@ -84,6 +84,8 @@ pub fn run() {
     #[cfg(target_os = "macos")]
     let builder = builder.plugin(tauri_nspanel::init());
 
+    let builder = skin_import::register_skin_protocol(builder);
+
     builder
         .setup(|app| {
             tray::setup_tray(app)?;

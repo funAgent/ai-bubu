@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useSkinStore } from './skin'
+import { useSkinStore, SKIN_BASE } from './skin'
 import type { SkinManifest } from '@/types'
 
 vi.mock('@tauri-apps/api/core', () => ({
@@ -51,7 +51,7 @@ describe('useSkinStore', () => {
 
   it('skinBasePath reflects current skin id', () => {
     const store = useSkinStore()
-    expect(store.skinBasePath).toBe('/skins/vita/')
+    expect(store.skinBasePath).toBe(`${SKIN_BASE}/vita/`)
   })
 
   describe('loadCatalog', () => {
@@ -152,7 +152,7 @@ describe('useSkinStore', () => {
 
       const result = store.getAnimationForState('idle')
       expect(result).not.toBeNull()
-      expect(result!.src).toBe('/skins/vita/idle.png')
+      expect(result!.src).toBe(`${SKIN_BASE}/vita/idle.png`)
       expect(result!.state).toBe('idle')
     })
 

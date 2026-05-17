@@ -2,6 +2,7 @@
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { useI18n } from '@/composables/useI18n'
 import { useAutoUpdater } from '@/composables/useAutoUpdater'
+import { SKIN_BASE } from '@/stores/skin'
 
 const { t } = useI18n()
 const appVersion = __APP_VERSION__
@@ -30,7 +31,7 @@ async function open(url: string) {
     </header>
 
     <div class="about-brand">
-      <img class="about-logo" src="/skins/vita/pet.png" alt="AIbubu" />
+      <img class="about-logo" :src="`${SKIN_BASE}/vita/pet.png`" alt="AIbubu" />
       <div class="brand-info">
         <p class="brand-name">{{ t('brand') }}</p>
         <p class="brand-desc">{{ t('aboutDesc') }}</p>

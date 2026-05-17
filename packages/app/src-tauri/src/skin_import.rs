@@ -2,7 +2,80 @@ use serde::Serialize;
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
-use tauri::Manager;
+use tauri::http;
+use tauri::{Manager, Runtime};
+
+fn mime_from_ext(path: &str) -> &'static str {
+    match path.rsplit('.').next().unwrap_or("") {
+        "json" => "application/json",
+        "png" => "image/png",
+        "gif" => "image/gif",
+        "jpg" | "jpeg" => "image/jpeg",
+        "webp" => "image/webp",
+        "svg" => "image/svg+xml",
+        _ => "application/octet-stream",
+    }
+}
+
+fn file_response(file_path: &Path, uri_path: &str) -> http::Response<Vec<u8>> {
+    match fs::read(file_path) {
+        Ok(data) => http::Response::builder()
+            .header(http::header::CONTENT_TYPE, mime_from_ext(uri_path))
+            .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+            .body(data)
+            .unwrap(),
+        Err(_) => http::Response::builder()
+            .status(http::StatusCode::INTERNAL_SERVER_ERROR)
+            .body(Vec::new())
+            .unwrap(),
+    }
+}
+
+pub fn register_skin_protocol<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
+    builder.register_uri_scheme_protocol("skin", |ctx, request| {
+        let path = request.uri().path().trim_start_matches('/');
+
+        if path.is_empty() || path.contains("..") {
+            return http::Response::builder()
+                .status(http::StatusCode::BAD_REQUEST)
+                .body(Vec::new())
+                .unwrap();
+        }
+
+        if cfg!(debug_assertions) {
+            let dev_path = Path::new(env!("CARGO_MANIFEST_DIR"))
+                .parent()
+                .unwrap_or(Path::new("."))
+                .join("public")
+                .join("skins")
+                .join(path);
+            if dev_path.is_file() {
+                return file_response(&dev_path, path);
+            }
+        } else {
+            if let Ok(data_dir) = ctx.app_handle().path().app_data_dir() {
+                let user_path = data_dir.join("skins").join(path);
+                if user_path.is_file() {
+                    return file_response(&user_path, path);
+                }
+            }
+
+            let asset_path = format!("skins/{}", path);
+            if let Some(asset) = ctx.app_handle().asset_resolver().get(asset_path) {
+                return http::Response::builder()
+                    .header(http::header::CONTENT_TYPE, &asset.mime_type)
+                    .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                    .body(asset.bytes)
+                    .unwrap();
+            }
+        }
+
+        http::Response::builder()
+            .status(http::StatusCode::NOT_FOUND)
+            .body(Vec::new())
+            .unwrap()
+    })
+}
 
 include!(concat!(env!("OUT_DIR"), "/builtin_skins.rs"));
 

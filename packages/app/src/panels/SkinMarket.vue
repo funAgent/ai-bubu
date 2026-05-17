@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { openUrl } from '@tauri-apps/plugin-opener'
-import { useSkinStore } from '@/stores/skin'
+import { useSkinStore, SKIN_BASE } from '@/stores/skin'
 import { useSettingsStore } from '@/stores/settings'
 import { getScoreColor } from '@/utils/activity'
 import { resolveAnimation } from '@/utils/skin'
@@ -55,7 +55,7 @@ function buildPreviewCells(entry: CatalogEntry): PreviewCell[] {
       state: s.state,
       score: s.score,
       anim: result ? result.config : null,
-      src: result ? `/skins/${entry.id}/${result.config.file}` : '',
+      src: result ? `${SKIN_BASE}/${entry.id}/${result.config.file}` : '',
     }
   })
 }
@@ -69,7 +69,7 @@ const hoveredPreviewCells = computed(() =>
 )
 
 function petAvatarSrc(skinId: string): string {
-  return `/skins/${skinId}/pet.png`
+  return `${SKIN_BASE}/${skinId}/pet.png`
 }
 
 function onEnter(id: string) {
