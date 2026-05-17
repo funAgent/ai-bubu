@@ -1,0 +1,59 @@
+{
+  "name": "Hoodie",
+  "version": "1.0.0",
+  "author": "ChatGPT Image",
+  "description": "红色卫衣少年皮肤",
+  "style": "pixel",
+  "format": "sprite",
+  "size": { "width": 64, "height": 80 },
+  "animations": {
+    "idle": {
+      "file": "idle.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "walk": {
+      "file": "walk.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "run": {
+      "file": "run.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0
+      }
+    },
+    "sprint": {
+      "file": "sprint.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 140,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 20,
+        "startFrame": 0
+      }
+    }
+  }
+}
