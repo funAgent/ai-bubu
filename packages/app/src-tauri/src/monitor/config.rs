@@ -144,7 +144,7 @@ pub fn load_providers(dir: &Path) -> Vec<ProviderConfig> {
         }
     }
 
-    providers.sort_by(|a, b| b.meta.priority.cmp(&a.meta.priority));
+    providers.sort_by_key(|p| std::cmp::Reverse(p.meta.priority));
     providers
 }
 

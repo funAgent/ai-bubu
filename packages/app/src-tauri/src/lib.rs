@@ -145,10 +145,10 @@ pub fn run() {
         ])
         .build(tauri::generate_context!())
         .expect("error while building aibubu")
-        .run(|app, event| {
+        .run(|_app, event| {
             #[cfg(target_os = "macos")]
             if let tauri::RunEvent::Reopen { .. } = event {
-                if let Some(window) = app.get_webview_window("social") {
+                if let Some(window) = _app.get_webview_window("social") {
                     if !window.is_visible().unwrap_or(false) {
                         let _ = window.show();
                         let _ = window.set_focus();
