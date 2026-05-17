@@ -1,0 +1,635 @@
+---
+import Base from '../../layouts/Base.astro'
+import Nav from '../../components/Nav.astro'
+import { t, localePath, type Locale } from '../../i18n'
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
+
+export function getStaticPaths() {
+  return [{ params: { locale: 'zh' } }, { params: { locale: 'en' } }]
+}
+
+const locale = Astro.params.locale as Locale
+const i18n = t(locale)
+const GITHUB_REPO = 'https://github.com/funAgent/ai-bubu'
+
+interface SkinAnimation {
+  file: string
+  frameWidth: number
+  frameHeight: number
+  frameCount: number
+  columns: number
+  fps: number
+  startFrame: number
+}
+
+interface SkinCard {
+  id: string
+  name: string
+  author: string
+  description?: string
+  style?: string
+  states: string[]
+  pet: string
+  animations: Record<string, SkinAnimation>
+}
+
+let skins: SkinCard[] = []
+try {
+  const raw = readFileSync(resolve('public/data/skins.json'), 'utf-8')
+  skins = JSON.parse(raw)
+} catch {
+  /* skins.json not yet generated */
+}
+
+const subtitle = i18n.market.subtitle.replace('{count}', String(skins.length))
+
+const STATE_LABELS: Record<string, string> = {
+  idle: i18n.market.stateIdle,
+  walk: i18n.market.stateWalk,
+  run: i18n.market.stateRun,
+  sprint: i18n.market.stateSprint,
+}
+---
+
+<Base title={i18n.market.pageTitle} description={i18n.market.description}>
+  <Nav variant="main" />
+
+  <main class="market">
+    <section class="market-hero">
+      <h1>{i18n.market.title}</h1>
+      <p class="market-subtitle">{subtitle}</p>
+    </section>
+
+    <section class="market-toolbar">
+      <div class="filter-group" id="filterGroup">
+        <button class="filter-btn active" data-filter="all">{i18n.market.filterAll}</button>
+        <button class="filter-btn" data-filter="pixel">{i18n.market.filterPixel}</button>
+        <button class="filter-btn" data-filter="ai-generated">{i18n.market.filterAI}</button>
+      </div>
+      <div class="search-box">
+        <svg
+          class="search-icon"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder={i18n.market.searchPlaceholder}
+          autocomplete="off"
+        />
+      </div>
+    </section>
+
+    <section class="gallery" id="gallery">
+      {
+        skins.map((skin) => (
+          <div
+            class="skin-card"
+            data-style={skin.style || ''}
+            data-name={skin.name.toLowerCase()}
+            data-author={skin.author.toLowerCase()}
+            data-skin-id={skin.id}
+          >
+            <div class="card-preview">
+              <div
+                class="sprite-preview"
+                data-skin-id={skin.id}
+                data-animations={JSON.stringify(skin.animations)}
+                role="img"
+                aria-label={skin.name}
+              />
+            </div>
+            <div class="card-body">
+              <h3 class="card-name">{skin.name}</h3>
+              <p class="card-author">
+                {i18n.market.author} {skin.author}
+              </p>
+              {skin.description && <p class="card-desc">{skin.description}</p>}
+              <div class="card-states" data-skin-id={skin.id}>
+                {skin.states.map((state) => (
+                  <button
+                    class:list={['state-tag', { active: state === 'idle' }]}
+                    data-state={state}
+                    data-skin-id={skin.id}
+                    type="button"
+                  >
+                    {STATE_LABELS[state] ?? state}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <div class="no-results" id="noResults" style="display:none">
+      {locale === 'zh' ? '没有找到匹配的角色' : 'No characters found'}
+    </div>
+
+    <section class="market-cta">
+      <p class="cta-text">{i18n.market.cta}</p>
+      <div class="cta-actions">
+        <a href={localePath(locale, '/download')} class="btn-primary">{i18n.market.ctaBtn}</a>
+        <a href={GITHUB_REPO} class="btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<script>
+  import { initLangToggle } from '../../scripts/lang-toggle'
+  import { SpritePlayer } from '../../scripts/sprite-player'
+  import type { SpriteAnimParams } from '../../scripts/sprite-player'
+
+  initLangToggle()
+
+  // --- Filter / Search ---
+  const gallery = document.getElementById('gallery')!
+  const cards = gallery.querySelectorAll<HTMLElement>('.skin-card')
+  const filterBtns = document.querySelectorAll<HTMLElement>('.filter-btn')
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement
+  const noResults = document.getElementById('noResults')!
+
+  let activeFilter = 'all'
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase()
+    let visible = 0
+
+    cards.forEach((card) => {
+      const style = card.dataset.style || ''
+      const name = card.dataset.name || ''
+      const author = card.dataset.author || ''
+
+      const matchesFilter = activeFilter === 'all' || style === activeFilter
+      const matchesSearch = !query || name.includes(query) || author.includes(query)
+
+      if (matchesFilter && matchesSearch) {
+        card.style.display = ''
+        visible++
+      } else {
+        card.style.display = 'none'
+      }
+    })
+
+    noResults.style.display = visible === 0 ? '' : 'none'
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => b.classList.remove('active'))
+      btn.classList.add('active')
+      activeFilter = btn.dataset.filter || 'all'
+      applyFilters()
+    })
+  })
+
+  searchInput.addEventListener('input', applyFilters)
+
+  // --- Sprite Animation ---
+  interface AnimMap {
+    [state: string]: SpriteAnimParams
+  }
+  const players = new Map<string, { player: SpritePlayer; anims: AnimMap; skinId: string }>()
+
+  document.querySelectorAll<HTMLElement>('.sprite-preview').forEach((el) => {
+    const skinId = el.dataset.skinId!
+    const anims: AnimMap = JSON.parse(el.dataset.animations!)
+    const player = new SpritePlayer(el)
+
+    if (anims.idle) {
+      player.play(anims.idle, `/skins/${skinId}/${anims.idle.file}`)
+      player.pause()
+    }
+
+    players.set(skinId, { player, anims, skinId })
+  })
+
+  // State tag interaction: hover to switch, leave to reset idle
+  document.querySelectorAll<HTMLElement>('.card-states').forEach((container) => {
+    const skinId = container.dataset.skinId!
+    const entry = players.get(skinId)
+    if (!entry) return
+
+    const tags = container.querySelectorAll<HTMLElement>('.state-tag')
+
+    tags.forEach((tag) => {
+      tag.addEventListener('mouseenter', () => {
+        const state = tag.dataset.state!
+        const anim = entry.anims[state]
+        if (!anim) return
+
+        tags.forEach((t) => t.classList.remove('active'))
+        tag.classList.add('active')
+        entry.player.play(anim, `/skins/${skinId}/${anim.file}`)
+      })
+    })
+
+    container.addEventListener('mouseleave', () => {
+      tags.forEach((t) => t.classList.remove('active'))
+      const idleTag = container.querySelector('[data-state="idle"]')
+      if (idleTag) idleTag.classList.add('active')
+
+      if (entry.anims.idle) {
+        entry.player.play(entry.anims.idle, `/skins/${skinId}/${entry.anims.idle.file}`)
+      }
+    })
+  })
+
+  // --- IntersectionObserver: pause off-screen, resume on-screen ---
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const ioEntry of entries) {
+        const card = ioEntry.target as HTMLElement
+        const skinId = card.dataset.skinId
+        if (!skinId) continue
+        const entry = players.get(skinId)
+        if (!entry) continue
+
+        if (ioEntry.isIntersecting) {
+          entry.player.resume()
+        } else {
+          entry.player.pause()
+        }
+      }
+    },
+    { rootMargin: '100px' },
+  )
+
+  cards.forEach((card) => observer.observe(card))
+</script>
+
+<style>
+  .market {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .market-hero {
+    text-align: center;
+    padding: 48px 0 32px;
+    animation: fadeUp 0.5s ease-out;
+  }
+
+  .market-hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+  }
+
+  .market-subtitle {
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--text-2);
+  }
+
+  .market-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.5s ease-out 0.06s both;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-3);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .filter-btn:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+    color: var(--text-2);
+  }
+
+  .filter-btn.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  .search-box {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-3);
+    pointer-events: none;
+  }
+
+  .search-input {
+    padding: 7px 12px 7px 30px;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    width: 180px;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .search-input::placeholder {
+    color: var(--text-3);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    width: 220px;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    animation: fadeUp 0.5s ease-out 0.12s both;
+  }
+
+  .skin-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.25s ease-out;
+    cursor: default;
+  }
+
+  .skin-card:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 128px;
+    padding: 16px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, transparent 100%);
+  }
+
+  .sprite-preview {
+    image-rendering: pixelated;
+    transition: transform 0.3s ease-out;
+    flex-shrink: 0;
+  }
+
+  .skin-card:hover .sprite-preview {
+    transform: scale(1.1);
+  }
+
+  .card-body {
+    padding: 0 16px 16px;
+  }
+
+  .card-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .card-author {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+
+  .card-desc {
+    font-size: 11px;
+    color: var(--text-2);
+    margin-top: 6px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-states {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+
+  .state-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-3);
+    letter-spacing: 0.2px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .state-tag:hover {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .state-tag[data-state='idle'] {
+    background: rgba(99, 102, 241, 0.06);
+    color: rgba(99, 102, 241, 0.5);
+  }
+  .state-tag[data-state='idle'].active {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+    border-color: rgba(99, 102, 241, 0.25);
+  }
+
+  .state-tag[data-state='walk'] {
+    background: rgba(34, 197, 94, 0.06);
+    color: rgba(22, 163, 74, 0.5);
+  }
+  .state-tag[data-state='walk'].active {
+    background: rgba(34, 197, 94, 0.12);
+    color: #16a34a;
+    border-color: rgba(34, 197, 94, 0.25);
+  }
+
+  .state-tag[data-state='run'] {
+    background: rgba(245, 158, 11, 0.06);
+    color: rgba(217, 119, 6, 0.5);
+  }
+  .state-tag[data-state='run'].active {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+    border-color: rgba(245, 158, 11, 0.25);
+  }
+
+  .state-tag[data-state='sprint'] {
+    background: rgba(239, 68, 68, 0.06);
+    color: rgba(220, 38, 38, 0.5);
+  }
+  .state-tag[data-state='sprint'].active {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+    border-color: rgba(239, 68, 68, 0.25);
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 14px;
+    color: var(--text-3);
+  }
+
+  .market-cta {
+    text-align: center;
+    margin-top: 64px;
+    padding: 48px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    animation: fadeUp 0.5s ease-out 0.18s both;
+  }
+
+  .cta-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease-out;
+  }
+
+  .btn-ghost:hover {
+    border-color: rgba(0, 0, 0, 0.2);
+    color: var(--text);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .gallery {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .market-toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .filter-group {
+      overflow-x: auto;
+    }
+
+    .search-input {
+      width: 100%;
+    }
+
+    .search-input:focus {
+      width: 100%;
+    }
+
+    .gallery {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .card-preview {
+      height: 100px;
+      padding: 12px;
+    }
+
+    .card-body {
+      padding: 0 12px 12px;
+    }
+
+    .card-name {
+      font-size: 13px;
+    }
+
+    .market-cta {
+      margin-top: 40px;
+      padding: 32px 16px;
+    }
+  }
+</style>

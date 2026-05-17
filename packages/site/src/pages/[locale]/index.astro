@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro'
+import Nav from '../../components/Nav.astro'
 import { t, localePath, type Locale } from '../../i18n'
 
 export function getStaticPaths() {
@@ -57,17 +58,7 @@ try {
     })}
   />
 
-  <nav class="nav" aria-label="main">
-    <a href={localePath(locale, '/')} class="logo">
-      <span class="logo-label">{i18n.nav.brand}</span>
-    </a>
-    <div class="nav-end">
-      <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">
-        {i18n.nav.switchLang}
-      </button>
-      <a href={GITHUB_REPO} class="nav-link" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </nav>
+  <Nav variant="main" />
 
   <main>
     <section class="hero">
@@ -209,6 +200,7 @@ try {
         }
       </div>
       <p class="chars-note">{i18n.chars.note}</p>
+      <a href={localePath(locale, '/market')} class="chars-browse">{i18n.chars.browseAll}</a>
     </section>
   </main>
 
@@ -439,64 +431,6 @@ try {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  .nav {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 24px 24px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
-
-  .nav-end {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .lang-btn {
-    background: none;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: var(--text-3);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-  }
-
-  .lang-btn:hover {
-    border-color: rgba(0, 0, 0, 0.2);
-    color: var(--text-2);
-  }
-
-  .nav-link {
-    font-size: 13px;
-    color: var(--text-3);
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-
-  .nav-link:hover {
-    color: var(--text);
   }
 
   .hero {
@@ -877,6 +811,20 @@ try {
   .chars-note {
     font-size: 13px;
     color: var(--text-3);
+  }
+
+  .chars-browse {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+
+  .chars-browse:hover {
+    color: var(--text);
+    transform: translateX(4px);
   }
 
   .footer {
