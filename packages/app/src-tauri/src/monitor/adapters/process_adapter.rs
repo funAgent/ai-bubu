@@ -90,10 +90,8 @@ impl ProcessAdapter {
     ) -> Option<Self> {
         let names = if let Some(ref proc_cfg) = config.activity.process {
             proc_cfg.names.clone()
-        } else if let Some(ref fb) = config.process_fallback {
-            fb.names.clone()
         } else {
-            return None;
+            config.process_fallback.as_ref()?.names.clone()
         };
 
         let parent_exclude = config
