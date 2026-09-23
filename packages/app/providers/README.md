@@ -10,6 +10,8 @@ providers/
 ├── claude-code.toml     # ✅ Verified
 ├── codex-cli.toml       # ✅ Verified
 ├── trae.toml            # ✅ Verified
+├── opencode.toml        # ✅ Verified
+├── gemini-cli.toml      # 🤖 Added by agent (2026-09-23) — paths from official docs, pending real-world validation
 └── README.md            # ← You are here
 ```
 
