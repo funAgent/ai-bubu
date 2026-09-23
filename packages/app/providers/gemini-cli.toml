@@ -1,0 +1,21 @@
+[meta]
+id = "gemini-cli"
+name = "Gemini CLI"
+category = "cli"
+priority = 8
+
+[detect]
+adapter = "file_mtime"
+[detect.paths]
+macos = "${HOME}/.gemini/"
+linux = "${HOME}/.gemini/"
+windows = "${HOME}/.gemini/"
+
+[activity]
+adapter = "file_mtime"
+[activity.file_mtime]
+watch_pattern = "tmp/**"
+
+[process_fallback]
+enabled = true
+names = ["gemini"]
