@@ -1,0 +1,20 @@
+[meta]
+id = "openclaw"
+name = "OpenClaw"
+category = "cli"
+priority = 8
+
+[detect]
+adapter = "file_mtime"
+[detect.paths]
+macos = "${HOME}/.openclaw/"
+linux = "${HOME}/.openclaw/"
+windows = "${HOME}/.openclaw/"
+
+[activity]
+adapter = "file_mtime"
+[activity.file_mtime]
+watch_pattern = "agents/*/sessions/*"
+
+[process_fallback]
+enabled = false

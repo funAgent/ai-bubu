@@ -12,6 +12,7 @@ providers/
 ├── trae.toml            # ✅ Verified
 ├── opencode.toml        # ✅ Verified
 ├── gemini-cli.toml      # 🤖 Added by agent (2026-09-23) — paths from official docs, pending real-world validation
+├── openclaw.toml        # ✅ Added by agent (2026-09-25) — session glob verified against a real ~/.openclaw install
 └── README.md            # ← You are here
 ```
 
