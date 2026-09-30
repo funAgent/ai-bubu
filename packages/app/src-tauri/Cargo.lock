@@ -1843,7 +1843,7 @@ dependencies = [
  "js-sys",
  "log",
  "wasm-bindgen",
- "windows-core 0.61.2",
+ "windows-core 0.57.0",
 ]
 
 [[package]]
@@ -4461,7 +4461,7 @@ dependencies = [
 [[package]]
 name = "tauri-nspanel"
 version = "2.1.0"
-source = "git+https://github.com/ahkohd/tauri-nspanel?branch=v2.1#a3122e894383aa068ec5365a42994e3ac94ba1b6"
+source = "git+https://github.com/ahkohd/tauri-nspanel?branch=v2.1#acb3ec1c2d2334916c9b07c74d5a0be9356674e3"
 dependencies = [
  "objc2",
  "objc2-app-kit",
