@@ -13,29 +13,29 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.11.1",
-    "@tauri-apps/plugin-autostart": "^2",
-    "@tauri-apps/plugin-dialog": "^2.7.3",
-    "@tauri-apps/plugin-fs": "^2.5.2",
-    "@tauri-apps/plugin-opener": "^2.5.5",
-    "@tauri-apps/plugin-process": "^2.3.1",
-    "@tauri-apps/plugin-store": "^2",
-    "@tauri-apps/plugin-updater": "^2.12.0",
-    "@vueuse/core": "^13",
-    "lottie-web": "^5",
-    "pinia": "^3",
-    "vue": "^3.5"
+    "@tauri-apps/api": "^2.12.0",
+    "@tauri-apps/plugin-autostart": "^2.6.0",
+    "@tauri-apps/plugin-dialog": "^2.8.0",
+    "@tauri-apps/plugin-fs": "^2.6.0",
+    "@tauri-apps/plugin-opener": "^2.7.0",
+    "@tauri-apps/plugin-process": "^2.4.0",
+    "@tauri-apps/plugin-store": "^2.5.0",
+    "@tauri-apps/plugin-updater": "^2.13.1",
+    "@vueuse/core": "^13.9.0",
+    "lottie-web": "^5.13.0",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.43"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.11.4",
-    "@vitejs/plugin-vue": "^5",
-    "@vitest/coverage-v8": "^4.1.2",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^20.8.9",
-    "terser": "^5.46.1",
-    "typescript": "^5.7",
-    "vite": "^6",
-    "vitest": "^4.1.2",
-    "vue-tsc": "^2"
+    "@tauri-apps/cli": "^2.12.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitest/coverage-v8": "^4.1.11",
+    "@vue/test-utils": "^2.5.1",
+    "happy-dom": "^20.14.5",
+    "terser": "^5.51.2",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^4.1.11",
+    "vue-tsc": "^2.2.12"
   }
 }
