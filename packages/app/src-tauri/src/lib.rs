@@ -9,7 +9,6 @@ use tauri::Manager;
 
 #[cfg(target_os = "macos")]
 mod nspanel {
-    use tauri::Manager;
     use tauri_nspanel::objc2::runtime::NSObjectProtocol;
     use tauri_nspanel::objc2::{ClassType, Message};
 
@@ -39,12 +38,18 @@ fn apply_fullscreen_overlay(app: &tauri::AppHandle, visible: bool) {
                 );
                 panel.set_level(PanelLevel::Status.value());
                 panel.set_hides_on_deactivate(false);
-                panel.set_style_mask(StyleMask::empty().nonactivating_panel().value());
+                if let Err(e) =
+                    panel.set_style_mask(StyleMask::empty().nonactivating_panel().value())
+                {
+                    eprintln!("fullscreen-overlay: set_style_mask failed: {e:?}");
+                }
                 eprintln!("fullscreen-overlay: enabled");
             } else {
                 panel.set_collection_behavior(CollectionBehavior::new().value());
                 panel.set_level(PanelLevel::Floating.value());
-                panel.set_style_mask(StyleMask::empty().value());
+                if let Err(e) = panel.set_style_mask(StyleMask::empty().value()) {
+                    eprintln!("fullscreen-overlay: reset_style_mask failed: {e:?}");
+                }
                 eprintln!("fullscreen-overlay: disabled");
             }
         }
