@@ -1,0 +1,20 @@
+[meta]
+id = "antigravity"
+name = "Antigravity"
+category = "ide"
+priority = 7
+
+[detect]
+adapter = "file_mtime"
+[detect.paths]
+macos = "${APP_SUPPORT}/Antigravity/"
+linux = "${HOME}/.config/Antigravity IDE/"
+windows = "${APPDATA}/Antigravity/"
+
+[activity]
+adapter = "file_mtime"
+[activity.file_mtime]
+watch_pattern = "User/globalStorage/*"
+
+[process_fallback]
+enabled = false
