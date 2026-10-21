@@ -19,7 +19,7 @@ dependencies = [
 
 [[package]]
 name = "aibubu"
-version = "0.4.16"
+version = "0.4.17"
 dependencies = [
  "chrono",
  "dirs 7.0.0",
@@ -40,7 +40,7 @@ dependencies = [
  "tauri-plugin-store",
  "tauri-plugin-updater",
  "tempfile",
- "toml 0.8.2",
+ "toml 1.1.6+spec-1.1.0",
  "zip 2.4.2",
 ]
 
