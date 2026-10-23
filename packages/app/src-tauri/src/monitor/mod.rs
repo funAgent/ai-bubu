@@ -1,14 +1,16 @@
 pub mod adapter;
 pub mod adapters;
 pub mod config;
+pub mod react;
 pub mod scoring;
 
 use adapter::{ActivityAdapter, ActivityLevel, ProbeResult};
 use adapters::build_adapters;
 use adapters::process_adapter::SharedProcessScanner;
 use config::load_providers;
+use react::ReactDetector;
 use scoring::MovementStateMachine;
-use std::collections::HashSet;
+use std::collections::{BTreeSet, HashSet};
 
 use serde::Serialize;
 use std::path::PathBuf;
@@ -247,9 +249,19 @@ pub fn start_monitor(
 
     let handle = thread::spawn(move || {
         let interval = Duration::from_millis(interval_ms);
+        let mut detector = ReactDetector::new();
         while !flag_clone.load(Ordering::Relaxed) {
             let update = engine.scan();
             let _ = app_handle.emit("monitor-update", &update);
+            let active: BTreeSet<String> = update
+                .providers
+                .iter()
+                .filter(|p| p.activity != ActivityLevel::Inactive)
+                .map(|p| p.provider_id.clone())
+                .collect();
+            if let Some(event) = detector.observe(active, Instant::now()) {
+                let _ = app_handle.emit("pet-react", &event);
+            }
             thread::sleep(interval);
         }
     });
