@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^7.4.0"
+    "astro": "^7.4.1"
   },
   "devDependencies": {
     "tsx": "^4.22.1"
