@@ -9,7 +9,13 @@ import ImageRenderer from './renderers/ImageRenderer.vue'
 const skinStore = useSkinStore()
 const petStore = usePetStore()
 
-const currentAnimation = computed(() => skinStore.getAnimationForState(petStore.movementState))
+const reactionAnimation = computed(() => skinStore.getReactionAnimation(petStore.reactionEvent))
+const currentAnimation = computed(
+  () => reactionAnimation.value ?? skinStore.getAnimationForState(petStore.movementState),
+)
+const playbackKey = computed(() =>
+  reactionAnimation.value ? petStore.interactionTick : 'movement',
+)
 
 const isIdle = computed(() => petStore.movementState === 'idle')
 
@@ -38,17 +44,23 @@ const rendererClasses = computed(() => ({
   'mood-happy': animState.value === 'happy',
   'interact-pat': !suppressInteract.value && animState.value === 'pat',
   'interact-poke': !suppressInteract.value && animState.value === 'poke',
-  'interact-celebrate': !suppressInteract.value && animState.value === 'celebrate',
+  'interact-celebrate':
+    !suppressInteract.value && !reactionAnimation.value && animState.value === 'celebrate',
   'interact-wave': !suppressInteract.value && animState.value === 'wave',
+  'react-start':
+    !suppressInteract.value && !reactionAnimation.value && animState.value === 'react_start',
+  'react-multi':
+    !suppressInteract.value && !reactionAnimation.value && animState.value === 'react_multi',
 }))
 </script>
 
 <template>
-  <div class="pet-canvas">
+  <div class="pet-canvas" :data-reaction="petStore.reactionEvent ?? undefined">
     <div class="pet-renderer" :class="rendererClasses" :style="rendererStyle">
       <template v-if="currentAnimation">
         <SpriteRenderer
           v-if="skinStore.currentManifest.format === 'sprite'"
+          :key="playbackKey"
           :src="currentAnimation.src"
           :frame-width="currentAnimation.config.sprite?.frameWidth ?? 128"
           :frame-height="currentAnimation.config.sprite?.frameHeight ?? 128"
@@ -61,11 +73,12 @@ const rendererClasses = computed(() => ({
 
         <LottieRenderer
           v-else-if="skinStore.currentManifest.format === 'lottie'"
+          :key="playbackKey"
           :src="currentAnimation.src"
           :loop="currentAnimation.config.loop"
         />
 
-        <ImageRenderer v-else :src="currentAnimation.src" />
+        <ImageRenderer v-else :key="playbackKey" :src="currentAnimation.src" />
       </template>
     </div>
   </div>
@@ -186,6 +199,50 @@ const rendererClasses = computed(() => ({
   }
   75% {
     transform: translateX(3px) rotate(4deg);
+  }
+}
+
+/* Short event overlays keep the movement sprite playing for legacy skins. */
+.pet-renderer.react-start {
+  animation: react-attention 0.9s ease-out;
+  transform-origin: center bottom;
+}
+
+@keyframes react-attention {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-3px) scale(1.04);
+  }
+  55% {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+.pet-renderer.react-multi {
+  animation: react-busy 0.4s ease-in-out 4;
+  transform-origin: center bottom;
+}
+
+@keyframes react-busy {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-2px, -3px) rotate(-3deg);
+  }
+  75% {
+    transform: translate(2px, -3px) rotate(3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pet-renderer {
+    animation: none !important;
+    transition: none;
   }
 }
 </style>

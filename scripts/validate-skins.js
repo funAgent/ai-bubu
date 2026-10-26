@@ -12,7 +12,7 @@ import { join, resolve } from 'path'
 
 const SKINS_DIR = resolve(import.meta.dirname, '..', 'packages', 'app', 'public', 'skins')
 const REQUIRED_FIELDS = ['name', 'author', 'animations']
-const VALID_STATES = ['idle', 'walk', 'run', 'sprint']
+const VALID_STATES = ['idle', 'walk', 'run', 'sprint', 'react_start', 'react_multi', 'react_done']
 
 let errors = 0
 

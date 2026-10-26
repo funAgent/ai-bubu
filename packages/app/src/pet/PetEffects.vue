@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { usePetStore } from '@/stores/pet'
 import type { InteractionAnimation } from '@/types'
 
@@ -16,24 +16,35 @@ const MAX_PARTICLES = 15
 
 const particles = ref<Particle[]>([])
 let nextId = 0
+const timers = new Set<ReturnType<typeof setTimeout>>()
+
+function clearParticles() {
+  for (const timer of timers) clearTimeout(timer)
+  timers.clear()
+  particles.value = []
+}
+
+onUnmounted(clearParticles)
 
 const INTERACTION_EMOJIS: Record<InteractionAnimation, string[]> = {
   pat: ['❤️', '💕'],
   poke: ['❗', '❓'],
   celebrate: ['🎉', '✨', '🎊', '⭐'],
   wave: ['👋'],
+  react_start: ['✨'],
+  react_multi: ['⚡', '✨'],
 }
 
 function spawnParticles(action: InteractionAnimation) {
   const emojis = INTERACTION_EMOJIS[action]
-  const count = action === 'celebrate' ? 5 : action === 'pat' ? 2 : 1
+  const count = action === 'celebrate' ? 5 : action === 'pat' || action === 'react_multi' ? 2 : 1
 
   if (particles.value.length + count > MAX_PARTICLES) {
     particles.value = particles.value.slice(-(MAX_PARTICLES - count))
   }
 
   for (let i = 0; i < count; i++) {
-    const offsetX = (Math.random() - 0.5) * 30
+    const offsetX = action === 'react_multi' ? (i === 0 ? -14 : 14) : (Math.random() - 0.5) * 30
     const p: Particle = {
       id: nextId++,
       emoji: emojis[i % emojis.length],
@@ -42,22 +53,22 @@ function spawnParticles(action: InteractionAnimation) {
     }
     particles.value.push(p)
 
-    setTimeout(
+    const timer = setTimeout(
       () => {
+        timers.delete(timer)
         particles.value = particles.value.filter((pp) => pp.id !== p.id)
       },
       action === 'celebrate' ? 1800 : 1200,
     )
+    timers.add(timer)
   }
 }
 
-watch(
-  () => petStore.interactionTick,
-  () => {
-    const action = petStore.interactionState
-    if (action) spawnParticles(action)
-  },
-)
+watch([() => petStore.interactionTick, () => petStore.interactionState], () => {
+  clearParticles()
+  const action = petStore.interactionState
+  if (action) spawnParticles(action)
+})
 </script>
 
 <template>
@@ -98,6 +109,13 @@ watch(
 
 .particle.burst {
   animation: particle-burst 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle.float,
+  .particle.burst {
+    animation: none;
+  }
 }
 
 @keyframes particle-float {

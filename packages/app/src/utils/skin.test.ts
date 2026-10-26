@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { resolveAnimation } from './skin'
+import { resolveAnimation, resolveReactionAnimation } from './skin'
 import type { SkinManifest, SkinAnimationConfig } from '@/types'
 
 function makeManifest(overrides: Partial<SkinManifest> = {}): SkinManifest {
@@ -107,5 +107,37 @@ describe('resolveAnimation', () => {
     delete manifest.fallback
     const result = resolveAnimation('run', manifest)
     expect(result).toEqual({ state: 'idle', config: idleAnim })
+  })
+})
+
+describe('resolveReactionAnimation', () => {
+  it.each(['work_start', 'multi_tool', 'work_done'] as const)(
+    'keeps the movement sprite for legacy skins on %s',
+    (event) => {
+      expect(
+        resolveReactionAnimation(
+          event,
+          makeManifest({ animations: { idle: idleAnim, run: runAnim } }),
+        ),
+      ).toBeNull()
+    },
+  )
+
+  it.each([
+    ['work_start', 'react_start'],
+    ['multi_tool', 'react_multi'],
+    ['work_done', 'react_done'],
+  ] as const)('selects optional %s clip', (event, key) => {
+    const clip = { file: 'reaction.png', loop: false }
+    expect(resolveReactionAnimation(event, makeManifest({ animations: { [key]: clip } }))).toEqual({
+      state: key,
+      config: clip,
+    })
+  })
+
+  it('does not select a reaction clip after playback has expired', () => {
+    expect(
+      resolveReactionAnimation(null, makeManifest({ animations: { react_start: idleAnim } })),
+    ).toBeNull()
   })
 })

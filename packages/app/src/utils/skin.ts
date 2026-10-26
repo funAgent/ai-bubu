@@ -1,4 +1,13 @@
-import type { MovementState, SkinManifest, SkinAnimationConfig } from '@/types'
+import type { MovementState, SkinManifest, SkinAnimationConfig, ReactionEvent } from '@/types'
+import { REACTION_RULES } from './react'
+
+/** Optional reaction clips never fall back to idle: null preserves the live movement clip. */
+export function resolveReactionAnimation(event: ReactionEvent | null, manifest: SkinManifest) {
+  if (!event) return null
+  const state = REACTION_RULES[event].animation
+  const config = manifest.animations[state]
+  return config ? { state, config } : null
+}
 
 export function resolveAnimation(
   state: MovementState,

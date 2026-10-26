@@ -2,7 +2,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { listen, type UnlistenFn } from '@tauri-apps/api/event'
 import { useMonitorStore } from '@/stores/monitor'
 import { usePetStore } from '@/stores/pet'
-import { mapReactEventToInteraction, type ReactEventPayload } from '@/utils/react'
+import type { ReactEventPayload } from '@/utils/react'
 import type { MonitorUpdate } from '@/types'
 
 export function useMonitor() {
@@ -28,10 +28,7 @@ export function useMonitor() {
 
     try {
       const fn = await listen<ReactEventPayload>('pet-react', (event) => {
-        const interaction = mapReactEventToInteraction(event.payload)
-        if (interaction) {
-          petStore.playInteraction(interaction)
-        }
+        if (mounted) petStore.playReaction(event.payload)
       })
       if (mounted) {
         unlistenReact = fn
