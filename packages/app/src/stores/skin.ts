@@ -3,8 +3,8 @@ import { ref, computed, watch } from 'vue'
 import { invoke } from '@tauri-apps/api/core'
 import { useSettingsStore } from './settings'
 import { useI18n } from '@/composables/useI18n'
-import type { SkinManifest, MovementState, SkinAnimationConfig } from '@/types'
-import { resolveAnimation } from '@/utils/skin'
+import type { SkinManifest, MovementState, SkinAnimationConfig, ReactionEvent } from '@/types'
+import { resolveAnimation, resolveReactionAnimation } from '@/utils/skin'
 
 export const SKIN_BASE = 'skin://localhost'
 
@@ -55,6 +55,11 @@ export const useSkinStore = defineStore('skin', () => {
   }
 
   let abortController: AbortController | null = null
+
+  function getReactionAnimation(event: ReactionEvent | null) {
+    const result = resolveReactionAnimation(event, currentManifest.value)
+    return result ? { ...result, src: skinBasePath.value + result.config.file } : null
+  }
 
   async function loadSkin(skinId: string) {
     if (abortController) {
@@ -172,6 +177,7 @@ export const useSkinStore = defineStore('skin', () => {
     catalogLoaded,
     currentManifest,
     getAnimationForState,
+    getReactionAnimation,
     skinBasePath,
     loadSkin,
     loadCatalog,

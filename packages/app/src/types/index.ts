@@ -6,7 +6,10 @@ export type MovementState = 'sprint' | 'run' | 'walk' | 'idle'
 
 export type MoodState = 'sleepy' | 'excited' | 'happy' | 'normal'
 
-export type InteractionAnimation = 'pat' | 'poke' | 'celebrate' | 'wave'
+export type ReactionEvent = 'work_start' | 'multi_tool' | 'work_done'
+export type ReactionAnimation = 'react_start' | 'react_multi' | 'react_done'
+export type InteractionAnimation =
+  'pat' | 'poke' | 'celebrate' | 'wave' | 'react_start' | 'react_multi'
 
 export type PetAnimationState = MovementState | MoodState | InteractionAnimation
 
@@ -86,7 +89,7 @@ export interface SkinManifest {
   style: string
   format: AnimationFormat
   size: { width: number; height: number }
-  animations: Partial<Record<MovementState, SkinAnimationConfig>>
+  animations: Partial<Record<MovementState | ReactionAnimation, SkinAnimationConfig>>
   sounds?: Partial<Record<MovementState, string>>
   fallback?: Partial<Record<MovementState, MovementState>>
 }

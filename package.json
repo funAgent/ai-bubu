@@ -13,7 +13,7 @@
     "lint": "eslint packages/app/src packages/site/src --fix",
     "lint:check": "eslint packages/app/src packages/site/src",
     "format": "prettier --write \"packages/**/*.{ts,vue,js,json,css,html,astro}\"",
-    "validate:skins": "node scripts/validate-skins.js",
+    "validate:skins": "node --test scripts/validate-skins.test.js && node scripts/validate-skins.js",
     "bump": "node scripts/bump-version.js",
     "prepare": "husky"
   },

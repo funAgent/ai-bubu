@@ -1,0 +1,31 @@
+{
+  "browser": "153.0.8010.0",
+  "checks": [
+    "14 skins load and draw nontransparent sprite pixels",
+    "work_start gesture uses CSS and restores current movement without remounting canvas",
+    "multi_tool is distinct; manual pat interrupts it; done is discarded while manual interaction plays",
+    "drag cancels reaction immediately",
+    "reduced motion disables reaction transforms and particle motion",
+    "320px preview layout has no horizontal overflow",
+    "dark background renders"
+  ],
+  "skins": [
+    "vita",
+    "tard",
+    "mort",
+    "doux",
+    "boy",
+    "dinosaur",
+    "glube",
+    "line",
+    "buddy",
+    "hoodie",
+    "panda",
+    "sketch-boy",
+    "cartoon-horse",
+    "cartoon-pig"
+  ],
+  "errors": [],
+  "failed": [],
+  "scope": "Production Vue components + stores, simulated bridge payloads; not a native desktop E2E run"
+}
