@@ -1,0 +1,20 @@
+[meta]
+id = "cursor-cli"
+name = "Cursor CLI"
+category = "cli"
+priority = 7
+
+[detect]
+adapter = "file_mtime"
+[detect.paths]
+macos = "${HOME}/.cursor/"
+linux = "${HOME}/.cursor/"
+windows = "${HOME}/.cursor/"
+
+[activity]
+adapter = "file_mtime"
+[activity.file_mtime]
+watch_pattern = "agent-cli-state.json"
+
+[process_fallback]
+enabled = false
