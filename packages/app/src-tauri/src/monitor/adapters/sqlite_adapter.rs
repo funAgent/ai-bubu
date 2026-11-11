@@ -113,8 +113,8 @@ fn try_sqlite_query(
             conn.pragma_update(None, "query_only", "ON").ok();
 
             let mut stmt = conn.prepare(&q).ok()?;
-            let column_names: Vec<String> =
-                stmt.column_names().iter().map(|s| s.to_string()).collect();
+            // rusqlite 0.41 起 column_names 返回迭代器而非切片
+            let column_names: Vec<String> = stmt.column_names().map(|s| s.to_string()).collect();
 
             stmt.query_row([], |row| {
                 let mut ts: Option<u64> = None;
