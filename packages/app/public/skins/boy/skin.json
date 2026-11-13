@@ -58,6 +58,42 @@
         "fps": 24,
         "startFrame": 20
       }
+    },
+    "react_done": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 10,
+        "columns": 40,
+        "fps": 14,
+        "startFrame": 20
+      }
+    },
+    "react_start": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 2,
+        "columns": 40,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "react_multi": {
+      "file": "skin.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 64,
+        "frameHeight": 98,
+        "frameCount": 10,
+        "columns": 40,
+        "fps": 12,
+        "startFrame": 20
+      }
     }
   }
 }

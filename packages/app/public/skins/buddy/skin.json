@@ -5,7 +5,10 @@
   "description": "卡通风橙色小人皮肤",
   "style": "pixel",
   "format": "sprite",
-  "size": { "width": 64, "height": 64 },
+  "size": {
+    "width": 64,
+    "height": 64
+  },
   "animations": {
     "idle": {
       "file": "skin.png",
@@ -53,6 +56,42 @@
         "columns": 8,
         "fps": 20,
         "startFrame": 24
+      }
+    },
+    "react_done": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 14,
+        "startFrame": 24
+      }
+    },
+    "react_start": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "react_multi": {
+      "file": "skin.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 16
       }
     }
   }
