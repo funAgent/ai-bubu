@@ -6,7 +6,10 @@
   "description": "Line 角色皮肤",
   "style": "pixel",
   "format": "sprite",
-  "size": { "width": 39, "height": 46 },
+  "size": {
+    "width": 39,
+    "height": 46
+  },
   "animations": {
     "idle": {
       "file": "skin.png",
@@ -53,6 +56,42 @@
         "frameCount": 8,
         "columns": 28,
         "fps": 24,
+        "startFrame": 12
+      }
+    },
+    "react_done": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 8,
+        "columns": 28,
+        "fps": 14,
+        "startFrame": 12
+      }
+    },
+    "react_start": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 2,
+        "columns": 28,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "react_multi": {
+      "file": "skin.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 156,
+        "frameHeight": 185,
+        "frameCount": 8,
+        "columns": 28,
+        "fps": 12,
         "startFrame": 12
       }
     }

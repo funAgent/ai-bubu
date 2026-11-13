@@ -7,7 +7,10 @@
   "description": "像素风小恐龙 Doux",
   "style": "pixel",
   "format": "sprite",
-  "size": { "width": 48, "height": 48 },
+  "size": {
+    "width": 48,
+    "height": 48
+  },
   "animations": {
     "idle": {
       "file": "skin.png",
@@ -55,6 +58,42 @@
         "columns": 24,
         "fps": 16,
         "startFrame": 17
+      }
+    },
+    "react_done": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 6,
+        "columns": 24,
+        "fps": 14,
+        "startFrame": 17
+      }
+    },
+    "react_start": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 2,
+        "columns": 24,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "react_multi": {
+      "file": "skin.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 24,
+        "frameHeight": 24,
+        "frameCount": 8,
+        "columns": 24,
+        "fps": 12,
+        "startFrame": 6
       }
     }
   }
