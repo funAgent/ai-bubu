@@ -57,6 +57,42 @@
         "fps": 20,
         "startFrame": 0
       }
+    },
+    "react_done": {
+      "file": "sprint.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 14,
+        "startFrame": 0
+      }
+    },
+    "react_start": {
+      "file": "idle.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 2,
+        "columns": 8,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "react_multi": {
+      "file": "run.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 176,
+        "frameHeight": 176,
+        "frameCount": 8,
+        "columns": 8,
+        "fps": 12,
+        "startFrame": 0
+      }
     }
   }
 }

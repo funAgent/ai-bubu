@@ -6,7 +6,10 @@
   "description": "像素风小恐龙 Dinosaur",
   "style": "pixel",
   "format": "sprite",
-  "size": { "width": 64, "height": 64 },
+  "size": {
+    "width": 64,
+    "height": 64
+  },
   "animations": {
     "idle": {
       "file": "skin.png",
@@ -53,6 +56,42 @@
         "frameCount": 2,
         "columns": 5,
         "fps": 16,
+        "startFrame": 2
+      }
+    },
+    "react_done": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 14,
+        "startFrame": 2
+      }
+    },
+    "react_start": {
+      "file": "skin.png",
+      "loop": false,
+      "sprite": {
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 6,
+        "startFrame": 0
+      }
+    },
+    "react_multi": {
+      "file": "skin.png",
+      "loop": true,
+      "sprite": {
+        "frameWidth": 128,
+        "frameHeight": 128,
+        "frameCount": 2,
+        "columns": 5,
+        "fps": 12,
         "startFrame": 2
       }
     }
