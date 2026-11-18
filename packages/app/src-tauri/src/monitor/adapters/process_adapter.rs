@@ -14,7 +14,8 @@ pub struct SharedProcessScanner {
 impl SharedProcessScanner {
     pub fn new() -> Self {
         Self {
-            system: System::new(),
+            // sysinfo 0.40 起 System::new 返回 Result；受支持桌面平台上初始化不会失败
+            system: System::new().expect("sysinfo::System init"),
             last_refresh: None,
         }
     }
